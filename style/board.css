@@ -1,38 +1,38 @@
 * {
-	font-family: Arial;
+  font-family: Arial;
 }
 
 div  {
-	padding: 0px;
-	margin: 0px;
+  padding: 0px;
+  margin: 0px;
 }
 
 body {
-	background: #111;
+  background: #111;
   color: white;
 }
 
 #waiting {
-	float: left;
-	width: 600px;
-	height: 600px;
-	padding: 20px;
-	font-size: 24px;
-	font-weight: bold;
-	text-align: center;
-	color: #EEE;
+  float: left;
+  width: 600px;
+  height: 600px;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #EEE;
 }
 
 .chat {
   color: black;
 }
 #chatlog {
-	height: 580px;
-	background: #EEE;
-	padding: 5px;
-	margin-bottom: 10px;
-	overflow-y: scroll;
-	overflow-x: none;
+  height: 580px;
+  background: #EEE;
+  padding: 5px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  overflow-x: none;
 }
 
 .overlay {
@@ -48,17 +48,17 @@ body {
   -webkit-box-shadow: 2px 2px 2px #222;
      -mox-box-shadow: 2px 2px 2px #222;
           box-shadow: 2px 2px 2px #222;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
 
   color: #DDD;
-	background-color: rgb(51, 51, 51);
-	background-color: rgba(51, 51, 51, 0.9);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333);
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333)";
+  background-color: rgb(51, 51, 51);
+  background-color: rgba(51, 51, 51, 0.9);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333)";
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) { 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
   #turn_overlay { top: 2px !important; }
   #bottom_overlay { top: 588px !important; }
 }
@@ -83,10 +83,10 @@ body {
   border: none;
 
   color: #222;
-	background-color: rgb(255, 204, 0);
-	background-color: rgba(255, 204, 0, 0.9);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00);
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00)";
+  background-color: rgb(255, 204, 0);
+  background-color: rgba(255, 204, 0, 0.9);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00)";
 }
 
 #bottom_overlay {
@@ -96,30 +96,30 @@ body {
 }
 
 .guerrilla_board {
-	background: top left no-repeat url('../images/guerrilla/board.jpg');
+  background: top left no-repeat url('../images/guerrilla/board.jpg');
 }
 
 .coin_board {
-	background: top left no-repeat url('../images/soldier/board.jpg');
+  background: top left no-repeat url('../images/soldier/board.jpg');
 }
 
 .board {
-	width: 560px;
-	height: 560px;
-	padding: 40px;
-	position: relative;
-	margin-right: 10px;
-	background-size: 640px 640px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	float: left;
+  width: 560px;
+  height: 560px;
+  padding: 40px;
+  position: relative;
+  margin-right: 10px;
+  background-size: 640px 640px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  float: left;
   z-index: 100;
 }
 
 .soldier {
-	position: absolute;
-	left: 0px;
-	top: 0px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
 }
 
 .selected {
@@ -130,20 +130,20 @@ body {
 }
 
 @-webkit-keyframes myanim {
-	0%, 100% { -webkit-transform: scale3d(1, 1, 1); zoom: 1; }
-	50%      { -webkit-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
+  0%, 100% { -webkit-transform: scale3d(1, 1, 1); zoom: 1; }
+  50%      { -webkit-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
 }
 @-moz-keyframes myanim {
-	0%, 100% { -moz-transform: scale3d(1, 1, 1); zoom: 1; }
-	50%      { -moz-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
+  0%, 100% { -moz-transform: scale3d(1, 1, 1); zoom: 1; }
+  50%      { -moz-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
 }
 @-o-keyframes myanim {
-	0%, 100% { -o-transform: scale3d(1, 1, 1); zoom: 1; }
-	50%      { -o-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
+  0%, 100% { -o-transform: scale3d(1, 1, 1); zoom: 1; }
+  50%      { -o-transform: scale3d(1.2, 1.2, 1); zoom: 1; }
 }
 @keyframes myanim {
-	0%, 100% { transform: scale3d(1, 1, 1); zoom: 1; }
-	50%      { transform: scale3d(1.2, 1.2, 1); zoom: 1; }
+  0%, 100% { transform: scale3d(1, 1, 1); zoom: 1; }
+  50%      { transform: scale3d(1.2, 1.2, 1); zoom: 1; }
 }
 
 #soldier_moves div, #guerrilla_moves div {
@@ -163,47 +163,47 @@ body {
 .soldier_piece {
   background: top left no-repeat url('../images/guerrilla/soldier_piece.png');
   position: absolute;
-	width: 68px;
-	height: 68px;
-	margin: 2px;
+  width: 68px;
+  height: 68px;
+  margin: 2px;
 }
 
 .guerrilla_piece {
   background: top left no-repeat url('../images/guerrilla/guerrilla_piece.png');
   position: absolute;
-	width: 39px;
-	height: 40px;
-	margin: 1px 1px 1px 3px;
+  width: 39px;
+  height: 40px;
+  margin: 1px 1px 1px 3px;
 }
 
 .intersection {
-	width: 60px;
-	height: 60px;
-	margin-top: -30px;
-	margin-left: 38px;
-	overflow: visible;
-	position: relative;
-	float: left;
-	color: white;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: 38px;
+  overflow: visible;
+  position: relative;
+  float: left;
+  color: white;
 }
 
 
 .square_hover {
-	background-color: rgb(255, 255, 0) !important;
-	background-color: rgba(255, 255, 0, 0.4) !important;
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFF00, endColorstr=#66FFFF00) !important;
-	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFF00, endColorstr=#66FFFF00)" !important;
+  background-color: rgb(255, 255, 0) !important;
+  background-color: rgba(255, 255, 0, 0.4) !important;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFF00, endColorstr=#66FFFF00) !important;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFF00, endColorstr=#66FFFF00)" !important;
 }
 
 .square_black {
-	background: none;
+  background: none;
 }
 
 .square_white {
-	background: none;
+  background: none;
 }
 
 .square_highlighted {
-	border: 1px solid #0FF;
+  border: 1px solid #0FF;
 }
 

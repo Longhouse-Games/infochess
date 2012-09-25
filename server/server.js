@@ -214,7 +214,7 @@ Server.prototype.broadcast = function(message, data, source) {
   var players = this.arrPlayers;
   if (source) {
     players = _.reject(this.arrPlayers, function(player) {
-      player === source;
+      return player === source;
     });
   }
   _.each(players, function(player) {

@@ -125,6 +125,7 @@ Server.prototype.addPlayer = function(socket, user) {
   var me = this;
 
   var role = null;
+  var army = null;
 
   var coin_player_name = _.isUndefined(this.dbgame.coin_player_name) ? null : this.dbgame.coin_player_name;
   var guerrilla_player_name = _.isUndefined(this.dbgame.guerrilla_player_name) ? null : this.dbgame.guerrilla_player_name;
@@ -201,9 +202,34 @@ Server.prototype.addPlayer = function(socket, user) {
     me.broadcast('message', data);
   });
 
+  socket.on('select_army', function(serializedArmy) {
+    console.log("Got 'select_army'");
+    console.log(serializedArmy);
+
+    // TODO ensure army is valid
+    // TODO persist the army choice
+    player.setArmy(serializedArmy);
+
+    // notify other player
+    me.broadcast('opponent_ready', {}, player);
+
+    // TODO begin game if players are ready
+    if (me.allPlayersReady()) {
+      console.log('Game in progress!');
+      me.broadcast('start_game', {});
+    }
+  });
+
   me.broadcast('num_connected_users', me.arrPlayers.length);
   socket.emit('board_type', 'guerrilla');
   return player;
+};
+
+Server.prototype.allPlayersReady = function() {
+  waiting_players = _.select(this.arrPlayers, function(player) {
+    return player.getArmy() === null;
+  });
+  return waiting_players.length === 0;
 };
 
 Server.prototype.getPlayerCount = function() {
@@ -282,6 +308,7 @@ var Player = function(_socket, server, user, role) {
   me.role = role;
   me.socket = _socket;
   me.id = me.socket.handshake.sessionID;
+  me.army = null;
 
   me.socket.emit('user_info', {
     name: user.name
@@ -343,6 +370,14 @@ Player.prototype.getRole = function() {
 
 Player.prototype.setRole = function(role) {
   this.role = role;
+};
+
+Player.prototype.getArmy = function() {
+  return this.army;
+};
+
+Player.prototype.setArmy = function(army) {
+  this.army = army;
 };
 
 

@@ -23,6 +23,15 @@ body {
   color: #EEE;
 }
 
+#side_area {
+  height: 580px;
+  background: #EEE;
+  padding: 5px;
+  margin-bottom: 10px;
+  overflow-y: scroll;
+  overflow-x: none;
+}
+
 .chat {
   color: black;
 }
@@ -33,6 +42,49 @@ body {
   margin-bottom: 10px;
   overflow-y: scroll;
   overflow-x: none;
+}
+
+#army_selector {
+  display: none;
+  background: #555;
+  border-style: groove;
+  position: absolute;
+  height: 580px;
+  padding: 5px;
+}
+
+img.piece {
+  height: 50px;
+  width: 50px;
+  margin-right: 5px;
+}
+li.chosen {
+  background-color: #000;
+}
+
+#points_remaining {
+  background-color: #500;
+}
+
+#finish_army {
+  background-color: #050;
+}
+
+#opponent_status {
+  background-color: #005;
+}
+
+ul.pieces_list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+ul.pieces_list > li {
+  margin-bottom: 5px;
+  /*
+   * required by IE9 for unbulleted lists
+   */
+  list-style-type: none;
 }
 
 .overlay {
@@ -95,12 +147,8 @@ body {
   left: 0px;
 }
 
-.guerrilla_board {
-  background: top left no-repeat url('../images/guerrilla/board.jpg');
-}
-
-.coin_board {
-  background: top left no-repeat url('../images/soldier/board.jpg');
+.flickering_board {
+  background: top left no-repeat url('../images/board_base.png');
 }
 
 .board {
@@ -150,23 +198,77 @@ body {
   z-index: 300;
 }
 
+#white_moves div, #black_moves div {
+  z-index: 300;
+}
+
 #pieces {
   width: 100%;
   height: 100%;
 }
 
-#soldier_moves, #guerrilla_moves {
+#soldier_moves, #guerrilla_moves, #white_moves, #black_moves {
   visibility: hidden;
   opacity: 0.4;
 }
 
-.soldier_piece {
-  background: top left no-repeat url('../images/guerrilla/soldier_piece.png');
+.shadow_piece, .soldier_piece, .temp_piece {
   position: absolute;
   width: 68px;
   height: 68px;
   margin: 2px;
 }
+
+.removal_marker {
+  width: 10px;
+  height: 10px;
+  margin-top: 3px;
+  margin-left: 56px;
+  overflow: visible;
+  position: relative;
+  float: left;
+  background: white;
+}
+
+.king_white {
+  background: top left no-repeat url('../images/king_white.68x68.png');
+}
+.queen_white {
+  background: top left no-repeat url('../images/queen_white.68x68.png');
+}
+.rook_white {
+  background: top left no-repeat url('../images/rook_white.68x68.png');
+}
+.knight_white {
+  background: top left no-repeat url('../images/knight_white.68x68.png');
+}
+.bishop_white {
+  background: top left no-repeat url('../images/bishop_white.68x68.png');
+}
+.pawn_white {
+  background: top left no-repeat url('../images/pawn_white.68x68.png');
+}
+.king_black {
+  background: top left no-repeat url('../images/king_black.68x68.png');
+}
+.queen_black {
+  background: top left no-repeat url('../images/queen_black.68x68.png');
+}
+.rook_black {
+  background: top left no-repeat url('../images/rook_black.68x68.png');
+}
+.knight_black {
+  background: top left no-repeat url('../images/knight_black.68x68.png');
+}
+.bishop_black {
+  background: top left no-repeat url('../images/bishop_black.68x68.png');
+}
+.pawn_black {
+  background: top left no-repeat url('../images/pawn_black.68x68.png');
+}
+
+
+
 
 .guerrilla_piece {
   background: top left no-repeat url('../images/guerrilla/guerrilla_piece.png');

@@ -15,9 +15,20 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     }
   }
 
+  function Piece(colour, type, position) {
+    // TODO move this to /lib/
+    // TODO validate position
+    this.position = position;
+    // TODO validate colour
+    this.colour = colour;
+    // TODO validate type
+    this.type = type;
+  };
+
   var socket = io.connect();
   var g_role = 'spectator';
   var g_gameState = null;
+  var g_selectedType; // Selected piece type when building army
 
   function getPositionKey(position) {
     if (!position) {
@@ -38,12 +49,80 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     return g_role === 'spectator';
   }
 
+  function getPlayerColour() {
+    // TODO
+    return 'white';
+  }
+
+  var g_piecesOnBoard = {}; // "x,y" -> div
   var g_soldierPiecesOnBoard = {}; // "x,y" -> img
   var g_guerrillaPiecesOnBoard = {}; // "x,y" -> img
+
+  var g_chessBoard = {}; // "x,y" -> Piece
 
   var SQUARE_SIZE = 70;
   var SOLDIER_MARGIN = 39;
   var GUERRILLA_MARGIN = 88;
+
+  function Army() {
+    return {
+      king: 0,
+      queen: 0,
+      knight: 0,
+      rook: 0,
+      bishop: 0,
+      pawn: 0
+    };
+  }
+
+  function ArmyLimits() {
+    return {
+      king: 1,
+      queen: 1,
+      knight: 2,
+      rook: 2,
+      bishop: 2,
+      pawn: 8
+    };
+  }
+
+  function getArmy() {
+    var army = new Army();
+
+    for (var key in g_chessBoard) {
+      if (g_chessBoard.hasOwnProperty(key)) {
+        var piece = g_chessBoard[key];
+        army[piece.type] += 1;
+      }
+    }
+    return army;
+  }
+
+  function calculatePoints(army) {
+    var points = army.queen * 3 +
+      (army.knight + army.rook) * 2 +
+      (army.bishop + army.pawn);
+    return points;
+  }
+
+  function recalculateArmy() {
+    // TODO if game has started, die/throw/or something
+    var army = getArmy();
+    var points = calculatePoints(army);
+
+    $("#points_remaining #points").text(10-points);
+    for (var type in army) {
+      if (army.hasOwnProperty(type)) {
+        $("#" + type + " .count").text(army[type]);
+      }
+    }
+  }
+
+  function pieceAt(position) {
+    var key = position.x+","+position.y;
+    var r = g_piecesOnBoard[key];
+    return r;
+  }
 
   function addPiece(container, piece, className, margin, piecesOnBoard) {
     var newPieceOnBoard = document.createElement("div");
@@ -54,6 +133,28 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     if (piecesOnBoard) {
       piecesOnBoard[getPositionKey(piece.position)] = newPieceOnBoard;
     }
+    return newPieceOnBoard;
+  }
+
+  function addTempPiece(piece) {
+    var container = document.getElementById('pieces');
+    var piecesOnBoard = g_piecesOnBoard;
+    var cssclass = cssClassForPiece(piece) + " temp_piece";
+    var newPieceOnBoard = addPiece(container, piece, cssclass, SOLDIER_MARGIN, piecesOnBoard);
+    // TODO add mechanism to remove this piece from the board - x in corner or drag away
+
+    //Add removal marker
+    var removalMarker = document.createElement("div");
+    removalMarker.className = "removal_marker";
+    removalMarker.onclick = function() {
+      container.removeChild(newPieceOnBoard);
+      delete piecesOnBoard[getPositionKey(piece.position)];
+      delete g_chessBoard[getPositionKey(piece.position)];
+      displayValidStartingPositions(getPlayerColour(), g_selectedType);
+      recalculateArmy();
+    }
+    newPieceOnBoard.appendChild(removalMarker);
+
     return newPieceOnBoard;
   }
 
@@ -174,6 +275,105 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     $moves.css('visibility', 'hidden');
   }
 
+  function getPieceCost(type) {
+    var cost = null;
+    switch(type) {
+      case 'king':
+        cost = 0;
+        break;
+      case 'queen':
+        cost = 3;
+        break;
+      case 'knight':
+      case 'rook':
+        cost = 2;
+        break;
+      case 'bishop':
+      case 'pawn':
+        cost = 1;
+        break;
+      default:
+        throw new Error("Invalid type: '"+type+"'");
+    }
+    return cost;
+  }
+
+  function displayValidStartingPositions(side, piece_type) {
+
+    var $moves = $('#white_moves');
+
+    // Clear all shadow pieces
+    $moves.text("");
+
+    // Determine if placement of this piece would go over the army limit
+    var army = getArmy();
+    var total = calculatePoints(army);
+    var piece_cost = getPieceCost(piece_type);
+    if ((total + piece_cost) > 10) {
+      return;
+    }
+
+    // Determine if the limits for thise type have been reached
+    var armyLimit = new ArmyLimits();
+    if ((army[piece_type] + 1) > armyLimit[piece_type]) {
+      return;
+    }
+
+    // Determine all possible positions
+    var positions = [];
+    if (piece_type === 'king' || piece_type === 'rook' || piece_type === 'queen' || piece_type === 'knight') {
+      // back row
+      for (var i = 0; i < 8; i++) {
+        positions.push({ x: i, y: 0 });
+      }
+    } else if (piece_type === 'bishop') {
+      var white = null;
+      var black = null;
+      // Search for black and white pieces first
+      for (var i = 0; i < 8; i++) {
+        var pos = { x: i, y: 0 };
+        if (pieceAt(pos)) {
+          if (i % 2 === 0) {
+            white = pos;
+          } else {
+            black = pos;
+          }
+        }
+      }
+      // back row
+      for (var i = 0; i < 8; i++) {
+        var pos = { x: i, y: 0 };
+        if (!pieceAt(pos)) {
+          if (white && (i % 2 === 0)) {
+            // nothing
+          } else if (black && (i % 2 === 1)) {
+            // nothing
+          } else {
+            positions.push(pos);
+          }
+        };
+      }
+    } else if (piece_type === 'pawn') {
+      // second from back row
+      for (var i = 0; i < 8; i++) {
+        positions.push({ x: i, y: 1 });
+      }
+    } else {
+      alert("Error encountered: invalid piece_type '"+piece_type+"'. Try refreshing the page.");
+      return;
+    }
+
+    // Display shadow pieces on unoccpied squares
+    for (var i = 0; i < positions.length; i++) {
+      var position = positions[i];
+      if (!pieceAt(position)) {
+        piece = new Piece(getPlayerColour(), piece_type, position);
+        createMove($moves, piece, position);
+      }
+    }
+    $moves.css('visibility', 'visible');
+  }
+
   function showGuerrillaMoves() {
     var $moves = $('#guerrilla_moves');
     $moves.text("");
@@ -195,6 +395,24 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     }
     if (g_gameState.isGuerrillaTurn()) {
       showGuerrillaMoves();
+    }
+  }
+
+  function cssClassForPiece(piece) {
+    return piece.type + '_' + piece.colour;
+  }
+
+  function createMove($moves, piece, position) {
+    var move = { piece: piece, position: position };
+    var container = $moves.get(0);
+    var cssclass = "shadow_piece " + cssClassForPiece(piece);
+    var newPieceOnBoard = addPiece(container, move, cssclass, SOLDIER_MARGIN);
+    newPieceOnBoard.onclick = function() {
+      console.log("Adding " + move.piece.type + " to position '"+move.position.x+","+move.position.y+"'");
+      addTempPiece(piece);
+      g_chessBoard[position.x+","+position.y] = piece;
+      recalculateArmy();
+      displayValidStartingPositions(getPlayerColour(), g_selectedType);
     }
   }
 
@@ -274,6 +492,34 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     }, timeout);
   }
 
+  function hideArmySelector() {
+    var $builder = $('#army_selector').first();
+    $builder.css('display', 'none');
+  }
+
+  function updateArmySelector() {
+    var $builder = $('#army_selector').first();
+    $builder.css('display', 'block');
+  }
+
+  function serializeArmy() {
+    return {};
+  }
+
+  var CHOOSING = "choosing";
+  var READY = "ready";
+  function update_opponent_status(new_status) {
+    console.log("UPDATING STATUS: " + new_status);
+    var $status = $('#opponent_status').first();
+    if (new_status == CHOOSING) {
+      $status.text('Opponent is choosing their army.');
+    } else if (new_status == READY) {
+      $status.text('Opponent is ready.');
+    } else {
+      console.log("Invalid status: " + new_status);
+    }
+  }
+
   function updatePlayerTurnOverlay() {
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
@@ -316,6 +562,21 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     socket.emit('takeRole', 'spectator');
   });
 
+  $('#finish_army').bind('click', function() {
+    socket.emit('select_army', serializeArmy());
+  });
+  $('.pieces_list > li').bind('click', function(event) {
+    var $li = $(this);
+    if ($li.hasClass('chosen')) {
+      $li.removeClass('chosen');
+    } else {
+      $('.pieces_list > li').removeClass('chosen');
+      $li.addClass('chosen');
+    }
+    g_selectedType = this.id
+    displayValidStartingPositions(getPlayerColour(), g_selectedType);
+  });
+
   socket.on('connect', function() {
 
     // receive messages
@@ -330,6 +591,18 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       }
     });
 
+    socket.on('opponent_ready', function() {
+      update_opponent_status(READY);
+    });
+
+    socket.on('opponent_choosing', function() {
+      update_opponent_status(CHOOSING);
+    });
+
+    socket.on('start_game', function() {
+      hideArmySelector();
+    });
+
     socket.on('role', function(role) {
       g_role = role;
       if (role === 'guerrilla') {
@@ -339,7 +612,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       } else {
         printMessage("server", "You are a spectator");
       }
-      $('.board').addClass('guerrilla_board');
+      $('.board').addClass('flickering_board');
     });
 
     socket.on('num_connected_users', function(numConnectedUsers) {
@@ -369,6 +642,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       g_gameState = new checkers.GameState;
       g_gameState.fromDTO(updateResponse.gameState);
 
+      updateArmySelector();
       updatePlayerTurnOverlay();
       updateGuerrillaPieces();
       updateSoldierPieces();

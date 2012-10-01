@@ -51,7 +51,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
   function getPlayerColour() {
     // TODO
-    return 'white';
+    return 'black';
   }
 
   var g_piecesOnBoard = {}; // "x,y" -> div
@@ -300,7 +300,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
   function displayValidStartingPositions(side, piece_type) {
 
-    var $moves = $('#white_moves');
+    var $moves = $("#"+getPlayerColour()+"_moves");
 
     // Clear all shadow pieces
     $moves.text("");
@@ -321,19 +321,20 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
     // Determine all possible positions
     var positions = [];
+    var row = getPlayerColour() === 'white' ? 0 : 7;
     if (piece_type === 'king' || piece_type === 'rook' || piece_type === 'queen' || piece_type === 'knight') {
       // back row
       for (var i = 0; i < 8; i++) {
-        positions.push({ x: i, y: 0 });
+        positions.push({ x: i, y: row });
       }
     } else if (piece_type === 'bishop') {
       var white = null;
       var black = null;
       // Search for black and white pieces first
       for (var i = 0; i < 8; i++) {
-        var pos = { x: i, y: 0 };
+        var pos = { x: i, y: row };
         if (pieceAt(pos) && g_chessBoard[getPositionKey(pos)].type === 'bishop') {
-          if (i % 2 === 0) {
+          if ((i+row) % 2 === 0) {
             white = pos;
           } else {
             black = pos;
@@ -342,11 +343,11 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       }
       // back row
       for (var i = 0; i < 8; i++) {
-        var pos = { x: i, y: 0 };
+        var pos = { x: i, y: row };
         if (!pieceAt(pos)) {
-          if (white && (i % 2 === 0)) {
+          if (white && ((i+row) % 2 === 0)) {
             // nothing
-          } else if (black && (i % 2 === 1)) {
+          } else if (black && ((i+row) % 2 === 1)) {
             // nothing
           } else {
             positions.push(pos);
@@ -356,7 +357,8 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     } else if (piece_type === 'pawn') {
       // second from back row
       for (var i = 0; i < 8; i++) {
-        positions.push({ x: i, y: 1 });
+        var row = getPlayerColour() === 'white' ? 1 : 6;
+        positions.push({ x: i, y: row });
       }
     } else {
       alert("Error encountered: invalid piece_type '"+piece_type+"'. Try refreshing the page.");
@@ -546,6 +548,48 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight);
   };
 
+  function createArmySelector() {
+    /*
+          <li id="king"><img class="piece" src="images/king_white.100x100.png">King</li>
+          <li id="queen"><img class="piece" src="images/queen_white.100x100.png">Queens: <span class="count">0</span> (cost: 3 points)</li>
+          <li id="knight"><img class="piece" src="images/knight_white.100x100.png">Knights: <span class="count">0</span> (cost: 2 points)</li>
+          <li id="rook"><img class="piece" src="images/rook_white.100x100.png">Rooks: <span class="count">0</span> (cost: 2 points)</li>
+          <li id="bishop"><img class="piece" src="images/bishop_white.100x100.png">Bishops: <span class="count">0</span> (cost: 1 point)</li>
+          <li id="pawn"><img class="piece" src="images/pawn_white.100x100.png">Pawns: <span class="count">0</span> (cost: 1 point)</li>
+    */
+
+    var pieces = ["king", "queen", "knight", "rook", "bishop", "pawn"];
+    var costs  = [     0,       3,        2,      2,        1,      1];
+    var container = document.getElementById('pieces_list');
+
+    // TODO hook up some templating here
+    for (var i = 0; i < pieces.length; i++) {
+      var piece = pieces[i];
+      var cost = costs[i];
+
+      var src = "images/"+piece+"_"+getPlayerColour()+".100x100.png";
+      var li = document.createElement("li");
+      li.id = piece;
+      li.innerHTML = "<img class='piece' src='"+src+"'>"+piece+": <span class='count'>0</span> (cost: "+cost+" points)";
+      container.appendChild(li);
+    }
+
+    $('#finish_army').bind('click', function() {
+      socket.emit('select_army', serializeArmy());
+    });
+    $('#pieces_list > li').bind('click', function(event) {
+      var $li = $(this);
+      if ($li.hasClass('chosen')) {
+        $li.removeClass('chosen');
+      } else {
+        $('#pieces_list > li').removeClass('chosen');
+        $li.addClass('chosen');
+      }
+      g_selectedType = this.id
+      displayValidStartingPositions(getPlayerColour(), g_selectedType);
+    });
+  };
+
   // reset game handler
   var $reset = $('#reset');
   $reset.bind('click', function() {
@@ -560,21 +604,6 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
   });
   $('#join_spectator').bind('click', function() {
     socket.emit('takeRole', 'spectator');
-  });
-
-  $('#finish_army').bind('click', function() {
-    socket.emit('select_army', serializeArmy());
-  });
-  $('.pieces_list > li').bind('click', function(event) {
-    var $li = $(this);
-    if ($li.hasClass('chosen')) {
-      $li.removeClass('chosen');
-    } else {
-      $('.pieces_list > li').removeClass('chosen');
-      $li.addClass('chosen');
-    }
-    g_selectedType = this.id
-    displayValidStartingPositions(getPlayerColour(), g_selectedType);
   });
 
   socket.on('connect', function() {
@@ -613,6 +642,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
         printMessage("server", "You are a spectator");
       }
       $('.board').addClass('flickering_board');
+      createArmySelector();
     });
 
     socket.on('num_connected_users', function(numConnectedUsers) {

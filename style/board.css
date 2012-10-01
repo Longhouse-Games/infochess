@@ -74,12 +74,12 @@ li.chosen {
   background-color: #005;
 }
 
-ul.pieces_list {
+ul#pieces_list {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-ul.pieces_list > li {
+ul#pieces_list > li {
   margin-bottom: 5px;
   /*
    * required by IE9 for unbulleted lists

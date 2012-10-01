@@ -332,7 +332,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       // Search for black and white pieces first
       for (var i = 0; i < 8; i++) {
         var pos = { x: i, y: 0 };
-        if (pieceAt(pos)) {
+        if (pieceAt(pos) && g_chessBoard[getPositionKey(pos)].type === 'bishop') {
           if (i % 2 === 0) {
             white = pos;
           } else {

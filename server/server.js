@@ -45,17 +45,16 @@ var Server = function(gameFactory, dbgame) {
 
 Server.prototype.getDBGame = function() {
   return this.dbgame;
-}
+};
 
 Server.prototype.startVote = function(name, question, onPass, getVoters) {
   var me = this;
   onPass = onPass || function() {};
   if (this.votes[name]) { return; } // vote already in progress
-  getVoters = getVoters || function() { 
+  getVoters = getVoters || function() {
       return _.filter(me.arrPlayers, function(player) {
         var role = player.getRole();
-        return role === WHITE_ROLE
-          || role === BLACK_ROLE;
+        return role === WHITE_ROLE || role === BLACK_ROLE;
       });};
   console.log('getVoters: ', getVoters);
   var vote = new Vote('reset',
@@ -120,7 +119,7 @@ Server.prototype.endGame = function() {
 };
 
 Server.prototype.addPlayer = function(socket, user) {
-  if (!user) throw "AddPlayer called with 'null' for user."
+  if (!user) throw "AddPlayer called with 'null' for user.";
 
   var me = this;
 

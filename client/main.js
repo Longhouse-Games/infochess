@@ -12,7 +12,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       for (var idx = 0; idx < this.length; ++idx) {
         callback(this[idx]);
       }
-    }
+    };
   }
 
   function Piece(colour, type, position) {
@@ -23,7 +23,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     this.colour = colour;
     // TODO validate type
     this.type = type;
-  };
+  }
 
   var socket = io.connect();
   var g_role = 'spectator';
@@ -154,7 +154,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       delete g_chessBoard[getPositionKey(piece.position)];
       displayValidStartingPositions(getPlayerColour(), g_selectedType);
       recalculateArmy();
-    }
+    };
     newPieceOnBoard.appendChild(removalMarker);
 
     return newPieceOnBoard;
@@ -174,13 +174,14 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
   }
 
   function setSelectedSoldierPiece(piece) {
-    for (var positionKey in g_soldierPiecesOnBoard) {
+    var positionKey = null;
+    for (positionKey in g_soldierPiecesOnBoard) {
       var otherPieceOnBoard = g_soldierPiecesOnBoard[positionKey];
       var className = otherPieceOnBoard.className.replace(/\s*selected/g, '');
       otherPieceOnBoard.className = className;
     }
     if (g_gameState.isSoldierTurn() && piece) {
-      var positionKey = getPositionKey(piece.position);
+      positionKey = getPositionKey(piece.position);
       var pieceOnBoard = g_soldierPiecesOnBoard[positionKey];
       g_selectedSoldierPiece = pieceOnBoard;
       if (pieceOnBoard) {
@@ -207,7 +208,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
         if (!g_gameState.movedSoldier) {
           setSelectedSoldierPiece(piece);
         }
-      }
+      };
     }
   }
 
@@ -222,23 +223,25 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     arrPieces = arrPieces || [];
     piecesOnBoard = piecesOnBoard || {};
     var removedPieces = {};
-    for (var positionKey in piecesOnBoard) {
+    var positionKey;
+    var pieceOnBoard;
+    for (positionKey in piecesOnBoard) {
       removedPieces[positionKey] = piecesOnBoard[positionKey];
     }
     // add new pieces
     for (var idxPiece = 0; idxPiece < arrPieces.length; ++idxPiece) {
       var piece = arrPieces[idxPiece];
-      var positionKey = getPositionKey(piece.position);
-      var pieceOnBoard = piecesOnBoard[positionKey];
+      positionKey = getPositionKey(piece.position);
+      pieceOnBoard = piecesOnBoard[positionKey];
       if (!pieceOnBoard) {
         addPiece(piece);
       }
       delete removedPieces[positionKey];
     }
     // remove extra pieces
-    for (var positionKey in removedPieces) {
+    for (positionKey in removedPieces) {
       delete piecesOnBoard[positionKey];
-      var pieceOnBoard = removedPieces[positionKey];
+      pieceOnBoard = removedPieces[positionKey];
       var parentNode = pieceOnBoard.parentNode;
       if (parentNode) {
         parentNode.removeChild(pieceOnBoard);
@@ -269,7 +272,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     var newPieceOnBoard = addPiece(container, piece, 'guerrilla_piece', GUERRILLA_MARGIN);
     newPieceOnBoard.onclick = function() {
       socket.emit('placeGuerrilla', piece);
-    }
+    };
   }
 
   function hideGuerrillaMoves() {
@@ -323,18 +326,19 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
     // Determine all possible positions
     var positions = [];
+    var i, pos;
     var row = getPlayerColour() === 'white' ? 0 : 7;
     if (piece_type === 'king' || piece_type === 'rook' || piece_type === 'queen' || piece_type === 'knight') {
       // back row
-      for (var i = 0; i < 8; i++) {
+      for (i = 0; i < 8; i++) {
         positions.push({ x: i, y: row });
       }
     } else if (piece_type === 'bishop') {
       var white = null;
       var black = null;
       // Search for black and white pieces first
-      for (var i = 0; i < 8; i++) {
-        var pos = { x: i, y: row };
+      for (i = 0; i < 8; i++) {
+        pos = { x: i, y: row };
         if (pieceAt(pos) && g_chessBoard[getPositionKey(pos)].type === 'bishop') {
           if ((i+row) % 2 === 0) {
             white = pos;
@@ -344,22 +348,18 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
         }
       }
       // back row
-      for (var i = 0; i < 8; i++) {
-        var pos = { x: i, y: row };
+      for (i = 0; i < 8; i++) {
+        pos = { x: i, y: row };
         if (!pieceAt(pos)) {
-          if (white && ((i+row) % 2 === 0)) {
-            // nothing
-          } else if (black && ((i+row) % 2 === 1)) {
-            // nothing
-          } else {
+          if (!(white && ((i+row) % 2 === 0)) && !(black && ((i+row) % 2 === 1))) {
             positions.push(pos);
           }
-        };
+        }
       }
     } else if (piece_type === 'pawn') {
       // second from back row
-      for (var i = 0; i < 8; i++) {
-        var row = getPlayerColour() === 'white' ? 1 : 6;
+      for (i = 0; i < 8; i++) {
+        row = getPlayerColour() === 'white' ? 1 : 6;
         positions.push({ x: i, y: row });
       }
     } else {
@@ -368,7 +368,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     }
 
     // Display shadow pieces on unoccpied squares
-    for (var i = 0; i < positions.length; i++) {
+    for (i = 0; i < positions.length; i++) {
       var position = positions[i];
       if (!pieceAt(position)) {
         piece = new Piece(getPlayerColour(), piece_type, position);
@@ -417,7 +417,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       g_chessBoard[position.x+","+position.y] = piece;
       recalculateArmy();
       displayValidStartingPositions(getPlayerColour(), g_selectedType);
-    }
+    };
   }
 
   function createSoldierMove($moves, piece, position) {
@@ -428,7 +428,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       socket.emit('moveCOIN', move);
       setSelectedSoldierPiece(null);
       hideSoldierMoves();
-    }
+    };
   }
 
   function hideSoldierMoves() {
@@ -439,10 +439,11 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
   function showSoldierMoves(piece) {
     var $moves = $('#soldier_moves');
     $moves.text("");
+    var arrMoves;
     if (g_gameState.movedSoldier) {
-      var arrMoves = g_gameState.getSoldierCapturingMoves(piece);
+      arrMoves = g_gameState.getSoldierCapturingMoves(piece);
     } else {
-      var arrMoves = g_gameState.getPotentialSoldierMoves(piece);
+      arrMoves = g_gameState.getPotentialSoldierMoves(piece);
     }
     for (var idx = 0; idx < arrMoves.length; ++idx) {
       var position = arrMoves[idx];
@@ -491,7 +492,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     setTimeout(function() {
       $overlay.css('background', oldBackground);
       setTimeout(function() {
-        clearTransitionProperty
+        clearTransitionProperty;
       }, timeout);
     }, timeout);
   }
@@ -548,7 +549,7 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
       '</span>' + message;
     document.getElementById('chatlog').appendChild(messageDiv);
     $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight);
-  };
+  }
 
   function createArmySelector() {
     /*
@@ -587,10 +588,10 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
         $('#pieces_list > li').removeClass('chosen');
         $li.addClass('chosen');
       }
-      g_selectedType = this.id
+      g_selectedType = this.id;
       displayValidStartingPositions(getPlayerColour(), g_selectedType);
     });
-  };
+  }
 
   // reset game handler
   var $reset = $('#reset');

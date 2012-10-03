@@ -38,20 +38,19 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
   }
 
   function isSoldierPlayer() {
-    return g_role === 'coin';
+    return g_role === BLACK_ROLE;
   }
 
   function isGuerrillaPlayer() {
-    return g_role === 'guerrilla';
+    return g_role === WHITE_ROLE;
   }
 
   function isSpectator() {
-    return g_role === 'spectator';
+    return g_role === SPECTATOR_ROLE;
   }
 
   function getPlayerColour() {
-    // TODO
-    return 'black';
+    return g_role;
   }
 
   var g_piecesOnBoard = {}; // "x,y" -> div
@@ -60,6 +59,9 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
   var g_chessBoard = {}; // "x,y" -> Piece
 
+  var SPECTATOR_ROLE = 'spectator';
+  var WHITE_ROLE = 'white';
+  var BLACK_ROLE = 'black';
   var SQUARE_SIZE = 70;
   var SOLDIER_MARGIN = 39;
   var GUERRILLA_MARGIN = 88;
@@ -596,11 +598,11 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
     socket.emit('requestReset');
   });
 
-  $('#join_guerrilla').bind('click', function() {
-    socket.emit('takeRole', 'guerrilla');
+  $('#join_white').bind('click', function() {
+    socket.emit('takeRole', WHITE_ROLE);
   });
-  $('#join_coin').bind('click', function() {
-    socket.emit('takeRole', 'coin');
+  $('#join_black').bind('click', function() {
+    socket.emit('takeRole', BLACK_ROLE);
   });
   $('#join_spectator').bind('click', function() {
     socket.emit('takeRole', 'spectator');
@@ -634,10 +636,10 @@ require(["lib/checkers", 'helpers'], function(checkers, helpers) {
 
     socket.on('role', function(role) {
       g_role = role;
-      if (role === 'guerrilla') {
-        printMessage("server", "You are the Guerrilla player!");
-      } else if (role === 'coin') {
-        printMessage("server", "You are the COIN player!");
+      if (role === WHITE_ROLE) {
+        printMessage("server", "You are the White player!");
+      } else if (role === BLACK_ROLE) {
+        printMessage("server", "You are the Black player!");
       } else {
         printMessage("server", "You are a spectator");
       }

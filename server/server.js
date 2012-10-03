@@ -22,8 +22,8 @@ requirejs([
     Checkers,
     Vote) {
 
-var GUERRILLA_ROLE = 'guerrilla';
-var COIN_ROLE = 'coin';
+var WHITE_ROLE = 'white';
+var BLACK_ROLE = 'black';
 var SPECTATOR = 'spectator';
 
 var Server = function(gameFactory, dbgame) {
@@ -32,7 +32,7 @@ var Server = function(gameFactory, dbgame) {
   me.gameFactory = gameFactory;
   me.game = gameFactory();
   me.arrPlayers = [];
-  me.arrRoles = [GUERRILLA_ROLE, COIN_ROLE];
+  me.arrRoles = [WHITE_ROLE, BLACK_ROLE];
   me.votes = {};
 
   me.requestReset = function() {
@@ -54,8 +54,8 @@ Server.prototype.startVote = function(name, question, onPass, getVoters) {
   getVoters = getVoters || function() { 
       return _.filter(me.arrPlayers, function(player) {
         var role = player.getRole();
-        return role === 'guerrilla'
-          || role === 'coin';
+        return role === WHITE_ROLE
+          || role === BLACK_ROLE;
       });};
   console.log('getVoters: ', getVoters);
   var vote = new Vote('reset',
@@ -131,20 +131,20 @@ Server.prototype.addPlayer = function(socket, user) {
   var guerrilla_player_name = _.isUndefined(this.dbgame.guerrilla_player_name) ? null : this.dbgame.guerrilla_player_name;
 
   if (coin_player_name !== null && user.name === coin_player_name) {
-    role = COIN_ROLE;
+    role = BLACK_ROLE;
   } else if (guerrilla_player_name !== null && user.name === guerrilla_player_name) {
-    role = GUERRILLA_ROLE;
+    role = WHITE_ROLE;
   } else {
     // Player was not previously assigned a role (or was spectating)
     if (guerrilla_player_name === null) {
 
-      role = GUERRILLA_ROLE;
+      role = WHITE_ROLE;
       this.dbgame.guerrilla_player_name = user.name;
       this.dbgame.save(function(err) { if (err) throw err; });
 
     } else if (coin_player_name === null) {
 
-      role = COIN_ROLE;
+      role = BLACK_ROLE;
       this.dbgame.coin_player_name = user.name;
       this.dbgame.save(function(err) { if (err) throw err; });
 
@@ -258,9 +258,9 @@ Server.prototype.getId = function() {
 
 Server.prototype.isAvailableRole = function(role) {
   var me = this;
-  if (role === GUERRILLA_ROLE) {
+  if (role === WHITE_ROLE) {
     return _.isUndefined(me.dbgame.guerrilla_player_name) || me.dbgame.guerrilla_player_name === null;
-  } else if (role === COIN_ROLE) {
+  } else if (role === BLACK_ROLE) {
     return _.isUndefined(me.dbgame.coin_player_name) || me.dbgame.coin_player_name === null;
   }
   throw "Invalid role: '" + role + "'";
@@ -272,10 +272,10 @@ Server.prototype.takeRole = function(role, player) {
   var roleChanged = false;
 
   var freeRole = function(role) {
-    if (role === GUERRILLA_ROLE) {
+    if (role === WHITE_ROLE) {
       me.dbgame.guerrilla_player_name === null;
       me.dbgame.save(function(err) { if (err) throw err; });
-    } else if (role === COIN_ROLE) {
+    } else if (role === BLACK_ROLE) {
       me.dbgame.coin_player_name === null;
       me.dbgame.save(function(err) { if (err) throw err; });
     }
@@ -294,10 +294,10 @@ Server.prototype.takeRole = function(role, player) {
 Server.prototype.getOpenRoles = function() {
   var roles = [];
   if (_.isUndefined(this.dbgame.coin_player_name) || this.dbgame.coin_player_name === null) {
-    roles.push(COIN_ROLE);
+    roles.push(BLACK_ROLE);
   }
   if (_.isUndefined(this.dbgame.guerrilla_player_name) || this.dbgame.guerrilla_player_name === null) {
-    roles.push(GUERRILLA_ROLE);
+    roles.push(WHITE_ROLE);
   }
   return roles;
 };

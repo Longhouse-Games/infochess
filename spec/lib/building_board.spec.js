@@ -109,6 +109,38 @@ describe("getPossiblePlacements", function() {
   });
 });
 
+describe("removePiece", function() {
+  var board, pos, piece;
+  beforeEach(function() {
+    board = new BuildingBoard();
+  });
+
+  it("should raise when removing a piece that's not there", function() {
+    pos = new Position(0,0);
+    var remove_it = function() {
+      board.removePiece(pos);
+    };
+    expect(remove_it).toThrow();
+  });
+
+  it("should return the piece removed", function() {
+    piece = new Piece('king', 'white');
+    pos = new Position(0,0);
+
+    board.addPiece(piece, pos);
+    expect(board.removePiece(pos)).toBe(piece);
+  });
+
+  it("should remove the piece from the board", function() {
+    piece = new Piece('king', 'white');
+    pos = new Position(0,0);
+
+    board.addPiece(piece, pos);
+    expect(board.removePiece(pos)).toNotBe(false);
+    expect(board.canAddPiece(piece, pos)).toBe(true);
+  });
+});
+
 describe("canAddPiece", function() {
 
   var piece;

@@ -138,10 +138,20 @@ describe("canAddPiece", function() {
   });
 
   describe("with a bishop", function() {
-    it("should reject a bishop on the same coloured square", function() {
+    it("should reject a bishop on another white square", function() {
       piece = new Piece('bishop', 'white');
       first = new Position(0,0);
       second = new Position(2,0);
+
+      board.addPiece(piece, first);
+
+      expect(board.canAddPiece(piece, second)).toBe(false);
+    });
+
+    it("should reject a bishop on another black square", function() {
+      piece = new Piece('bishop', 'white');
+      first = new Position(1,0);
+      second = new Position(3,0);
 
       board.addPiece(piece, first);
 

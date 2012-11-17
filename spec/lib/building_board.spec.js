@@ -28,26 +28,6 @@ describe("validatePosition", function() {
   });
 });
 
-describe("isValidArmy", function() {
-  var board;
-
-  beforeEach(function() {
-    board = new BuildingBoard();
-  });
-
-  it("should return false unless it contains a king", function() {
-    expect(board.isValidArmy()).toBe(false);
-  });
-
-  it("should return true if there's a king", function() {
-    var piece = new Piece('king', 'white');
-    var pos = new Position(0,0);
-    board.addPiece(piece, pos);
-
-    expect(board.isValidArmy()).toBe(true);
-  });
-});
-
 describe("getPossiblePlacements", function() {
 
   var board;

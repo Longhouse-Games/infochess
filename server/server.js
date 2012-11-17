@@ -205,7 +205,6 @@ Server.prototype.addPlayer = function(socket, user) {
     console.log("Got 'select_army'");
     console.log(serializedArmy);
 
-    // TODO ensure army is valid
     // TODO persist the army choice
     player.setArmy(serializedArmy);
 

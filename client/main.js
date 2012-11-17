@@ -187,7 +187,7 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
   }
 
   function serializeArmy() {
-    return {};
+    return getBuildingBoard().serialize();
   }
 
   var CHOOSING = "choosing";

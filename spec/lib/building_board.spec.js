@@ -236,6 +236,75 @@ describe("canAddPiece", function() {
   });
 });
 
+describe("serialization", function() {
+  var board;
+  it("should not serialize certain attributes", function() {
+    board = new BuildingBoard();
+
+    board.addPiece(new Piece('king', 'white'), new Position(0, 0));
+    board.addPiece(new Piece('queen', 'white'), new Position(1, 0));
+
+    dto_string = board.serialize();
+    dto = JSON.parse(dto_string);
+    expect(dto).not.toBeUndefined();
+    expect(dto).not.toBeNull();
+    expect(dto['max_points']).toBeUndefined();
+    var king = dto['pieces']['0,0'];
+    expect(king).not.toBeUndefined();
+    var queen = dto['pieces']['1,0'];
+    expect(queen).not.toBeUndefined();
+  });
+});
+
+describe("deserialisation", function() {
+
+  var json;
+
+  it("should reject garbage", function() {
+    json = "NOT VALID JSON";
+    var do_it = function() {
+      board = new BuildingBoard(json);
+    };
+    expect(do_it).toThrow();
+  });
+
+  it("should ignore unknown attributes", function() {
+    json = '{ "pieces": [], "foo": "bar" }';
+    board = new BuildingBoard(json);
+    expect(board.foo).toBeUndefined();
+  });
+
+  it("should explode when given protected attributes", function() {
+    json = '{ "pieces": [], "max_points": 5000000 }';
+
+    var do_it = function() {
+      board = new BuildingBoard(json);
+    };
+    expect(do_it).toThrow();
+  });
+
+  it("should throw when given a set of pieces of different colours", function() {
+    json = '{ "pieces": { "0,0": { "type": "king", "cost": 0, "limit": 1, "colour": "white", "starting_row": 0 },' +
+      '"0,7": {"type": "queen", "cost": 3, "limit": 1, "colour": "black", "starting_row": 7} } }';
+    var do_it = function() {
+      board = new BuildingBoard(json);
+    };
+    expect(do_it).toThrow();
+  });
+
+  it("should accept valid attributes", function() {
+    json = '{ "pieces": { "0,0": { "type": "king", "cost": 0, "limit": 1, "colour": "white", "starting_row": 0 } } }';
+    board = new BuildingBoard(json);
+    var king = board.pieces["0,0"];
+    expect(king).not.toBeUndefined();
+    expect(king.type).toBe("king");
+    expect(king.cost).toBe(0);
+    expect(king.limit).toBe(1);
+    expect(king.colour).toBe("white");
+    expect(king.starting_row).toBe(0);
+  });
+});
+
 return {
   name: "building_board_spec"
 };

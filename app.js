@@ -26,7 +26,7 @@ requirejs.config({
   }
 });
 
-requirejs(['underscore', 'moment', './lib/checkers'], function(_, moment, Checkers) {
+requirejs(['underscore', 'moment', './lib/infochess'], function(_, moment, InfoChess) {
 
 // global variables
 var connectedUsers = 0;
@@ -223,6 +223,7 @@ app.get('/debug', function (req, res) {
   sendfile(__dirname + '/debug.html');
 });
 app.get('/images/*', serve_dir);
+app.get('/vendor/*', serve_dir);
 app.get('/style/*', serve_dir);
 app.get('/lib/*', serve_dir);
 app.get('/client/*', serve_dir);
@@ -292,11 +293,11 @@ var loadGame = function(dbgame) {
   var factory = null;
   if (_.isUndefined(dbgame.gameState) || dbgame.gameState === null) {
     logger.debug("Creating new game: "+dbgame._id);
-    factory = function() { return new Checkers.GameState(); };
+    factory = function() { return new InfoChess.InfoChess(); };
   } else {
     logger.debug("Restoring old game: "+dbgame._id);
     factory = function() {
-      gameState = new Checkers.GameState();
+      gameState = new InfoChess.InfoChess();
       gameState.fromDTO(JSON.parse(dbgame.gameState));
       return gameState;
     };
@@ -341,5 +342,5 @@ app.listen(port, function() {
   console.log("Guerrilla-checkers listening on http://localhost:" + port);
 });
 
-}); // requirejs Checkers
+});
 

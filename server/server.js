@@ -15,13 +15,14 @@ requirejs.config({
 
 requirejs([
   'underscore',
-  './lib/checkers',
-  './lib/vote'],
+  './lib/vote',
+  './lib/helper'],
   function(
     _,
-    Checkers,
-    Vote) {
+    Vote,
+    HelperModule) {
 
+var Position = HelperModule.Position;
 var WHITE_ROLE = 'white';
 var BLACK_ROLE = 'black';
 var SPECTATOR = 'spectator';
@@ -79,25 +80,26 @@ Server.prototype.updateServerStatus = function() {
   me.broadcast('num_connected_users', me.arrPlayers.length);
 };
 
+Server.prototype.saveGame = function(gameState) {
+  console.log('saving new game state');
+  this.dbgame.gameState = JSON.stringify(gameState);
+  this.dbgame.save(function(err) { if (err) throw err; });
+};
+
 Server.prototype.refreshBoard = function(result, arrPlayers) {
   var me = this;
   var data = {
-    result: result,
-    remainingGuerrillaPieces: me.game.getRemainingGuerrillaPieces(),
-    phase: me.game.getCurrentPhaseIndex(),
-    board: me.game.getPieces(),
-    placedGuerrilla: me.game.placedGuerrilla,
-    gameState: me.game.asDTO()
+    result: result
   };
 
-  console.log('saving new game state');
-  this.dbgame.gameState = JSON.stringify(data.gameState);
-  this.dbgame.save(function(err) { if (err) throw err; });
+  // TODO fix game saving
+  //saveGame(data.gameState);
 
   console.log('update players: ', me.arrPlayers.length);
   _.each(arrPlayers || me.arrPlayers, function(player) {
     var socket = player.getSocket();
     if (_.isUndefined(socket) || _.isNull(socket)) { return; }
+    data.gameState = me.game.asDTO(player.getRole());
     socket.emit('update', data);
   });
   var winner = me.game.getWinner();
@@ -201,33 +203,9 @@ Server.prototype.addPlayer = function(socket, user) {
     me.broadcast('message', data);
   });
 
-  socket.on('select_army', function(serializedArmy) {
-    console.log("Got 'select_army'");
-    console.log(serializedArmy);
-
-    // TODO persist the army choice
-    player.setArmy(serializedArmy);
-
-    // notify other player
-    me.broadcast('opponent_ready', {}, player);
-
-    // TODO begin game if players are ready
-    if (me.allPlayersReady()) {
-      console.log('Game in progress!');
-      me.broadcast('start_game', {});
-    }
-  });
-
   me.broadcast('num_connected_users', me.arrPlayers.length);
   socket.emit('board_type', 'guerrilla');
   return player;
-};
-
-Server.prototype.allPlayersReady = function() {
-  waiting_players = _.select(this.arrPlayers, function(player) {
-    return player.getArmy() === null;
-  });
-  return waiting_players.length === 0;
 };
 
 Server.prototype.getPlayerCount = function() {
@@ -312,25 +290,42 @@ var Player = function(_socket, server, user, role) {
     name: user.name
   });
 
-  // welcome message
   me.socket.emit('message', {
     user: 'server',
     message: 'Welcome to Guerrilla Checkers!'
   });
 
-  // checkers protocol
-  me.socket.on('moveCOIN', function(data) {
-    console.log(data);
-    console.log('### COIN move requested. Piece at ('+data.piece.x+','+data.piece.y+") to ("+data.position.x+","+data.position.y+")");
-    var result = me.server.getGame().moveSoldierPiece(data.piece, data.position);
-    me.server.refreshBoard(result);
+  var handleMessage = function(message, func) {
+    me.socket.on(message, function(data) {
+      console.log("Protocol message: " + message);
+      console.log(data);
+      me.server.refreshBoard(func(data));
+    });
+  };
+
+  handleMessage('select_army', function(serializedArmy) {
+    console.log("Got 'select_army'");
+    console.log(serializedArmy);
+
+    me.server.getGame().setArmy(me.role, serializedArmy);
+
+    // notify other player
+    me.server.broadcast('opponent_ready', {}, me);
+
+    return true;
   });
 
-  me.socket.on('placeGuerrilla', function(data) {
-    console.log("### Guerrilla move requested.");
-    console.log(data);
-    var result = me.server.getGame().placeGuerrillaPiece(data.position);
-    me.server.refreshBoard(result);
+
+  handleMessage('moveCOIN', function(data) {
+    return me.server.getGame().moveSoldierPiece(data.piece, data.position);
+  });
+
+  handleMessage('placeGuerrilla', function(data) {
+    return me.server.getGame().placeGuerrillaPiece(data.position);
+  });
+
+  handleMessage('move', function(move) {
+    return me.server.getGame().move(me.role, new Position(move.src.x, move.src.y), new Position(move.dest.x, move.dest.y));
   });
 
   // notify other users
@@ -341,17 +336,6 @@ var Player = function(_socket, server, user, role) {
   // refresh board
   me.socket.emit('role', role);
   me.server.refreshBoard(true, [me]);
-
-  // send recent messages
-  //fetchRecentMessages(function(err,messages) {
-
-  //  for(var i = messages.length-1; i >= 0; --i) {
-  //    var message = messages[i];
-  //    console.log(message);
-  //    me.socket.emit('message', message);
-  //  }
-
-  //});
 };
 
 Player.prototype.getId = function() {
@@ -369,15 +353,6 @@ Player.prototype.getRole = function() {
 Player.prototype.setRole = function(role) {
   this.role = role;
 };
-
-Player.prototype.getArmy = function() {
-  return this.army;
-};
-
-Player.prototype.setArmy = function(army) {
-  this.army = army;
-};
-
 
 module.exports.Player = Player;
 module.exports.Server = Server;

@@ -1,8 +1,8 @@
-define(['lib/building_board'], function(BuildingBoardModule) {
+define(['lib/helper', 'lib/building_board'], function(HelperModule, BuildingBoardModule) {
 
 var BuildingBoard = BuildingBoardModule.BuildingBoard;
-var Position = BuildingBoardModule.Position;
-var Piece = BuildingBoardModule.Piece;
+var Position = HelperModule.Position;
+var Piece = HelperModule.Piece;
 
 describe("validatePosition", function() {
   var pos, board;

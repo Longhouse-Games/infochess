@@ -18,8 +18,16 @@ global.beforeEach = require('./vendor/jasmine-1.2.0/jasmine').beforeEach;
 
 
 //bring in and list all the tests to be run
-requirejs(['./spec/lib/building_board.spec'], function(BuildingBoardSpec) {
-  console.log("BuildingBoardSpec: ", BuildingBoardSpec);
+requirejs(
+    [
+      './spec/lib/building_board.spec',
+      './spec/lib/playing_board.spec',
+      './spec/lib/infochess.spec'
+    ],
+    function() {
+  for (var i = 0; i < arguments.length; i++) {
+    console.log('Running spec: '+ arguments[i].name);
+  }
   var jasmine = require('./vendor/jasmine-1.2.0/jasmine').jasmine;
   var ConsoleJasmineReporter2 = require('./vendor/runner/consoleJasmineReporter2').ConsoleJasmineReporter;
   jasmine.getEnv().addReporter(new ConsoleJasmineReporter2());

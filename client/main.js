@@ -1,11 +1,12 @@
 requirejs.config({
   baseUrl: 'client',
   paths: {
-    lib: '../lib'
+    lib: '../lib',
+    underscore: "../vendor/underscore/underscore"
   }
 });
 
-require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, BuildingBoardModule, helpers) {
+require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], function(HelperModule, InfoChess, BuildingBoardModule, helpers) {
 
   if (Array.prototype.forEach === undefined) {
     Array.prototype.forEach = function(callback) {
@@ -16,8 +17,9 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
   }
 
   var BuildingBoard = BuildingBoardModule.BuildingBoard;
-  var Piece = BuildingBoardModule.Piece;
-  var Position = BuildingBoardModule.Position;
+  var Piece = HelperModule.Piece;
+  var Position = HelperModule.Position;
+  var keyToPosition = HelperModule.keyToPosition;
 
   var TYPES = [
     'king',
@@ -33,6 +35,8 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
   var g_gameState = null;
   var g_building_board = null;
   var g_selectedType; // Selected piece type when building army
+
+  var ui_pieces = {}; // "x,y" -> div
 
   function isBlackPlayer() {
     return g_role === BLACK_ROLE;
@@ -50,7 +54,6 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
     return g_role;
   }
 
-  var g_piecesOnBoard = {}; // "x,y" -> div
 
 
   var SPECTATOR_ROLE = 'spectator';
@@ -86,6 +89,25 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
     return newPieceOnBoard;
   }
 
+  function addNormalPiece(piece, position) {
+    var container = document.getElementById('pieces');
+    var cssclass = cssClassForPiece(piece) + " normal_piece";
+    if (piece.invisible === true) {
+      cssclass = cssclass + " invisible";
+    }
+    var newPieceOnBoard = addPiece(container, piece, position, cssclass, PIECE_MARGIN);
+
+    newPieceOnBoard.onclick = function() {
+      if (g_gameState.getCurrentRole() === g_role) {
+        clearSelection();
+        this.className += " selected";
+        displayPossibleMoves(getPlayerColour(), piece, position);
+      }
+    };
+
+    return newPieceOnBoard;
+  }
+
   function addTempPiece(piece, position) {
     var container = document.getElementById('pieces');
     var cssclass = cssClassForPiece(piece) + " temp_piece";
@@ -105,6 +127,35 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
     return newPieceOnBoard;
   }
 
+  function clearSelection() {
+    $(".selected").removeClass("selected");
+  }
+
+  function displayPossibleMoves(role, piece, position) {
+    var $moves = $("#moves");
+    // Clear all shadow pieces
+    $moves.text("");
+
+    var pos_keys = g_gameState.getPossibleMoves(piece, position);
+
+    pos_keys.forEach(function(pos_key) {
+
+      var handler = function(piece, src, dest) {
+        return function() {
+          clearSelection();
+          var move = {
+            src: src,
+            dest: dest
+          };
+          socket.emit('move', move);
+        };
+      }(piece, position, keyToPosition(pos_key));
+
+      createMove($moves, piece, keyToPosition(pos_key), handler);
+    });
+    $moves.css('visibility', 'visible');
+  }
+
   function displayValidStartingPositions(side, piece_type) {
 
     var $moves = $("#"+getPlayerColour()+"_moves");
@@ -122,7 +173,17 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
 
     for (i = 0; i < positions.length; i++) {
       var position = positions[i];
-      createMove($moves, piece, position);
+
+      var handler = function(position) {
+        return function() {
+          addTempPiece(piece, position);
+          getBuildingBoard().addPiece(piece, position);
+          recalculateArmy();
+          displayValidStartingPositions(getPlayerColour(), g_selectedType);
+        };
+      }(position);
+
+      createMove($moves, piece, position, handler);
     }
     $moves.css('visibility', 'visible');
   }
@@ -131,17 +192,11 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
     return piece.type + '_' + piece.colour;
   }
 
-  function createMove($moves, piece, position) {
+  function createMove($moves, piece, position, clickHandler) {
     var container = $moves.get(0);
     var cssclass = "shadow_piece " + cssClassForPiece(piece);
     var newPieceOnBoard = addPiece(container, piece, position, cssclass, PIECE_MARGIN);
-    newPieceOnBoard.onclick = function() {
-      console.log("Adding " + piece.type + " to position '"+position.asKey()+"'");
-      addTempPiece(piece, position);
-      getBuildingBoard().addPiece(piece, position);
-      recalculateArmy();
-      displayValidStartingPositions(getPlayerColour(), g_selectedType);
-    };
+    newPieceOnBoard.onclick = clickHandler;
   }
 
   function setTransitionProperty($element, value) {
@@ -183,7 +238,13 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
 
   function updateArmySelector() {
     var $builder = $('#army_selector').first();
-    $builder.css('display', 'block');
+    if (g_gameState.getCurrentPhase() === g_gameState.PHASES.SETUP) {
+      $builder.css('display', 'block');
+    } else {
+      $builder.css('display', 'none');
+      $(".temp_piece").remove();
+      $(".shadow_piece").remove();
+    }
   }
 
   function serializeArmy() {
@@ -204,6 +265,21 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
     }
   }
 
+  function updateBoard() {
+    var pieces = g_gameState.board.getPieces();
+    console.log("Updating board, pieces:" );
+    console.log(pieces);
+    var piecesOnBoard = ui_pieces || {};
+    $("#pieces").text("");
+
+    for (var pos_key in pieces) {
+      if (pieces.hasOwnProperty(pos_key)) {
+        var piece = pieces[pos_key];
+        addNormalPiece(piece, keyToPosition(pos_key));
+      }
+    }
+  }
+
   function updatePlayerTurnOverlay() {
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
@@ -212,13 +288,10 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
       setOverlayText($overlay, g_gameState.getCurrentPhase() + "'S TURN");
       return;
     }
-    if (isWhitePlayer()) {
-      setOverlayText($overlay, g_gameState.isGuerrillaTurn() ? yourTurn : opponentsTurn);
-      return;
-    }
-    if (isBlackPlayer()) {
-      setOverlayText($overlay, g_gameState.isSoldierTurn() ? yourTurn : opponentsTurn);
-      return;
+    if (g_gameState.getCurrentRole() === g_role) {
+      setOverlayText($overlay, yourTurn);
+    } else {
+      setOverlayText($overlay, opponentsTurn);
     }
   }
 
@@ -310,10 +383,6 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
       update_opponent_status(CHOOSING);
     });
 
-    socket.on('start_game', function() {
-      hideArmySelector();
-    });
-
     socket.on('role', function(role) {
       g_role = role;
       if (role === WHITE_ROLE) {
@@ -351,11 +420,12 @@ require(["lib/checkers", "lib/building_board", 'helpers'], function(checkers, Bu
         return;
       }
 
-      g_gameState = new checkers.GameState;
+      g_gameState = new InfoChess.InfoChess;
       g_gameState.fromDTO(updateResponse.gameState);
 
       updateArmySelector();
       updatePlayerTurnOverlay();
+      updateBoard();
     });
 
     // send message functionality

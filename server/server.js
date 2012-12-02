@@ -103,7 +103,7 @@ Server.prototype.refreshBoard = function(result, arrPlayers) {
     socket.emit('update', data);
   });
   var winner = me.game.getWinner();
-  if (winner) {
+  if (winner && me.game.currentPhase === me.game.PHASES.GAMEOVER) {
     me.broadcast('gameOver', {winner: winner});
     me.broadcast('message', {user: 'game', message: 'Game Over'});
     me.broadcast('message', {user: 'game', message: 'Winner: ' + winner});

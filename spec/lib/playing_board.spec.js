@@ -5,14 +5,14 @@ var PlayingBoard = PlayingBoardModule.PlayingBoard;
 var BuildingBoard = BuildingBoardModule.BuildingBoard;
 var Position = HelperModule.Position;
 var Piece = HelperModule.Piece;
-var makeArmy = SpecHelper.makeArmy;
+var makeBuildingBoard = SpecHelper.makeBuildingBoard;
 
 describe("player views", function() {
   var board;
 
   beforeEach(function() {
-    var whiteArmy = makeArmy('black');
-    var blackArmy = makeArmy('white');
+    var whiteArmy = makeBuildingBoard('black');
+    var blackArmy = makeBuildingBoard('white');
 
     board = new PlayingBoard(whiteArmy, blackArmy);
   });

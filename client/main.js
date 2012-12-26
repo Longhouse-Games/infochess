@@ -80,7 +80,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     });
   }
 
-  function addPiece(container, piece, position, className, margin) {
+  function addPiece(container, position, className, margin) {
     var newPieceOnBoard = document.createElement("div");
     newPieceOnBoard.className += " " + className;
     newPieceOnBoard.style.left = margin + ((position.x) * SQUARE_SIZE) + 'px';
@@ -95,7 +95,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     if (piece.invisible === true) {
       cssclass = cssclass + " invisible";
     }
-    var newPieceOnBoard = addPiece(container, piece, position, cssclass, PIECE_MARGIN);
+    var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
 
     newPieceOnBoard.onclick = function() {
       if (g_gameState.getCurrentRole() === g_role) {
@@ -111,7 +111,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   function addTempPiece(piece, position) {
     var container = document.getElementById('pieces');
     var cssclass = cssClassForPiece(piece) + " temp_piece";
-    var newPieceOnBoard = addPiece(container, piece, position, cssclass, PIECE_MARGIN);
+    var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
 
     //Add removal marker
     var removalMarker = document.createElement("div");
@@ -154,6 +154,58 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       createMove($moves, piece, keyToPosition(pos_key), handler);
     });
     $moves.css('visibility', 'visible');
+
+    var castling = g_gameState.getCastlingMoves(piece, position);
+
+    console.log("Castling results");
+    console.log(castling);
+    createCastlingMoves($moves, piece, position, castling);
+  }
+
+  function createCastlingMoves(container, piece, position, castling) {
+    var castlingHandler = function(side, piece) {
+      return function() {
+        if (side !== 'queenside' && side !== 'kingside') {
+          throw "Invalid side for castling: " + side;
+        }
+        clearSelection();
+        var rook_x = side === 'queenside' ? 0 : 7;
+        var move = {
+          src: new Position(4, piece.starting_row),
+          dest: new Position(rook_x, piece.starting_row)
+        }
+        socket.emit('move', move);
+      };
+    };
+    var queensideHandler = castlingHandler('queenside', piece);
+    var kingsideHandler = castlingHandler('kingside', piece);
+
+    if ((castling.queenside || castling.kingside) && piece.type !== "king") {
+      //highlight the king
+      var king_pos = castling.queenside ? castling.queenside.king : castling.kingside.king;
+      var king = new Piece('king', getPlayerColour());
+      var handler = null;
+      if (position.x === 0) {
+        handler = queensideHandler;
+      } else if (position.x === 7) {
+        handler = kingsideHandler;
+      } else {
+        throw "Invalid position for castling: " + position.asKey();
+      }
+      createCastlingMove(container, king, new Position(4, king.starting_row), handler);
+    }
+    if (castling.queenside && piece.type !== "rook") {
+      //highlight queenside rook
+      var rook_pos = castling.queenside.rook;
+      var rook = new Piece('rook', getPlayerColour());
+      createCastlingMove(container, rook, new Position(0, rook.starting_row), queensideHandler);
+    }
+    if (castling.kingside && piece.type !== "rook") {
+      //highlight kingside rook
+      var rook_pos = castling.kingside.rook;
+      var rook = new Piece('rook', getPlayerColour());
+      createCastlingMove(container, rook, new Position(7, rook.starting_row), kingsideHandler);
+    }
   }
 
   function displayValidStartingPositions(side, piece_type) {
@@ -195,7 +247,14 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   function createMove($moves, piece, position, clickHandler) {
     var container = $moves.get(0);
     var cssclass = "shadow_piece " + cssClassForPiece(piece);
-    var newPieceOnBoard = addPiece(container, piece, position, cssclass, PIECE_MARGIN);
+    var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
+    newPieceOnBoard.onclick = clickHandler;
+  }
+
+  function createCastlingMove($moves, piece, position, clickHandler) {
+    var container = $moves.get(0);
+    var cssclass = "castling_shadow_piece";
+    var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
     newPieceOnBoard.onclick = clickHandler;
   }
 
@@ -271,6 +330,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     console.log(pieces);
     var piecesOnBoard = ui_pieces || {};
     $("#pieces").text("");
+    $("#moves").text("");
 
     for (var pos_key in pieces) {
       if (pieces.hasOwnProperty(pos_key)) {

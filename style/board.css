@@ -219,6 +219,14 @@ ul#pieces_list > li {
   margin: 2px;
 }
 
+.castling_shadow_piece {
+  border: 5px solid red;
+  z-index: 350;
+  position: absolute;
+  width: 63px;
+  height: 63px;
+}
+
 .invisible {
   opacity: 0.6;
 }

@@ -71,6 +71,71 @@ describe("move", function() {
 
 });
 
+describe("castling", function() {
+  it("should report a potential move if castling is possible", function() {
+    var king = new Piece('king', 'white');
+    board = new PlayingBoard({
+      "4,0": king,
+      "0,0": new Piece('rook', 'white'),
+      "7,0": new Piece('rook', 'white')
+    });
+
+    var castling_king = null;
+    var castling_rook = null;
+    var moves = board.getCastlingMoves(king, new Position("5,0"));
+    expect(moves.kingside).not.toBeUndefined();
+    expect(moves.queenside).not.toBeUndefined();
+
+    var result = board.move('white', new Position(4,0), new Position(0,0));
+
+    expect(result.type).toBe('castling');
+    expect(board.pieces["0,0"]).toBeUndefined();
+    expect(board.pieces["4,0"]).toBeUndefined();
+    expect(board.pieces["2,0"]).not.toBeUndefined();
+    expect(board.pieces["3,0"]).not.toBeUndefined();
+    expect(board.pieces["2,0"].type).toBe('king');
+    expect(board.pieces["3,0"].type).toBe('rook');
+  });
+
+  it("should not report a move if king and rook are not in position", function() {
+    var king = new Piece('king', 'white');
+    board = new PlayingBoard({
+      "3,0": king,
+      "0,0": new Piece('rook', 'white')
+    });
+
+    var castling_king = null;
+    var moves = board.getCastlingMoves(king, new Position("3,0"));
+    expect(moves.kingside).toBeFalsy();
+    expect(moves.queenside).toBeFalsy();
+
+    var do_it = function() {
+      board.move('white', new Position(3,0), new Position(0,0));
+    };
+    var result = board.move('white', new Position(3,0), new Position(0,0));
+    expect(do_it).toThrow();
+  });
+
+  it("should not report a move another piece are between king and rook", function() {
+    var king = new Piece('king', 'white');
+    board = new PlayingBoard({
+      "4,0": king,
+      "3,0": new Piece('knight', 'white'),
+      "0,0": new Piece('rook', 'white')
+    });
+
+    var castling_king = null;
+    var moves = board.getCastlingMoves(king, new Position("4,0"));
+    expect(moves.kingside).toBeFalsy();
+    expect(moves.queenside).toBeFalsy();
+
+    var do_it = function() {
+      board.move('white', new Position(5,0), new Position(0,0));
+    };
+    expect(do_it).toThrow();
+  });
+});
+
 return {
   name: "playing_board_spec"
 };

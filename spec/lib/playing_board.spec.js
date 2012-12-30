@@ -71,6 +71,61 @@ describe("move", function() {
 
 });
 
+describe("pawn capture", function() {
+  it("should report capturing spots if multiple captures are available", function() {
+    board = new PlayingBoard({
+      "1,5": new Piece('pawn', 'white'),
+      "3,5": new Piece('pawn', 'white'),
+      "0,6": new Piece('pawn', 'black'),
+      "2,6": new Piece('pawn', 'black')
+    });
+
+    var captures = board.getPawnCaptures('white');
+
+    expect(captures.length).toBe(3);
+    expect(captures[0].src.x).toEqual(1);
+    expect(captures[0].src.y).toEqual(5);
+    expect(captures[1].src.x).toEqual(1);
+    expect(captures[1].src.y).toEqual(5);
+    expect(captures[2].src.x).toEqual(3);
+    expect(captures[2].src.y).toEqual(5);
+    expect(captures[0].dest.x).toEqual(0);
+    expect(captures[0].dest.y).toEqual(6);
+    expect(captures[1].dest.x).toEqual(2);
+    expect(captures[1].dest.y).toEqual(6);
+    expect(captures[2].dest.x).toEqual(2);
+    expect(captures[2].dest.y).toEqual(6);
+
+    expect(board.pieces['0,6'].colour).toBe('black');
+    expect(board.pieces['2,6'].colour).toBe('black');
+    expect(board.pieces['1,5'].colour).toBe('white');
+    expect(board.pieces['3,5'].colour).toBe('white');
+  });
+
+  it("should not perform the capture immediately if only one capture is possible", function() {
+    board = new PlayingBoard({
+      "1,5": new Piece('pawn', 'white'),
+      "0,6": new Piece('pawn', 'black')
+    });
+
+    var captures = board.getPawnCaptures('white');
+    expect(captures.length).toBe(1);
+    expect(captures[0].src.x).toEqual(1);
+    expect(captures[0].src.y).toEqual(5);
+    expect(captures[0].dest.x).toEqual(0);
+    expect(captures[0].dest.y).toEqual(6);
+    expect(board.pieces['0,6'].colour).toBe('black');
+    expect(board.pieces['1,5'].colour).toBe('white');
+
+    var result = board.move('white', new Position(1,5), new Position(0,6), 'pawn-capture');
+    expect(result.type).toBe('capture');
+    expect(board.pieces['1,5']).toBeUndefined();
+    expect(board.pieces['0,6']).not.toBeUndefined();
+    expect(board.pieces['0,6'].colour).toBe('white');
+    expect(board.pieces['0,6'].type).toBe('pawn');
+  });
+});
+
 describe("castling", function() {
   it("should report a potential move if castling is possible", function() {
     var king = new Piece('king', 'white');

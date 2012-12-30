@@ -287,11 +287,28 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     newPieceOnBoard.onclick = clickHandler;
   }
 
+  // Add a div to the board at position with the given class. Also attach click handler
+  function addToBoard(cssclass, position, clickHandler) {
+    var container = $("#moves").get(0);
+    var square = addPiece(container, position, cssclass, PIECE_MARGIN);
+    square.onclick = clickHandler;
+  }
+
   function createCastlingMove($moves, piece, position, clickHandler) {
     var container = $moves.get(0);
     var cssclass = "castling_shadow_piece";
     var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
     newPieceOnBoard.onclick = clickHandler;
+  }
+
+  function addPawnCaptureSource(position, clickHandler) {
+    console.log("Adding pawn_capture_source for position" + position);
+    addToBoard("pawn_capture_source", position, clickHandler);
+  }
+
+  function addPawnCaptureTarget(position, clickHandler) {
+    console.log("Adding pawn_capture_target for position" + position);
+    addToBoard("pawn_capture_target", position, clickHandler);
   }
 
   function setTransitionProperty($element, value) {
@@ -376,6 +393,66 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
   }
 
+  function clearPawnCaptureTargets() {
+    $(".pawn_capture_target").remove();
+  }
+
+  function updatePawnCaptures(captures) {
+    var me = this;
+    console.log("Got captures!");
+    console.log(captures);
+    var sources = [];
+    var targets = {};
+    var i;
+    for (i = 0; i < captures.length; i++) {
+      var capture = captures[i];
+      if (sources.indexOf(capture.src) === -1) {
+        sources.push(capture.src);
+      }
+      targets[new Position(capture.dest.x, capture.dest.y).asKey()] = capture.dest;
+    }
+
+    console.log("SOURCES AND TARGETS");
+    console.log(sources);
+    console.log(targets);
+
+    for (i = 0; i < sources.length; i++) {
+      var sourceHandler = function(src) {
+        return function() {
+          console.log("Source pawn "+src.x+","+src.y+" clicked");
+          var dir_mod = getPlayerColour() === "white" ? 1 : -1;
+          var left  = new Position(src.x - 1, src.y + (1*dir_mod));
+          var right = new Position(src.x + 1, src.y + (1*dir_mod));
+          clearPawnCaptureTargets();
+
+          var addTarget = function(position) {
+            if (targets[position.asKey()]) {
+              var handler = function() {
+                console.log("Target pawn "+position.x+","+position.y+" clicked. Using src "+src.x+","+src.y);
+                var move = {
+                  src: src,
+                  dest: position
+                };
+                socket.emit('move', move);
+              };
+              addPawnCaptureTarget(position, handler);
+            }
+          };
+
+          addTarget(left);
+          addTarget(right);
+        };
+      }(sources[i]);
+      addPawnCaptureSource(new Position(sources[i].x, sources[i].y), sourceHandler);
+    }
+     // for (i = 0; i < targets.length; i++) {
+     //   var destHandler = function() {
+     //     console.log("target square clicked");
+     //   };
+     //   addPawnCaptureTarget(new Position(targets[i].x, targets[i].y), destHandler);
+     // }
+  }
+
   function updatePlayerTurnOverlay() {
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
@@ -456,6 +533,9 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   $('#join_spectator').bind('click', function() {
     socket.emit('takeRole', 'spectator');
   });
+  $('#pawn_capture').bind('click', function() {
+    socket.emit('pawn_capture_query');
+  });
 
   socket.on('connect', function() {
 
@@ -519,9 +599,15 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       g_gameState = new InfoChess.InfoChess;
       g_gameState.fromDTO(updateResponse.gameState);
 
+      console.log("REsponse:");
+      console.log(updateResponse);
+
       updateArmySelector();
       updatePlayerTurnOverlay();
       updateBoard();
+      if (updateResponse.result.pawn_captures) {
+        updatePawnCaptures(updateResponse.result.pawn_captures);
+      }
     });
 
     // send message functionality

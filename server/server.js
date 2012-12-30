@@ -303,6 +303,14 @@ var Player = function(_socket, server, user, role) {
     });
   };
 
+  var handlePrivateMessage = function(message, func) {
+    me.socket.on(message, function(data) {
+      console.log("Protocol message: " + message);
+      console.log(data);
+      me.server.refreshBoard(func(data), [me]);
+    });
+  };
+
   handleMessage('select_army', function(serializedArmy) {
     console.log("Got 'select_army'");
     console.log(serializedArmy);
@@ -326,6 +334,12 @@ var Player = function(_socket, server, user, role) {
 
   handleMessage('move', function(move) {
     return me.server.getGame().move(me.role, new Position(move.src.x, move.src.y), new Position(move.dest.x, move.dest.y));
+  });
+
+  handlePrivateMessage('pawn_capture_query', function() {
+    console.log("Got pawn_capture_query");
+
+    return { pawn_captures: me.server.getGame().getPawnCaptures(me.role) };
   });
 
   // notify other users

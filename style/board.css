@@ -208,7 +208,6 @@ ul#pieces_list > li {
 }
 
 #moves, #soldier_moves, #guerrilla_moves, #white_moves, #black_moves {
-  visibility: hidden;
   opacity: 0.4;
 }
 
@@ -221,6 +220,22 @@ ul#pieces_list > li {
 
 .castling_shadow_piece {
   border: 5px solid red;
+  z-index: 350;
+  position: absolute;
+  width: 63px;
+  height: 63px;
+}
+
+.pawn_capture_source {
+  border: 5px solid blue;
+  z-index: 350;
+  position: absolute;
+  width: 63px;
+  height: 63px;
+}
+
+.pawn_capture_target {
+  border: 5px solid green;
   z-index: 350;
   position: absolute;
   width: 63px;

@@ -551,10 +551,10 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     socket.emit('psyop', { reinforced: true });
   });
   $('#ew_normal').bind('click', function() {
-    socket.emit('ew_normal');
+    socket.emit('ew', { reinforced: false });
   });
   $('#ew_reinforced').bind('click', function() {
-    socket.emit('ew_reinforced');
+    socket.emit('ew', { reinforced: true });
   });
   $('#feint').bind('click', function() {
     if (g_gameState.currentIWCost === 1) {

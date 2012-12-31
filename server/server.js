@@ -346,6 +346,21 @@ var Player = function(_socket, server, user, role) {
     return result;
   });
 
+  handleMessage('ew', function(data) {
+    console.log("EW attack from " + me.role);
+    if (typeof data.reinforced === 'undefined') {
+      throw "Protocol error: 'reinforced' must be specified for IW attacks";
+    }
+
+    var result = me.server.getGame().iw_attack(me.role, {type: 'ew', reinforced: data.reinforced});
+    if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
+      // Notify other player (TODO spectators will get this too, but they shouldn't)
+      me.server.broadcast('defend', result, me);
+      return true;
+    }
+    return result;
+  });
+
   handleMessage('iw_defense', function(data) {
     var result = me.server.getGame().iw_defense(me.role, data);
     return result;

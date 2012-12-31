@@ -126,6 +126,67 @@ describe("pawn capture", function() {
   });
 });
 
+describe("iw attack", function() {
+  it("should target the pawn farthest from the king", function() {
+    var target = new Piece('pawn', 'white');
+    var board = new PlayingBoard({
+      "0,4": new Piece('king', 'white'),
+      "7,7": new Piece('queen', 'white'),
+      "5,5": target
+    });
+    var attack = {
+      attacker: 'black',
+      type: 'psyop',
+      reinforced: false
+    };
+    var result = board.psyop_attack(attack);
+    expect(result).not.toBeUndefined();
+    expect(result.type).toBe('capture');
+    expect(result.captured_piece).toBe(target);
+    expect(board.pieces['5,5']).toBeUndefined();
+    expect(board.pieces['7,7']).not.toBeUndefined();
+  });
+
+  // TODO handle case where two pawns are equidistant from king
+
+  it("should target the piece farthest from the king if there are no pawns", function() {
+    var target = new Piece('pawn', 'white');
+    var board = new PlayingBoard({
+      "0,4": new Piece('king', 'white'),
+      "5,5": new Piece('knight', 'white'),
+      "7,7": target
+    });
+    var attack = {
+      attacker: 'black',
+      type: 'psyop',
+      reinforced: false
+    };
+    var result = board.psyop_attack(attack);
+    expect(result).not.toBeUndefined();
+    expect(result.type).toBe('capture');
+    expect(result.captured_piece).toBe(target);
+    expect(board.pieces['5,5']).not.toBeUndefined();
+    expect(board.pieces['7,7']).toBeUndefined();
+  });
+
+  it("should target the king if it is the only remaining piece", function() {
+    var target = new Piece('king', 'white');
+    var board = new PlayingBoard({
+      "0,4": target
+    });
+    var attack = {
+      attacker: 'black',
+      type: 'psyop',
+      reinforced: false
+    };
+    var result = board.psyop_attack(attack);
+    expect(result).not.toBeUndefined();
+    expect(result.type).toBe('capture');
+    expect(result.captured_piece).toBe(target);
+    expect(board.pieces['0,4']).toBeUndefined();
+  });
+});
+
 describe("castling", function() {
   it("should report a potential move if castling is possible", function() {
     var king = new Piece('king', 'white');

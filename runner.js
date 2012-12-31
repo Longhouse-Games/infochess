@@ -22,7 +22,8 @@ requirejs(
     [
       './spec/lib/building_board.spec',
       './spec/lib/playing_board.spec',
-      './spec/lib/infochess.spec'
+      './spec/lib/infochess.spec',
+      './spec/lib/helper.spec'
     ],
     function() {
   for (var i = 0; i < arguments.length; i++) {

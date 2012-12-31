@@ -32,6 +32,10 @@ body {
   overflow-x: none;
 }
 
+#actions {
+  float: right
+}
+
 .chat {
   color: black;
 }

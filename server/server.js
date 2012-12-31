@@ -323,17 +323,29 @@ var Player = function(_socket, server, user, role) {
     return true;
   });
 
-
-  handleMessage('moveCOIN', function(data) {
-    return me.server.getGame().moveSoldierPiece(data.piece, data.position);
-  });
-
-  handleMessage('placeGuerrilla', function(data) {
-    return me.server.getGame().placeGuerrillaPiece(data.position);
-  });
-
   handleMessage('move', function(move) {
     return me.server.getGame().move(me.role, new Position(move.src.x, move.src.y), new Position(move.dest.x, move.dest.y));
+  });
+
+  handleMessage('end_turn', function(data) {
+    me.server.getGame().endTurn(me.role);
+    return true;
+  });
+
+  handleMessage('psyop_normal', function(data) {
+    console.log(me.server.getGame());
+    var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: false});
+    if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
+      // Notify other player (TODO spectators will get this too, but they shouldn't)
+      me.server.broadcast('defend', result, me);
+      return true;
+    }
+    return result;
+  });
+
+  handleMessage('iw_defense', function(data) {
+    var result = me.server.getGame().iw_defense(me.role, data);
+    return result;
   });
 
   handlePrivateMessage('pawn_capture_query', function() {

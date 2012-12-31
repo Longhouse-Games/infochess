@@ -393,6 +393,14 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
   }
 
+  function updateIW() {
+    $("#psyop_attack_cost").text(g_gameState.currentPsyOpAttackCost);
+    $("#ew_attack_cost").text(g_gameState.currentEWAttackCost);
+    $("#psyop_defend_cost").text(g_gameState.currentPsyOpDefendCost);
+    $("#ew_defend_cost").text(g_gameState.currentEWDefendCost);
+    $("#iw_points").text(g_gameState.remainingIW);
+  }
+
   function clearPawnCaptureTargets() {
     $(".pawn_capture_target").remove();
   }
@@ -536,6 +544,28 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   $('#pawn_capture').bind('click', function() {
     socket.emit('pawn_capture_query');
   });
+  $('#psyop_normal').bind('click', function() {
+    socket.emit('psyop_normal');
+  });
+  $('#psyop_reinforced').bind('click', function() {
+    socket.emit('psyop_reinforced');
+  });
+  $('#ew_normal').bind('click', function() {
+    socket.emit('ew_normal');
+  });
+  $('#ew_reinforced').bind('click', function() {
+    socket.emit('ew_reinforced');
+  });
+  $('#feint').bind('click', function() {
+    if (g_gameState.currentIWCost === 1) {
+      alert("Feints can only be done when the current IW cost is 2.");
+    } else {
+      socket.emit('feint');
+    }
+  });
+  $('#end_turn').bind('click', function() {
+    socket.emit('end_turn');
+  });
 
   socket.on('connect', function() {
 
@@ -591,6 +621,16 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       $('#username').val(userInfo.name);
     });
 
+    socket.on('defend', function(data) {
+      if (confirm("The opponent has issued an IW attack!. Do you wish to defend? It will cost "+data.defense_cost+" IW")) {
+        alert("You have chosen to defend. Good for you!");
+        socket.emit('iw_defense', { defend: true });
+      } else {
+        alert("You have chosen not to defend. Foop!");
+        socket.emit('iw_defense', { defend: false });
+      }
+    });
+
     socket.on('update', function(updateResponse) {
       if (!updateResponse || !updateResponse.gameState) {
         return;
@@ -605,6 +645,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       updateArmySelector();
       updatePlayerTurnOverlay();
       updateBoard();
+      updateIW();
       if (updateResponse.result.pawn_captures) {
         updatePawnCaptures(updateResponse.result.pawn_captures);
       }

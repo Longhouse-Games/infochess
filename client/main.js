@@ -545,10 +545,10 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     socket.emit('pawn_capture_query');
   });
   $('#psyop_normal').bind('click', function() {
-    socket.emit('psyop_normal');
+    socket.emit('psyop', { reinforced: false });
   });
   $('#psyop_reinforced').bind('click', function() {
-    socket.emit('psyop_reinforced');
+    socket.emit('psyop', { reinforced: true });
   });
   $('#ew_normal').bind('click', function() {
     socket.emit('ew_normal');

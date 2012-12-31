@@ -332,9 +332,12 @@ var Player = function(_socket, server, user, role) {
     return true;
   });
 
-  handleMessage('psyop_normal', function(data) {
+  handleMessage('psyop', function(data) {
     console.log(me.server.getGame());
-    var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: false});
+    if (typeof data.reinforced === 'undefined') {
+      throw "Protocol error: 'reinforced' must be specified for IW attacks";
+    }
+    var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: data.reinforced});
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)
       me.server.broadcast('defend', result, me);

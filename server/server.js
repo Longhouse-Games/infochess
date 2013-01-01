@@ -361,6 +361,18 @@ var Player = function(_socket, server, user, role) {
     return result;
   });
 
+  handleMessage('feint', function(data) {
+    console.log("Feint from " + me.role);
+
+    var result = me.server.getGame().iw_attack(me.role, {type: 'feint'});
+    if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
+      // Notify other player (TODO spectators will get this too, but they shouldn't)
+      me.server.broadcast('defend', result, me);
+      return true;
+    }
+    return result;
+  });
+
   handleMessage('iw_defense', function(data) {
     var result = me.server.getGame().iw_defense(me.role, data);
     return result;

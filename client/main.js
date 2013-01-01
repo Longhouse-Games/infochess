@@ -557,8 +557,8 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     socket.emit('ew', { reinforced: true });
   });
   $('#feint').bind('click', function() {
-    if (g_gameState.currentIWCost === 1) {
-      alert("Feints can only be done when the current IW cost is 2.");
+    if (g_gameState.currentPsyOpAttackCost === 1 && g_gameState.currentEWAttackCost === 1) {
+      alert("Feints can only be done when any of the current IW attack costs are 2.");
     } else {
       socket.emit('feint');
     }
@@ -622,6 +622,8 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     });
 
     socket.on('defend', function(data) {
+      console.log("Defending! Cost: " + data.defense_cost);
+      console.log(data);
       if (confirm("The opponent has issued an IW attack!. Do you wish to defend? It will cost "+data.defense_cost+" IW")) {
         alert("You have chosen to defend. Good for you!");
         socket.emit('iw_defense', { defend: true });

@@ -378,6 +378,11 @@ var Player = function(_socket, server, user, role) {
     return result;
   });
 
+  handleMessage('pawn_upgrade', function(data) {
+    var result = me.server.getGame().pawn_upgrade(me.role, data);
+    return result;
+  });
+
   handlePrivateMessage('pawn_capture_query', function() {
     console.log("Got pawn_capture_query");
 

@@ -57,6 +57,15 @@ body {
   padding: 5px;
 }
 
+#pawn_upgrade_dialog {
+  visibility: hidden;
+  background: #555;
+  border-style: groove;
+  position: absolute;
+  height: 580px;
+  padding: 5px;
+}
+
 img.piece {
   height: 50px;
   width: 50px;

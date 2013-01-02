@@ -348,6 +348,12 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     $builder.css('display', 'none');
   }
 
+  function showPawnUpgradeDialog() {
+    console.log("Showing pawn upgrade");
+    var $dialog = $('#pawn_upgrade_dialog').first();
+    $dialog.css('visibility', 'visible');
+  }
+
   function updateArmySelector() {
     var $builder = $('#army_selector').first();
     if (g_gameState.getCurrentPhase() === g_gameState.PHASES.SETUP) {
@@ -526,6 +532,27 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     });
   }
 
+  function initPawnUpgradeDialog() {
+    var pieces = ["queen", "knight", "rook", "bishop"];
+    var container = document.getElementById('upgrade_list');
+
+    for (var i = 0; i < pieces.length; i++) {
+      var piece = pieces[i];
+
+      var src = "images/"+piece+"_"+getPlayerColour()+".100x100.png";
+      var li = document.createElement("li");
+      li.id = piece;
+      li.innerHTML = "<img class='piece' src='"+src+"'>"+piece;
+      li.onclick = function(type) {
+        return function() {
+          socket.emit('pawn_upgrade', type);
+          $dialog = $("#pawn_upgrade_dialog").css('visibility', 'hidden');
+        };
+      }(piece);
+      container.appendChild(li);
+    }
+  }
+
   // reset game handler
   var $reset = $('#reset');
   $reset.bind('click', function() {
@@ -600,6 +627,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       }
       $('.board').addClass('flickering_board');
       createArmySelector();
+      initPawnUpgradeDialog();
     });
 
     socket.on('num_connected_users', function(numConnectedUsers) {
@@ -648,6 +676,10 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       updatePlayerTurnOverlay();
       updateBoard();
       updateIW();
+      if (g_gameState.currentPhase === g_gameState.PHASES.PAWNUPGRADE &&
+        g_gameState.currentRole == getPlayerColour()) {
+        showPawnUpgradeDialog();
+      }
       if (updateResponse.result.pawn_captures) {
         updatePawnCaptures(updateResponse.result.pawn_captures);
       }

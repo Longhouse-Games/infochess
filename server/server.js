@@ -1,5 +1,7 @@
 var requirejs = require('requirejs'),
     logger    = require('./logger');
+var Game = require('./infochess');
+var metadata = new Game.Metadata();
 
 requirejs.config({
   nodeRequire: require,
@@ -27,13 +29,14 @@ var WHITE_ROLE = 'white';
 var BLACK_ROLE = 'black';
 var SPECTATOR = 'spectator';
 
-var Server = function(gameFactory, dbgame) {
+var Server = function(gameFactory, dbgame, egs_notifier) {
   var me = this;
+  me.egs_notifier = egs_notifier;
   me.dbgame = dbgame;
   me.gameFactory = gameFactory;
   me.game = gameFactory();
   me.arrPlayers = [];
-  me.arrRoles = [WHITE_ROLE, BLACK_ROLE];
+  me.arrRoles = [metadata.roles[0].slug, metadata.roles[1].slug];
   me.votes = {};
 
   me.requestReset = function() {
@@ -55,9 +58,10 @@ Server.prototype.startVote = function(name, question, onPass, getVoters) {
   getVoters = getVoters || function() {
       return _.filter(me.arrPlayers, function(player) {
         var role = player.getRole();
-        return role === WHITE_ROLE || role === BLACK_ROLE;
+        return role === metadata.roles[0].slug
+          || role === metadata.roles[1].slug;
       });};
-  console.log('getVoters: ', getVoters);
+  logger.debug('getVoters: ', getVoters);
   var vote = new Vote('reset',
            "Would you like to reset the game?",
            getVoters,
@@ -89,13 +93,15 @@ Server.prototype.saveGame = function(gameState) {
 Server.prototype.refreshBoard = function(result, arrPlayers) {
   var me = this;
   var data = {
-    result: result
+    result: result,
+    gameState: me.game.asDTO()
   };
 
-  // TODO fix game saving
-  //saveGame(data.gameState);
+  logger.debug('saving new game state');
+  this.dbgame.gameState = JSON.stringify(data.gameState);
+  this.dbgame.save(function(err) { if (err) throw err; });
 
-  console.log('update players: ', me.arrPlayers.length);
+  logger.debug('update players: ', me.arrPlayers.length);
   _.each(arrPlayers || me.arrPlayers, function(player) {
     var socket = player.getSocket();
     if (_.isUndefined(socket) || _.isNull(socket)) { return; }
@@ -106,8 +112,9 @@ Server.prototype.refreshBoard = function(result, arrPlayers) {
   if (winner && me.game.currentPhase === me.game.PHASES.GAMEOVER) {
     me.broadcast('gameOver', {winner: winner});
     me.broadcast('message', {user: 'game', message: 'Game Over'});
-    me.broadcast('message', {user: 'game', message: 'Winner: ' + winner});
-    me.requestReset();
+    var role = _.find(metadata.roles, function(role){ return role.slug === winner });
+    me.broadcast('message', {user: 'game', message: 'Winner: ' + role.name});
+    me.egs_notifier.gameover();
   }
 };
 
@@ -117,7 +124,7 @@ Server.prototype.resetGame = function() {
 };
 
 Server.prototype.endGame = function() {
-  this.requestReset();
+//  this.requestReset();
 };
 
 Server.prototype.addPlayer = function(socket, user) {
@@ -128,25 +135,32 @@ Server.prototype.addPlayer = function(socket, user) {
   var role = null;
   var army = null;
 
-  var coin_player_name = _.isUndefined(this.dbgame.coin_player_name) ? null : this.dbgame.coin_player_name;
-  var guerrilla_player_name = _.isUndefined(this.dbgame.guerrilla_player_name) ? null : this.dbgame.guerrilla_player_name;
+  var role1 = metadata.roles[0];
+  var role2 = metadata.roles[1];
+  logger.debug("Roles: ", { role1: role1, role2: role2 });
+  var role1player = _.isUndefined(this.dbgame.roles[role1.slug]) ? null : this.dbgame.roles[role1.slug];
+  var role2player = _.isUndefined(this.dbgame.roles[role2.slug]) ? null : this.dbgame.roles[role2.slug];
 
-  if (coin_player_name !== null && user.name === coin_player_name) {
-    role = BLACK_ROLE;
-  } else if (guerrilla_player_name !== null && user.name === guerrilla_player_name) {
-    role = WHITE_ROLE;
+  logger.debug("Determining player role.");
+  logger.debug("Role1 player id: " + role1player);
+  logger.debug("Role2 player id: " + role2player);
+  logger.debug("User.gaming_id: " + user.gaming_id);
+  if (role1player !== null && user.gaming_id === role1player) {
+    role = role1.slug;
+  } else if (role2player !== null && user.gaming_id === role2player) {
+    role = role2.slug;
   } else {
     // Player was not previously assigned a role (or was spectating)
-    if (guerrilla_player_name === null) {
+    if (role1player === null) {
 
-      role = WHITE_ROLE;
-      this.dbgame.guerrilla_player_name = user.name;
+      role = role1.slug;
+      this.dbgame.roles[role1.slug] = user.gaming_id;
       this.dbgame.save(function(err) { if (err) throw err; });
 
-    } else if (coin_player_name === null) {
+    } else if (role2player === null) {
 
-      role = BLACK_ROLE;
-      this.dbgame.coin_player_name = user.name;
+      role = role2.slug;
+      this.dbgame.roles[role2.slug] = user.gaming_id;
       this.dbgame.save(function(err) { if (err) throw err; });
 
     } else {
@@ -158,11 +172,11 @@ Server.prototype.addPlayer = function(socket, user) {
   this.arrPlayers.push(player);
 
   socket.on('disconnect', function(data) {
-    console.log('disconnected player: ', player);
+    logger.info('disconnected player: '+user.gaming_id);
     me.arrPlayers = _.without(me.arrPlayers, player);
     me.updateServerStatus();
     var votesToDelete = [];
-    console.log('active votes: ', me.votes);
+    logger.debug('active votes: ', me.votes);
     _.each(me.votes, function(vote) {
       if (vote.getVoters().length === 0) {
         votesToDelete.push(vote.getName());
@@ -172,30 +186,25 @@ Server.prototype.addPlayer = function(socket, user) {
       }
     });
     _.each(votesToDelete, function(name) {
-      console.log('removing dead vote: ', name);
+      logger.debug('removing dead vote: ', name);
       delete me.votes[name];
     });
   });
 
   socket.on('requestReset', function(data) {
-    console.log('reseting game');
-    me.requestReset();
+//    logger.debug('reseting game');
+//    me.requestReset();
   });
 
 
   socket.on('vote', function(ballot) {
     if (ballot) {
-      console.log(player.getSocket().id, ' voted ', ballot.choice, ' for ', ballot.name);
+      logger.debug(player.getSocket().id, ' voted ', ballot.choice, ' for ', ballot.name);
       var vote = me.votes[ballot.name];
       if (vote) {
         vote.addVote(ballot.choice, player);
       }
     }
-  });
-
-  socket.on('takeRole', function(role) {
-    me.takeRole(role, player); 
-    me.refreshBoard(true, [player]);
   });
 
   // handle user chat message
@@ -204,7 +213,6 @@ Server.prototype.addPlayer = function(socket, user) {
   });
 
   me.broadcast('num_connected_users', me.arrPlayers.length);
-  socket.emit('board_type', 'guerrilla');
   return player;
 };
 
@@ -232,52 +240,6 @@ Server.prototype.getId = function() {
   return this.dbgame.id;
 };
 
-Server.prototype.isAvailableRole = function(role) {
-  var me = this;
-  if (role === WHITE_ROLE) {
-    return _.isUndefined(me.dbgame.guerrilla_player_name) || me.dbgame.guerrilla_player_name === null;
-  } else if (role === BLACK_ROLE) {
-    return _.isUndefined(me.dbgame.coin_player_name) || me.dbgame.coin_player_name === null;
-  }
-  throw "Invalid role: '" + role + "'";
-};
-
-Server.prototype.takeRole = function(role, player) {
-  var me = this;
-  logger.debug('role change requested ' + role + '->' + player.getRole());
-  var roleChanged = false;
-
-  var freeRole = function(role) {
-    if (role === WHITE_ROLE) {
-      me.dbgame.guerrilla_player_name === null;
-      me.dbgame.save(function(err) { if (err) throw err; });
-    } else if (role === BLACK_ROLE) {
-      me.dbgame.coin_player_name === null;
-      me.dbgame.save(function(err) { if (err) throw err; });
-    }
-  };
-
-  if (me.isAvailableRole(role)) {
-    logger.debug('desired role is available');
-    freeRole(player.getRole());
-    player.setRole(role);
-    me.broadcast('roles', me.arrRoles);
-    player.getSocket().emit('role', role);
-    me.updateServerStatus();
-  }
-};
-
-Server.prototype.getOpenRoles = function() {
-  var roles = [];
-  if (_.isUndefined(this.dbgame.coin_player_name) || this.dbgame.coin_player_name === null) {
-    roles.push(BLACK_ROLE);
-  }
-  if (_.isUndefined(this.dbgame.guerrilla_player_name) || this.dbgame.guerrilla_player_name === null) {
-    roles.push(WHITE_ROLE);
-  }
-  return roles;
-};
-
 var Player = function(_socket, server, user, role) {
   var me = this;
   me.server = server;
@@ -287,12 +249,7 @@ var Player = function(_socket, server, user, role) {
   me.army = null;
 
   me.socket.emit('user_info', {
-    name: user.name
-  });
-
-  me.socket.emit('message', {
-    user: 'server',
-    message: 'Welcome to Guerrilla Checkers!'
+    name: user.gaming_id
   });
 
   var handleMessage = function(message, func) {
@@ -417,5 +374,6 @@ Player.prototype.setRole = function(role) {
 
 module.exports.Player = Player;
 module.exports.Server = Server;
+module.exports.Metadata = Game.Metadata;
 }); // requirejs define
 

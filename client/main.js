@@ -66,7 +66,10 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     'pawn'
   ];
 
-  var socket = io.connect();
+  var socket = io.connect(null, {
+    'remember transport': false
+  });
+
   var g_role = 'spectator';
   var g_gameState = null;
   var g_building_board = null;
@@ -89,7 +92,6 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   function getPlayerColour() {
     return g_role;
   }
-
 
 
   var SPECTATOR_ROLE = 'spectator';
@@ -467,6 +469,14 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
      // }
   }
 
+  function notifyPlayer() {
+    if ((isWhitePlayer() && g_gameState.isWhiteTurn()) ||
+        (isBlackPlayer() && g_gameState.isBlackTurn())) {
+      var sound = document.getElementById('your_turn');
+      sound.Play();
+    }
+  }
+
   function updatePlayerTurnOverlay() {
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
@@ -553,21 +563,6 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
   }
 
-  // reset game handler
-  var $reset = $('#reset');
-  $reset.bind('click', function() {
-    socket.emit('requestReset');
-  });
-
-  $('#join_white').bind('click', function() {
-    socket.emit('takeRole', WHITE_ROLE);
-  });
-  $('#join_black').bind('click', function() {
-    socket.emit('takeRole', BLACK_ROLE);
-  });
-  $('#join_spectator').bind('click', function() {
-    socket.emit('takeRole', 'spectator');
-  });
   $('#pawn_capture').bind('click', function() {
     socket.emit('pawn_capture_query');
   });
@@ -601,6 +596,15 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       printMessage(data.user, data.message);
       window.scrollTo(0, document.body.scrollHeight);
     });
+    socket.on('error', function(msg) {
+      printMessage("server", "Error: " + msg);
+      console.log("Server error: " + msg);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    socket.on('session_error', function(data) {
+      console.log("Invalid session. Reloading.");
+      location.reload();
+    });
     socket.on('user_disconnect', function(data) {
       var userSpan = document.getElementById(data.user);
       if (socket.id != data.user && userSpan && userSpan.parentNode) {
@@ -624,6 +628,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
         printMessage("server", "You are the Black player!");
       } else {
         printMessage("server", "You are a spectator");
+        $('.board').addClass('guerrilla_board');
       }
       $('.board').addClass('flickering_board');
       createArmySelector();
@@ -631,7 +636,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     });
 
     socket.on('num_connected_users', function(numConnectedUsers) {
-      if (numConnectedUsers >= 2) {
+      if (numConnectedUsers >= 1) {
         $('.board').first().show();
         $('#waiting').hide();
       } else {
@@ -673,6 +678,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       console.log(updateResponse);
 
       updateArmySelector();
+      notifyPlayer();
       updatePlayerTurnOverlay();
       updateBoard();
       updateIW();

@@ -4,7 +4,7 @@ winston.cli();
 
 var logger = new winston.Logger({
   transports: [
-    new winston.transports.Console({level: 'verbose'})
+    new winston.transports.Console({level: 'verbose', timestamp: true})
   ]
 });
 

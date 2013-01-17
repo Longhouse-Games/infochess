@@ -3,20 +3,21 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-    <link rel="stylesheet" href="/style/board.css" />
+    <link rel="stylesheet" href="style/board.css" />
     <!--[if IE]>
-    <link rel="stylesheet" href="/style/ie.css" />
+    <link rel="stylesheet" href="style/ie.css" />
     <![endif]-->
-    <script src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="http://code.jquery.com/ui/jquery-ui-git.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/jquery-ui-git.js"></script>
     <!--[if lt IE 9]>
-    <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+    <script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
 
     <script src="/socket.io/socket.io.js"></script>
     <script data-main="client/main" src="scripts/require.js"></script>
   </head>
   <body>
+    <embed src="sounds/your_turn.wav" autostart="false" width="0" height="0" id="your_turn" enablejavascript="true">
     <div id="checkers" class="board">
       <div id="pieces"></div>
       <div id="moves"></div>
@@ -69,21 +70,10 @@
       <div>
         <span id="end_turn">End Turn</span> (no IW attack)
       </div>
-      <div id="reset">
-        <span>reset game</span>
-      </div>
-      <div id="join_white">
-        <span>Join White</span>
-      </div>
-      <div id="join_black">
-        <span>Join Black</span>
-      </div>
-      <div id="join_spectator">
-        <span>Join Spectator</span>
-      </div>
       <div id="pawn_capture">
         <span>Pawn Capture</span>
       </div>
     </div>
+    <div id="chatlog" class="chat" ></div>
   </body>
 </html>

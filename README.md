@@ -1,12 +1,14 @@
-lvgprototype
-============
-
 Dependencies
 ------------
 
-npm install socket.io express
+Install dependencies: `npm install`
 
 Running the Server
 ------------------
 
-node server.js
+node app.js
+
+Deployment
+----------
+
+It's best to run the server on port 843. AVAST and a few other Antivirus programs block websockets and XHR polling on other ports. 843 offers maximum compatibility.

@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style/rules.css" />
+    <!--[if IE]>
+    <link rel="stylesheet" href="style/ie.css" />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>Guerrilla Checkers</h1>
+    <p>By Brian Train</p>
+    <p>
+      <h2>Table of Contents:</h2>
+      <ol>
+        <li><a href="#roles">Roles</a></li>
+        <li><a href="#winning">Winning</a></li>
+        <li><a href="#state_movement">State movement</a></li>
+        <li><a href="#guerrilla_movement">Guerrilla movement</a></li>
+      </ol>
+    </p>
+    <p>
+      <h2><a id="roles">Roles:</a></h2>
+      <ul>
+        <li>
+          Guerrillas: They receive 66 pieces and place two pieces each turn.
+        </li>
+        <li>
+          The State: They have six pieces, all of which are on the board at the start.
+        </li>
+      </ul>
+      <img src="images/rules/pieces_guerrilla.png">
+      <img src="images/rules/pieces_soldier.png">
+    </p>
+    <p>
+      <h2><a id="winning">Victory</a></h2>
+      The player who clears the board of all enemy pieces at the end of his turn wins. The Guerrilla player loses if he runs out of stones.
+    </p>
+    <p>
+      <h2><a id="state_movement">State Movement:</a></h2>
+      The State player moves one checker per turn, one square diagonally as a King in regular checkers, or makes captures by jumping over the point between two squares. He is not forced to capture if he does not want to, but if he does he must take all possible captures. Captured stones are removed from the board.
+      <p>
+        <img src="images/rules/state_moves.jpeg">
+      </p>
+    </p>
+    <p>
+      <h2><a id="guerrilla_movement">Guerrilla Movement:</a></h2>
+      The Guerrilla player does not move his pieces. Instead, he places two and only two stones per turn on the board, on the points (intersections) of the squares. The first stone must be orthogonally adjacent to any stone on the board; the second stone must be orthogonally adjacent to the first stone placed. He may not place stones on the board edge points. He captures an enemy checker by surrounding it (i.e. having a stone, or a board edge point, on each of the four points of the square the checker occupies – note this makes the edge of the board very dangerous for the State player). The checker is removed from the board.
+      <p>
+        <img src="images/rules/guerrilla_moves.jpeg">
+      </p>
+      <p>
+        <img src="images/rules/edge_captures.jpeg">
+      </p>
+    </p>
+  </body>
+</html>

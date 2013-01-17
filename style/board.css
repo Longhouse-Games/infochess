@@ -2,6 +2,10 @@
   font-family: Arial;
 }
 
+a {
+  color: #5555CC
+}
+
 div  {
   padding: 0px;
   margin: 0px;
@@ -258,6 +262,12 @@ ul#pieces_list > li {
 .invisible {
   opacity: 0.6;
 }
+.coin_theme_soldier {
+  background: top left no-repeat url('../images/soldier/soldier_piece.png');
+}
+.guerrilla_theme_soldier {
+  background: top left no-repeat url('../images/guerrilla/soldier_piece.png');
+}
 
 .removal_marker {
   width: 10px;
@@ -311,11 +321,17 @@ ul#pieces_list > li {
 
 
 .guerrilla_piece {
-  background: top left no-repeat url('../images/guerrilla/guerrilla_piece.png');
   position: absolute;
   width: 39px;
   height: 40px;
   margin: 1px 1px 1px 3px;
+}
+.coin_theme_guerrilla {
+  background: top left no-repeat url('../images/soldier/guerrilla_piece.png');
+}
+
+.guerrilla_theme_guerrilla {
+  background: top left no-repeat url('../images/guerrilla/guerrilla_piece.png');
 }
 
 .intersection {

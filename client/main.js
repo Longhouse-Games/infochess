@@ -74,6 +74,8 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   var g_gameState = null;
   var g_building_board = null;
   var g_selectedType; // Selected piece type when building army
+  var g_playSounds = true;
+  var g_soundsLoaded = false;
 
   var ui_pieces = {}; // "x,y" -> div
 
@@ -469,11 +471,19 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
      // }
   }
 
+  function playSound(id) {
+    if (g_playSounds) {
+      var sound = document.getElementById(id);
+      if (sound.readyState === 4) { // HAVE_ENOUGH_DATA - aka it's loaded
+        sound.play();
+      }
+    }
+  }
+
   function notifyPlayer() {
     if ((isWhitePlayer() && g_gameState.isWhiteTurn()) ||
         (isBlackPlayer() && g_gameState.isBlackTurn())) {
-      var sound = document.getElementById('your_turn');
-      sound.Play();
+      playSound('your_turn');
     }
   }
 
@@ -711,6 +721,16 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     $(messageInput).bind('keypress', function(evt) {
       if (evt.keyCode == 13) { sendMessage(); }
     });
+  });
+
+  $("#toggle_sound").bind('click', function() {
+    if (g_playSounds) {
+      g_playSounds = false;
+      $("#toggle_sound").text("Enable Sound");
+    } else {
+      g_playSounds = true;
+      $("#toggle_sound").text("Disable Sound");
+    }
   });
 
 });

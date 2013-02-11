@@ -7,7 +7,7 @@
     <!--[if IE]>
     <link rel="stylesheet" href="style/ie.css" />
     <![endif]-->
-    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
     <script src="//code.jquery.com/ui/jquery-ui-git.js"></script>
     <!--[if lt IE 9]>
     <script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
@@ -17,7 +17,8 @@
     <script data-main="client/main" src="scripts/require.js"></script>
   </head>
   <body>
-    <embed src="sounds/your_turn.wav" autostart="false" width="0" height="0" id="your_turn" enablejavascript="true">
+    <audio src="sounds/your_turn.wav" preload="auto" id="your_turn">
+    </audio>
     <div id="checkers" class="board">
       <div id="pieces"></div>
       <div id="moves"></div>
@@ -73,6 +74,7 @@
       <div id="pawn_capture">
         <span>Pawn Capture</span>
       </div>
+      <span id="toggle_sound">Disable Sound</span>
     </div>
     <div id="chatlog" class="chat" ></div>
   </body>

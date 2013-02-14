@@ -388,6 +388,10 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   }
 
   function updateBoard() {
+    if (g_gameState.getCurrentPhase() === g_gameState.PHASES.SETUP) {
+      // TODO refresh the placed pieces properly once building boards are persisted
+      return;
+    }
     var pieces = g_gameState.board.getPieces();
     console.log("Updating board, pieces:" );
     console.log(pieces);

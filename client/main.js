@@ -76,6 +76,15 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   var g_selectedType; // Selected piece type when building army
   var g_playSounds = true;
   var g_soundsLoaded = false;
+  var g_actions_enabled = {
+    pawn_capture: false,
+    psyop_normal: false,
+    psyop_reinforced: false,
+    ew_normal: false,
+    ew_reinforced: false,
+    feint: false,
+    end_turn: false
+  };
 
   var ui_pieces = {}; // "x,y" -> div
 
@@ -409,6 +418,38 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
   }
 
+  function updateActions() {
+    var phase = g_gameState.getCurrentPhase();
+    var phases = g_gameState.PHASES;
+
+    g_actions_enabled.pawn_capture = false;
+    g_actions_enabled.psyop_normal = false;
+    g_actions_enabled.psyop_reinforced = false;
+    g_actions_enabled.ew_normal = false;
+    g_actions_enabled.ew_reinforced = false;
+    g_actions_enabled.feint = false;
+    g_actions_enabled.end_turn = false;
+
+    if (phase === phases.SETUP ||
+        phase === phases.PAWNUPGRADE ||
+        phase === phases.DEFENSE ||
+        phase === phases.GAMEOVER ||
+        phase === phases.PAWNCAPTURE) {
+      //disable all
+    } else if (phase === phases.MOVE) {
+      //enable only pawn capture
+      g_actions_enabled.pawn_capture = true;
+    } else if (phase === phases.IW) {
+      //enable psyop, ew, end_turn, feint
+      g_actions_enabled.psyop_normal = true;
+      g_actions_enabled.psyop_reinforced = true;
+      g_actions_enabled.ew_normal = true;
+      g_actions_enabled.ew_reinforced = true;
+      g_actions_enabled.feint = true;
+      g_actions_enabled.end_turn = true;
+    }
+  }
+
   function updateIW() {
     $("#psyop_attack_cost").text(g_gameState.currentPsyOpAttackCost);
     $("#ew_attack_cost").text(g_gameState.currentEWAttackCost);
@@ -580,29 +621,43 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   }
 
   $('#pawn_capture').bind('click', function() {
-    socket.emit('pawn_capture_query');
+    if (g_actions_enabled.pawn_capture) {
+      socket.emit('pawn_capture_query');
+    }
   });
   $('#psyop_normal').bind('click', function() {
-    socket.emit('psyop', { reinforced: false });
+    if (g_actions_enabled.psyop_normal) {
+      socket.emit('psyop', { reinforced: false });
+    }
   });
   $('#psyop_reinforced').bind('click', function() {
-    socket.emit('psyop', { reinforced: true });
+    if (g_actions_enabled.psyop_reinforced) {
+      socket.emit('psyop', { reinforced: true });
+    }
   });
   $('#ew_normal').bind('click', function() {
-    socket.emit('ew', { reinforced: false });
+    if (g_actions_enabled.ew_normal) {
+      socket.emit('ew', { reinforced: false });
+    }
   });
   $('#ew_reinforced').bind('click', function() {
-    socket.emit('ew', { reinforced: true });
+    if (g_actions_enabled.ew_reinforced) {
+      socket.emit('ew', { reinforced: true });
+    }
   });
   $('#feint').bind('click', function() {
-    if (g_gameState.currentPsyOpAttackCost === 1 && g_gameState.currentEWAttackCost === 1) {
-      alert("Feints can only be done when any of the current IW attack costs are 2.");
-    } else {
-      socket.emit('feint');
+    if (g_actions_enabled.feint) {
+      if (g_gameState.currentPsyOpAttackCost === 1 && g_gameState.currentEWAttackCost === 1) {
+        alert("Feints can only be done when any of the current IW attack costs are 2.");
+      } else {
+        socket.emit('feint');
+      }
     }
   });
   $('#end_turn').bind('click', function() {
-    socket.emit('end_turn');
+    if (g_actions_enabled.end_turn) {
+      socket.emit('end_turn');
+    }
   });
 
   socket.on('connect', function() {
@@ -696,6 +751,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       updateArmySelector();
       notifyPlayer();
       updatePlayerTurnOverlay();
+      updateActions();
       updateBoard();
       updateIW();
       if (g_gameState.currentPhase === g_gameState.PHASES.PAWNUPGRADE &&

@@ -252,20 +252,25 @@ var Player = function(_socket, server, user, role) {
     name: user.gaming_id
   });
 
-  var handleMessage = function(message, func) {
+  var handleMessage = function(message, func, recipients) {
     me.socket.on(message, function(data) {
-      console.log("Protocol message: " + message);
-      console.log(data);
-      me.server.refreshBoard(func(data));
+      try {
+        console.log("Protocol message: " + message);
+        console.log(data);
+        me.server.refreshBoard(func(data), recipients);
+      } catch (error) {
+        if (error.name === "InvalidMessageError") {
+          logger.error("Client error", { error: error });
+          me.socket.emit('error', error.message);
+          return;
+        }
+        throw error;
+      }
     });
   };
 
   var handlePrivateMessage = function(message, func) {
-    me.socket.on(message, function(data) {
-      console.log("Protocol message: " + message);
-      console.log(data);
-      me.server.refreshBoard(func(data), [me]);
-    });
+    handleMessage(message, func, [me]);
   };
 
   handleMessage('select_army', function(serializedArmy) {
@@ -292,7 +297,7 @@ var Player = function(_socket, server, user, role) {
   handleMessage('psyop', function(data) {
     console.log(me.server.getGame());
     if (typeof data.reinforced === 'undefined') {
-      throw "Protocol error: 'reinforced' must be specified for IW attacks";
+      throw new InvalidMessageError("Protocol error: 'reinforced' must be specified for IW attacks");
     }
     var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: data.reinforced});
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
@@ -306,7 +311,7 @@ var Player = function(_socket, server, user, role) {
   handleMessage('ew', function(data) {
     console.log("EW attack from " + me.role);
     if (typeof data.reinforced === 'undefined') {
-      throw "Protocol error: 'reinforced' must be specified for IW attacks";
+      throw new InvalidMessageError("Protocol error: 'reinforced' must be specified for IW attacks");
     }
 
     var result = me.server.getGame().iw_attack(me.role, {type: 'ew', reinforced: data.reinforced});

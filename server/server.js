@@ -97,7 +97,7 @@ Server.prototype.refreshBoard = function(result, arrPlayers) {
     gameState: me.game.asDTO()
   };
 
-  logger.debug('saving new game state');
+  logger.debug('saving new game state', { gameState: JSON.stringify(data.gameState) });
   this.dbgame.gameState = JSON.stringify(data.gameState);
   this.dbgame.save(function(err) { if (err) throw err; });
 

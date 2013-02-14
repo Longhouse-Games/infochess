@@ -137,13 +137,15 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
     var newPieceOnBoard = addPiece(container, position, cssclass, PIECE_MARGIN);
 
-    newPieceOnBoard.onclick = function() {
-      if (g_gameState.getCurrentRole() === g_role) {
-        clearSelection();
-        this.className += " selected";
-        displayPossibleMoves(getPlayerColour(), piece, position);
-      }
-    };
+    if (getPlayerColour() === piece.colour) {
+      newPieceOnBoard.onclick = function() {
+        if (g_gameState.getCurrentRole() === g_role) {
+          clearSelection();
+          this.className += " selected";
+          displayPossibleMoves(getPlayerColour(), piece, position);
+        }
+      };
+    }
 
     return newPieceOnBoard;
   }

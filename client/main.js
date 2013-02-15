@@ -73,6 +73,7 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   var g_role = 'spectator';
   var g_gameState = null;
   var g_building_board = null;
+  var g_last_phase = null;
   var g_selectedType; // Selected piece type when building army
   var g_playSounds = true;
   var g_soundsLoaded = false;
@@ -534,6 +535,25 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     }
   }
 
+  function phaseHasChanged(old_phase, new_phase) {
+    var phases = g_gameState.PHASES;
+    if (old_phase === phases.IW || old_phase === phases.DEFENSE) {
+      // it's now their turn
+      notifyPlayer();
+    }
+
+    if (new_phase === phases.MOVE) {
+      printMessage('server', "Current phase: "+g_gameState.getCurrentRole()+"'s physical move.");
+    } else if (new_phase === phases.IW) {
+      printMessage('server', "Current phase: "+g_gameState.getCurrentRole()+"'s information-warfare move.");
+      printMessage('server', "Choose one of psyop, electronic warface, feint, or end turn.");
+    } else if (new_phase === phases.DEFENSE) {
+      printMessage('server', "Current phase: "+g_gameState.getCurrentRole()+" is defending against IW attack.");
+    } else if (new_phase === phases.PAWNUPGRADE) {
+      printMessage('server', "Current phase: "+g_gameState.getCurrentRole()+" is upgrading a pawn");
+    }
+  }
+
   function updatePlayerTurnOverlay() {
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
@@ -748,8 +768,12 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
       console.log("REsponse:");
       console.log(updateResponse);
 
+      if (g_last_phase !== g_gameState.getCurrentPhase()) {
+        phaseHasChanged(g_last_phase, g_gameState.getCurrentPhase());
+        g_last_phase = g_gameState.getCurrentPhase();
+      }
+
       updateArmySelector();
-      notifyPlayer();
       updatePlayerTurnOverlay();
       updateActions();
       updateBoard();

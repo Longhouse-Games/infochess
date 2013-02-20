@@ -3,10 +3,15 @@ requirejs.config({
   paths: {
     lib: '../lib',
     underscore: "../vendor/underscore/underscore"
+  },
+  shim: {
+    underscore: {
+      exports: '_'
+    }
   }
 });
 
-require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], function(HelperModule, InfoChess, BuildingBoardModule, helpers) {
+require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'helpers'], function(_, HelperModule, InfoChess, BuildingBoardModule, helpers) {
 
   if (Array.prototype.forEach === undefined) {
     Array.prototype.forEach = function(callback) {
@@ -66,6 +71,8 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     'pawn'
   ];
 
+  var metadata = new InfoChess.Metadata();
+
   var socket = io.connect(null, {
     'remember transport': false
   });
@@ -90,11 +97,11 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
   var ui_pieces = {}; // "x,y" -> div
 
   function isBlackPlayer() {
-    return g_role === BLACK_ROLE;
+    return g_role === metadata.roles[1].slug;
   }
 
   function isWhitePlayer() {
-    return g_role === WHITE_ROLE;
+    return g_role === metadata.roles[0].slug;
   }
 
   function isSpectator() {
@@ -558,6 +565,11 @@ require(["lib/helper", "lib/infochess", "lib/building_board", 'helpers'], functi
     var $overlay = $('#turn_overlay').first();
     var yourTurn = "YOUR TURN";
     var opponentsTurn = "OPPONENT'S TURN";
+    if (g_gameState.getWinner()) {
+      var winner = _.find(metadata.roles, function(role){ return role.slug === g_gameState.getWinner();});
+      setOverlayText($overlay, winner.name.toUpperCase() + " WINS");
+      return;
+    }
     if (isSpectator()) {
       setOverlayText($overlay, g_gameState.getCurrentPhase() + "'S TURN");
       return;

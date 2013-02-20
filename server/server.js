@@ -1,7 +1,5 @@
 var requirejs = require('requirejs'),
     logger    = require('./logger');
-var Game = require('./infochess');
-var metadata = new Game.Metadata();
 
 requirejs.config({
   nodeRequire: require,
@@ -17,16 +15,21 @@ requirejs.config({
 
 requirejs([
   'underscore',
+  './lib/infochess',
   './lib/vote',
   './lib/helper'],
   function(
     _,
+    Game,
     Vote,
     HelperModule) {
+
+var metadata = new Game.Metadata();
 
 var Position = HelperModule.Position;
 var WHITE_ROLE = 'white';
 var BLACK_ROLE = 'black';
+
 var SPECTATOR = 'spectator';
 
 var Server = function(gameFactory, dbgame, egs_notifier) {

@@ -412,10 +412,9 @@ var createGame = function(req, res) {
         game_id: dbgame._id,
         game_title: metadata.slug,
         game_version: '1.0',
-        role1: game.roles[metadata.roles[0].slug],
-        role2: game.roles[metadata.roles[1].slug]
+        players: roles
       });
-      egs_notifier.role1sMove();
+      egs_notifier.move(role1);
     });
   });
 };
@@ -551,6 +550,11 @@ var findActiveGameByDBGame = function(dbgame) {
 }
 
 var loadGame = function(dbgame) {
+  var roles = {};
+  _.each(metadata.roles, function(role) {
+    roles[role.slug] = dbgame.roles[role.slug]
+  });
+
   var egs_notifier = new EGSNotifier.EGSNotifier({
     host: EGS_HOST,
     port: EGS_PORT,
@@ -559,8 +563,7 @@ var loadGame = function(dbgame) {
     game_id: dbgame._id,
     game_title: metadata.slug,
     game_version: '1.0',
-    role1: dbgame.roles[metadata.roles[0].slug],
-    role2: dbgame.roles[metadata.roles[1].slug]
+    players: roles
   });
   var factory = null;
   if (_.isUndefined(dbgame.gameState) || dbgame.gameState === null) {

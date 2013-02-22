@@ -29,8 +29,7 @@ requirejs([ 'underscore'], function(_) {
     this.game_id = req('game_id');
     this.game_title = req('game_title');
     this.game_version = req('game_version');
-    this.role1 = req('role1');
-    this.role2 = req('role2');
+    this.players = req('players');
     this.STATES = {
       PEND: "PEND",
       ATTN: "ATTN",
@@ -38,7 +37,7 @@ requirejs([ 'underscore'], function(_) {
     };
     logger.debug("EGS Notifier started for host: "+this.host);
 
-    this.deliver = function(updates) {
+    this.deliver = function(options) {
       var path = "/api/secure/jsonws/egs-portlet.gamebot";
 
       var auth = (this.username && this.password) ? (encodeURIComponent(this.username)+":"+this.password+"@") : "";
@@ -47,7 +46,7 @@ requirejs([ 'underscore'], function(_) {
         url: url,
         method: 'POST',
         headers: { "Content-type": "text/plain; charset=utf-8" },
-        body: JSON.stringify(this.buildPayload(updates))
+        body: JSON.stringify(this.buildWrapper(options))
       };
       logger.debug("Opts for request:", opts);
       request(opts, function(error, response, body) {
@@ -74,44 +73,70 @@ requirejs([ 'underscore'], function(_) {
        "state": state
       };
     };
-    this.buildPayload = function(updates) {
+    this.buildOutcome = function(winner, scores) {
+      return {
+       "gameInstanceId": this.game_id,
+       "gameTitle": this.game_title,
+       "gameVersion": this.game_version,
+       "outcome": {
+         "scores": scores,
+         "winner": winner
+       }
+      };
+    };
+    this.buildWrapper = function(options) {
+      var payload = {}
+      if (options.updates) {
+        payload.updates = options.updates;
+      }
+      if (options.outcomes) {
+        payload.outcomes = options.outcomes;
+      }
       return {
          "method": "game-updates",
          "id": 7224,
          "jsonrpc":"2.0",
          "params": {
-            "payload": {
-                "updates": updates
-            }
+            "payload": payload
          }
       }
-    }
+    };
   };
 
-  EGSNotifier.prototype.role1sMove = function() {
-    logger.info("EGSNotifier: Notifying EGS that it's "+this.role1+"'s turn");
-    logger.info("EGSNotifier: Notifying EGS that it's not "+this.role2+"'s turn");
-    return this.deliver([
-      this.buildUpdate(this.role1, this.STATES.ATTN),
-      this.buildUpdate(this.role2, this.STATES.PEND)
-    ]);
+  EGSNotifier.prototype.move = function(role) {
+    var me = this;
+    var updates = _.map(
+        _.reject(this.players, function(gaming_id, role_slug) {
+          return role === role_slug;
+        }),
+        function(gaming_id) {
+          logger.info("EGSNotifier: Notifying EGS that it's not "+gaming_id+"'s turn");
+          return me.buildUpdate(gaming_id, me.STATES.PEND);
+        }
+    );
+    logger.info("EGSNotifier: Notifying EGS that it's "+this.players[role]+"'s turn");
+    updates.push(this.buildUpdate(this.players[role], this.STATES.ATTN));
+    return this.deliver({ updates: updates });
   };
 
-  EGSNotifier.prototype.role2sMove = function() {
-    logger.info("EGSNotifier: Notifying EGS that it's "+this.role2+"'s turn");
-    logger.info("EGSNotifier: Notifying EGS that it's not "+this.role1+"'s turn");
-    return this.deliver([
-      this.buildUpdate(this.role2, this.STATES.ATTN),
-      this.buildUpdate(this.role1, this.STATES.PEND)
-    ]);
-  };
-
-  EGSNotifier.prototype.gameover = function() {
+  EGSNotifier.prototype.gameover = function(winning_role, scores) {
+    var me = this;
     logger.info("EGSNotifier: Notifying EGS that it's gameover.");
-    return this.deliver([
-      this.buildUpdate(this.role2, this.STATES.OVER),
-      this.buildUpdate(this.role1, this.STATES.OVER)
-    ]);
+
+    var updates = _.map(this.players, function(gaming_id, role) {
+      return me.buildUpdate(gaming_id, me.STATES.OVER);
+    });
+
+    var winning_id = me.players.winning_role;
+
+    var scores_with_ids = {};
+    _.each(scores, function(score, role) {
+      scores_with_ids[me.players[role]] = score;
+    });
+
+    return this.deliver({ updates: updates,
+      outcomes: [ this.buildOutcome(winning_id, scores_with_ids) ]
+    });
   }
 
   module.exports.EGSNotifier = EGSNotifier;

@@ -117,7 +117,7 @@ Server.prototype.refreshBoard = function(result, arrPlayers) {
     me.broadcast('message', {user: 'game', message: 'Game Over'});
     var role = _.find(metadata.roles, function(role){ return role.slug === winner });
     me.broadcast('message', {user: 'game', message: 'Winner: ' + role.name});
-    me.egs_notifier.gameover();
+    me.egs_notifier.gameover(me.game.getWinner(), me.game.getScores());
   }
 };
 
@@ -255,6 +255,11 @@ var Player = function(_socket, server, user, role) {
     name: user.gaming_id
   });
 
+  function endOfTurn() {
+    //Things that should happen when changing to another player's turn
+    this.server.egs_notifier.move(this.server.getGame().getCurrentRole());
+  }
+
   var handleMessage = function(message, func, recipients) {
     me.socket.on(message, function(data) {
       try {
@@ -294,6 +299,7 @@ var Player = function(_socket, server, user, role) {
 
   handleMessage('end_turn', function(data) {
     me.server.getGame().endTurn(me.role);
+    endOfTurn();
     return true;
   });
 
@@ -303,6 +309,7 @@ var Player = function(_socket, server, user, role) {
       throw new InvalidMessageError("Protocol error: 'reinforced' must be specified for IW attacks");
     }
     var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: data.reinforced});
+    endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)
       me.server.broadcast('defend', result, me);
@@ -318,6 +325,7 @@ var Player = function(_socket, server, user, role) {
     }
 
     var result = me.server.getGame().iw_attack(me.role, {type: 'ew', reinforced: data.reinforced});
+    endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)
       me.server.broadcast('defend', result, me);
@@ -330,6 +338,7 @@ var Player = function(_socket, server, user, role) {
     console.log("Feint from " + me.role);
 
     var result = me.server.getGame().iw_attack(me.role, {type: 'feint'});
+    endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)
       me.server.broadcast('defend', result, me);

@@ -414,7 +414,7 @@ var createGame = function(req, res) {
         game_version: '1.0',
         players: roles
       });
-      egs_notifier.move(role1);
+      egs_notifier.move(role1.slug);
     });
   });
 };

@@ -64,25 +64,21 @@ requirejs([ 'underscore'], function(_) {
         return;
       });
     }
-    this.buildUpdate = function(gamingId, state) {
-      return {
+    this.buildUpdate = function(options) {
+      var update = {
        "gameInstanceId": this.game_id,
        "gameTitle": this.game_title,
        "gameVersion": this.game_version,
-       "gamingId": gamingId,
-       "state": state
+       "gamingId": options.gamingId,
+       "state": options.state
       };
-    };
-    this.buildOutcome = function(winner, scores) {
-      return {
-       "gameInstanceId": this.game_id,
-       "gameTitle": this.game_title,
-       "gameVersion": this.game_version,
-       "outcome": {
-         "scores": scores,
-         "winner": winner
-       }
-      };
+      if ('score' in options) {
+        update['score'] = options['score'];
+      }
+      if (options['outcome']) {
+        update['outcome'] = options['outcome'];
+      }
+      return update;
     };
     this.buildWrapper = function(options) {
       var payload = {}
@@ -111,11 +107,11 @@ requirejs([ 'underscore'], function(_) {
         }),
         function(gaming_id) {
           logger.info("EGSNotifier: Notifying EGS that it's not "+gaming_id+"'s turn");
-          return me.buildUpdate(gaming_id, me.STATES.PEND);
+          return me.buildUpdate({gamingId: gaming_id, state: me.STATES.PEND});
         }
     );
     logger.info("EGSNotifier: Notifying EGS that it's "+this.players[role]+"'s turn");
-    updates.push(this.buildUpdate(this.players[role], this.STATES.ATTN));
+    updates.push(this.buildUpdate({gamingId: this.players[role], state: this.STATES.ATTN}));
     return this.deliver({ updates: updates });
   };
 
@@ -123,20 +119,26 @@ requirejs([ 'underscore'], function(_) {
     var me = this;
     logger.info("EGSNotifier: Notifying EGS that it's gameover.");
 
-    var updates = _.map(this.players, function(gaming_id, role) {
-      return me.buildUpdate(gaming_id, me.STATES.OVER);
-    });
-
-    var winning_id = me.players.winning_role;
-
     var scores_with_ids = {};
     _.each(scores, function(score, role) {
       scores_with_ids[me.players[role]] = score;
     });
 
-    return this.deliver({ updates: updates,
-      outcomes: [ this.buildOutcome(winning_id, scores_with_ids) ]
+    var updates = _.map(this.players, function(gaming_id, role) {
+      var options = {
+        gamingId: gaming_id,
+        state: me.STATES.OVER,
+        score: scores[role]
+      }
+      if (gaming_id === me.players[winning_role]) {
+        options.outcome = "Win";
+      } else {
+        options.outcome = "Lose";
+      }
+      return me.buildUpdate(options);
     });
+
+    return this.deliver({ updates: updates });
   }
 
   module.exports.EGSNotifier = EGSNotifier;

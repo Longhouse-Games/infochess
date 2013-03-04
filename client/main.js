@@ -821,13 +821,17 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
     });
   });
 
-  $("#toggle_sound").bind('click', function() {
+  $(".toggle_sound").bind('click', function() {
     if (g_playSounds) {
       g_playSounds = false;
       $("#toggle_sound").text("Enable Sound");
+      $("#volume_control").addClass("volume_control_off");
+      $("#volume_control").removeClass("volume_control_on");
     } else {
       g_playSounds = true;
       $("#toggle_sound").text("Disable Sound");
+      $("#volume_control").addClass("volume_control_on");
+      $("#volume_control").removeClass("volume_control_off");
     }
   });
 

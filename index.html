@@ -20,7 +20,7 @@
   <body>
     <div id="settings_dialog" title="Settings">
       <ul>
-        <li id="toggle_sound">Disable Sound</li>
+        <li id="toggle_sound" class="toggle_sound">Disable Sound</li>
         <li><a href="rules.html" target="_new" onClick="window.open(this.href, 'rules', 'width=660,height=800,resizable').focus();return(false);">Rules</a></li>
         <li>Credits (TODO)</li>
         <li>Forfeit Game (TODO)</li>
@@ -43,7 +43,8 @@
     <div id="waiting">Waiting For Opponent</div>
     <div id="users"></div>
     <div id="status_area">
-      <div id="settings">
+      <div id="settings" class="setting_button"></div>
+      <div id="volume_control" class="toggle_sound setting_button volume_control_on"></div>
       <div>
         You have <span id="iw_points">0</span> IW points remaining.
       </div>

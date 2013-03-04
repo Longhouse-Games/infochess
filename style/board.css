@@ -104,6 +104,33 @@ ul#pieces_list > li {
   list-style-type: none;
 }
 
+.setting_button {
+  margin: 2px;
+}
+
+.setting_button:hover {
+  margin: 0px;
+  border: 2px solid #00FFFF;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+#volume_control {
+  position: absolute;
+  right: 3px;
+  top: 35px;
+  height: 25px;
+  width: 25px;
+  background-size: 100%;
+  z-index: 10000;
+}
+.volume_control_on {
+  background: top left no-repeat url('../images/sound_on.svg');
+}
+.volume_control_off {
+  background: top left no-repeat url('../images/sound_off.svg');
+}
+
 #settings {
   position: absolute;
   right: 3px;
@@ -113,14 +140,6 @@ ul#pieces_list > li {
   background: top left no-repeat url('../images/settings.gif');
   background-size: 100%;
   z-index: 10000;
-  margin: 2px;
-}
-
-#settings:hover {
-  margin: 0px;
-  border: 2px solid #00FFFF;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
 }
 
 .settings_dialog {

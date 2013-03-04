@@ -115,6 +115,26 @@ requirejs([ 'underscore'], function(_) {
     return this.deliver({ updates: updates });
   };
 
+  EGSNotifier.prototype.forfeit = function(forfeiting_role) {
+    var me = this;
+    logger.info("EGSNotifier: Notifying EGS that "+forfeiting_role+" has forfeited and the game is over.");
+    var updates = _.map(this.players, function(gaming_id, role) {
+      var options = {
+        gamingId: gaming_id,
+        state: me.STATES.OVER,
+        score: 0
+      }
+      if (gaming_id === me.players[forfeiting_role]) {
+        options.outcome = "Forfeit";
+      } else {
+        options.outcome = "Win";
+      }
+
+      return me.buildUpdate(options);
+    });
+    return this.deliver({ updates: updates });
+  };
+
   EGSNotifier.prototype.gameover = function(winning_role, scores) {
     var me = this;
     logger.info("EGSNotifier: Notifying EGS that it's gameover.");
@@ -139,7 +159,7 @@ requirejs([ 'underscore'], function(_) {
     });
 
     return this.deliver({ updates: updates });
-  }
+  };
 
   module.exports.EGSNotifier = EGSNotifier;
 });

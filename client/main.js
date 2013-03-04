@@ -797,6 +797,10 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
       if (updateResponse.result.pawn_captures) {
         updatePawnCaptures(updateResponse.result.pawn_captures);
       }
+
+      if (g_gameState.getWinner()) {
+        $("#forfeit").addClass("disabled");
+      }
     });
 
     // send message functionality
@@ -850,5 +854,30 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
       $("#settings_dialog").dialog("open");
     }
   });
+
+  function forfeit_game() {
+    socket.emit('forfeit');
+  }
+
+  $("#forfeit_dialog").dialog({
+    autoOpen: false,
+    dialogClass: "settings_dialog",
+    modal: true,
+    width: 400,
+    buttons: [
+      { text: "Forfeit", click:
+        function() {
+          forfeit_game();
+          $( this ).dialog("close");
+        } },
+      { text: "Close", click: function() { $( this ).dialog("close"); } }
+    ]
+  });
+  $("#forfeit").bind('click', function() {
+    if (!g_gameState.getWinner()) {
+      $("#forfeit_dialog").dialog("open");
+    }
+  });
+
 });
 

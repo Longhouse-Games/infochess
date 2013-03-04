@@ -831,5 +831,20 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
     }
   });
 
+  $("#settings_dialog").dialog({
+    autoOpen: false,
+    dialogClass: "settings_dialog",
+    draggable: false,
+    resizable: false,
+    width: 350,
+    buttons: [ { text: "Close", click: function() { $( this ).dialog( "close" ); } } ]
+  });
+  $("#settings").bind('click', function() {
+    if ($("#settings_dialog").dialog("isOpen")) {
+      $("#settings_dialog").dialog("close");
+    } else {
+      $("#settings_dialog").dialog("open");
+    }
+  });
 });
 

@@ -104,6 +104,46 @@ ul#pieces_list > li {
   list-style-type: none;
 }
 
+#settings {
+  position: absolute;
+  right: 3px;
+  top: 5px;
+  height: 25px;
+  width: 25px;
+  background: top left no-repeat url('../images/settings.gif');
+  background-size: 100%;
+  z-index: 10000;
+  margin: 2px;
+}
+
+#settings:hover {
+  margin: 0px;
+  border: 2px solid #00FFFF;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+.settings_dialog {
+  z-index: 10000;
+}
+.settings_dialog:focus {
+  outline: none;
+}
+.settings_dialog *:focus {
+  outline: none;
+}
+
+.settings_dialog ul {
+  list-style-type: none;
+}
+.settings_dialog li {
+  cursor: hand;
+  cursor: pointer;
+}
+.settings_dialog a {
+  text-decoration: none;
+}
+
 .overlay {
   position: absolute;
   top: 0px;

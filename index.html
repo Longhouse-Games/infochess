@@ -7,8 +7,9 @@
     <!--[if IE]>
     <link rel="stylesheet" href="style/ie.css" />
     <![endif]-->
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-    <script src="//code.jquery.com/ui/jquery-ui-git.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="style/jquery-custom-theme/jquery-ui-1.10.1.custom.css"/>
     <!--[if lt IE 9]>
     <script src="//ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
     <![endif]-->
@@ -17,6 +18,14 @@
     <script data-main="client/main" src="scripts/require.js"></script>
   </head>
   <body>
+    <div id="settings_dialog" title="Settings">
+      <ul>
+        <li id="toggle_sound">Disable Sound</li>
+        <li><a href="rules.html" target="_new" onClick="window.open(this.href, 'rules', 'width=660,height=800,resizable').focus();return(false);">Rules</a></li>
+        <li>Credits (TODO)</li>
+        <li>Forfeit Game (TODO)</li>
+      </ul>
+    </div>
     <audio src="sounds/your_turn.wav" preload="auto" id="your_turn">
     </audio>
     <div id="checkers" class="board">
@@ -34,6 +43,7 @@
     <div id="waiting">Waiting For Opponent</div>
     <div id="users"></div>
     <div id="status_area">
+      <div id="settings">
       <div>
         You have <span id="iw_points">0</span> IW points remaining.
       </div>

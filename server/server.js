@@ -369,7 +369,7 @@ var Player = function(_socket, server, user, role) {
     me.server.getGame().forfeit(role);
     me.server.refreshBoard(null);
     me.server.egs_notifier.forfeit(role);
-    me.server.broadcast('message', {user: 'game', message: user.gaming_id + " has forfeit the game."});
+    me.server.broadcast('message', {user: 'game', message: user.gaming_id + " has forfeited the game."});
   });
 
   // notify other users

@@ -489,6 +489,19 @@ app.get(PREFIX+'/debug', function (req, res) {
 app.get(PREFIX+'/rules.html', function (req, res) {
   res.sendfile(__dirname + '/rules.html');
 });
+app.get(PREFIX+'/credits', function (req, res) {
+  var md = require("node-markdown").Markdown;
+  fs.readFile('CREDITS.md', 'utf-8', function(err, credits) {
+    if (err) {
+      logger.err("Error reading CREDITS.md", err);
+      res.send("Error!");
+      return;
+    }
+    var html = md(credits);
+    res.header("Content-Type", "text/html");
+    res.send(html);
+  });
+});
 app.get(PREFIX+'/status', function(req, res) {
   res.send("Okay!");
 });

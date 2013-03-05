@@ -104,42 +104,45 @@ ul#pieces_list > li {
   list-style-type: none;
 }
 
+#settings_overlay {
+  position: absolute;
+  right: 1px;
+  top: 5px;
+  width: 27px;
+  border: 2px solid #333333;
+	background-color: rgb(51, 51, 51);
+	background-color: rgba(151, 151, 151, 0.5);
+  border-radius: 10px;
+}
+
 .setting_button {
-  margin: 2px;
+  padding: 1px;
+  position: relative;
+  height: 25px;
+  width: 25px;
+  background-size: 25px 25px;
+  z-index: 10000;
 }
 
 .setting_button:hover {
-  margin: 0px;
-  border: 2px solid #00FFFF;
+  padding: 0px;
+  border: 1px solid #00FFFF;
   border-radius: 10px;
   -moz-border-radius: 10px;
 }
 
-#volume_control {
-  position: absolute;
-  right: 3px;
-  top: 35px;
-  height: 25px;
-  width: 25px;
-  background-size: 100%;
-  z-index: 10000;
-}
 .volume_control_on {
-  background: top left no-repeat url('../images/sound_on.svg');
+  background: center center no-repeat url('../images/sound_on.svg');
+  background-size: 25px 25px;
 }
 .volume_control_off {
-  background: top left no-repeat url('../images/sound_off.svg');
+  background: center center no-repeat url('../images/sound_off.svg');
+  background-size: 25px 25px;
 }
 
 #settings {
-  position: absolute;
-  right: 3px;
-  top: 5px;
-  height: 25px;
-  width: 25px;
-  background: top left no-repeat url('../images/settings.gif');
-  background-size: 100%;
-  z-index: 10000;
+  background: center center no-repeat url('../images/settings.gif');
+  background-size: 25px 25px;
 }
 
 .settings_dialog {

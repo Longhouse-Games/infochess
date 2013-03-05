@@ -806,7 +806,6 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
     // send message functionality
     var messageInput = document.getElementById('message');
     var usernameInput = document.getElementById('username');
-    var sendButton = document.getElementById('send_button');
     var sendMessage = function() {
       var message = messageInput.value;
       if (!message) {
@@ -819,7 +818,6 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
     };
 
     // send messages
-    $(sendButton).bind('click', sendMessage);
     $(messageInput).bind('keypress', function(evt) {
       if (evt.keyCode == 13) { sendMessage(); }
     });

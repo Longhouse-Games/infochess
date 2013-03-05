@@ -212,18 +212,6 @@ ul#pieces_list > li {
   font-weight: initial;
 }
 
-#send_button {
-  width: 80px;
-  left: 500px;
-  border: none;
-
-  color: #222;
-  background-color: rgb(255, 204, 0);
-  background-color: rgba(255, 204, 0, 0.9);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DDFFCC00, endColorstr=#DDFFCC00)";
-}
-
 #bottom_overlay {
   position: absolute;
   top: 590px;

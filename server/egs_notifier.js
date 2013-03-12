@@ -42,7 +42,7 @@ requirejs([ 'underscore'], function(_) {
       var path = "/api/secure/jsonws/egs-portlet.gamebot";
 
       var auth = (this.username && this.password) ? (encodeURIComponent(this.username)+":"+this.password+"@") : "";
-      var url = "http://"+auth+this.host+":"+this.port+path;
+      var url = this.protocol+"://"+auth+this.host+":"+this.port+path;
       var opts = {
         url: url,
         method: 'POST',

@@ -51,6 +51,7 @@ var mongoose = require('mongoose')
 if (AIRBRAKE_API_KEY) {
   var client = airbrake.createClient(AIRBRAKE_API_KEY);
   client.handleExceptions();
+  logger.info("Airbrake initialised.");
 //  app.error(client.expressHandler()); SEE: https://github.com/felixge/node-airbrake/issues/25
 }
 
@@ -147,7 +148,7 @@ var find_or_create_user = function(profile, session_id, next) {
   });
 };
 
-// helper functions 
+// helper functions
 var fetchRecentMessages = function(callback) {
   var chatModel = mongoose.model('Chat');
   chatModel
@@ -253,12 +254,14 @@ authenticateAppServer = function(req, res, callback) {
 };
 
 handleNew = function(req, res) {
+  logger.debug("New game requested.");
   authenticateAppServer(req, res, function() {
     return createGame(req, res);
   });
 };
 
 handlePlay = function(req, res) {
+  logger.debug("/play requested.");
   var game_id = req.param('gid');
   if (!game_id) {
     res.send("gid is a required parameter", 400);
@@ -380,6 +383,7 @@ var respond_with_error = function(response, message) {
 };
 
 var createGame = function(req, res) {
+  logger.debug("Creating game.");
   var lang = req.lang;
   var debug = req.debug;
   var app = req.app;
@@ -421,6 +425,7 @@ var createGame = function(req, res) {
 };
 
 var playGame = function(req, res, game_id, user) {
+  logger.debug("Request to play game '"+game_id+"' from user:", user);
   var role = req.param('role');
 
   if (!role) {

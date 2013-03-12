@@ -639,7 +639,12 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-mongoose.connect('mongodb://localhost/lvg-'+metadata.slug);
+var options = { server: { socketOptions: { connectTimeoutMS: 10000 }}};
+mongoose.connect('mongodb://localhost/lvg-'+metadata.slug, options, function(err) {
+  if (err) {
+    throw err;
+  }
+});
 
 app.listen(PORT, function() {
   logger.info("["+new Date()+"] "+metadata.name+" listening on http://localhost:" + PORT + PREFIX);

@@ -5,7 +5,7 @@ var CAS_URL_FALLBACK = process.env.CAS_URL_FALLBACK || "https://" + CAS_HOST_FAL
 var PORT = process.env.PORT || 3000;
 var EGS_HOST = process.env.EGS_HOST || "globalecco.org";
 var EGS_PORT = process.env.EGS_PORT || 443;
-var EGS_PROTOCOL = process.env.EGS_PROTOCOL || (EGS_PORT === 443 ? 'https' : 'http')
+var EGS_PROTOCOL = process.env.EGS_PROTOCOL || (EGS_PORT == 443 ? 'https' : 'http')
 var EGS_USERNAME = process.env.EGS_USERNAME;
 var EGS_PASSWORD = process.env.EGS_PASSWORD;
 var PREFIX = process.env.PREFIX || "";

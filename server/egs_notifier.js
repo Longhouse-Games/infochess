@@ -24,7 +24,7 @@ requirejs([ 'underscore'], function(_) {
     };
     this.host = req('host');
     this.port = options.port || 443;
-    this.protocol = options.protocol || (this.port === 443 ? 'https' : 'http')
+    this.protocol = options.protocol || (this.port == 443 ? 'https' : 'http')
     this.username = options.username;
     this.password = options.password;
     this.game_id = req('game_id');

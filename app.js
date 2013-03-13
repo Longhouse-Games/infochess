@@ -188,8 +188,9 @@ function handleLogin(request, response, game_id, callback) {
   var loginUrl = cas_url + '?service=' + encodeURIComponent(hostname);
   logger.debug("CAS Login URL: "+loginUrl);
 
+  var base_url = "https://"+host;
   var casInstance = new cas({
-    base_url: "https://" + host,
+    base_url: base_url,
     service: hostname
   });
 
@@ -200,10 +201,14 @@ function handleLogin(request, response, game_id, callback) {
     return;
   } 
 
-  logger.info("Got service ticket!");
+  logger.info("Got service ticket: " + serviceTicket);
 
   // validate service ticket
   casInstance.validate(serviceTicket, function(error, status, cas_handle) {
+    logger.info("Validated ticket.");
+    if (error) {
+      logger.error("Error validating CAS: ", error);
+    }
     if (error || !status) {
       response.redirect(loginUrl);
       return;

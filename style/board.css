@@ -146,7 +146,7 @@ ul#pieces_list > li {
 }
 
 .settings_dialog {
-  z-index: 10000;
+  z-index: 20000 !important;
 }
 .settings_dialog:focus {
   outline: none;

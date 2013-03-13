@@ -812,6 +812,7 @@ require(["underscore", "lib/helper", "lib/infochess", "lib/building_board", 'hel
         return;
       }
       var user = usernameInput.value || 'player';
+      // TODO username should be determined on the server.
       socket.emit('message', { user: user, message: message });
       messageInput.value = '';
       messageInput.focus();

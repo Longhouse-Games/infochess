@@ -1,23 +1,23 @@
 {
-  "name": "guerrilla-checkers",
+  "name": "infochess",
   "author": "Longhouse Games",
   "version": "0.1.0",
-  "description": "Guerrilla Checkers, a hybrid of Go and Checkers, designed by Brian Train.",
-  "main": "server.js",
+  "description": "InfoChess, a game by John Arquilla",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Longhouse-Games/guerrilla-checkers.git"
+    "url": "git://github.com/Longhouse-Games/infochess.git"
   },
   "license": "BSD",
   "engines": {
-    "node": "~0.6.17"
+    "node": "~0.8.x"
   },
   "dependencies": {
-    "cas": "git://github.com/Longhouse-Games/node-cas.git#master",
+    "raven": "git://github.com/Longhouse-Games/raven.git#master",
     "coffee-script" : ">=1.0.1",
     "express": "2.5.10",
     "mongoose": "2.7.0",

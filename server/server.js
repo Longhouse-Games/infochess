@@ -24,7 +24,7 @@ requirejs([
     Vote,
     HelperModule) {
 
-var metadata = new Game.Metadata();
+var metadata = Game.metadata;
 
 var Position = HelperModule.Position;
 var WHITE_ROLE = 'white';
@@ -400,6 +400,7 @@ Player.prototype.setRole = function(role) {
 
 module.exports.Player = Player;
 module.exports.Server = Server;
-module.exports.Metadata = Game.Metadata;
+module.exports.metadata = Game.metadata;
+module.exports.create = Game.create;
 }); // requirejs define
 

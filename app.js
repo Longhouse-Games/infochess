@@ -1,16 +1,35 @@
-var Raven = require('raven');
+var requirejs = require('requirejs');
 
-var InfoChess = require('./server/server');
-ic = Raven.init(InfoChess);
-
-ic.configure({
-  send_index: function(request, response) {
-    response.sendfile(__dirname + "/index.html");
+requirejs.config({
+  baseUrl: __dirname,
+  nodeRequire: require,
+  paths: {
+    lib: "./lib",
+    server: "./server",
+    underscore: "./vendor/underscore"
   },
-  send_asset: function(request, response, path) {
-    path = __dirname + path;
-    response.sendfile(path);
+  shim: {
+    underscore: {
+      exports: '_'
+    }
   }
 });
 
-ic.run();
+Raven = require('raven');
+
+requirejs(['./server/server'], function(InfoChess) {
+
+  ic = Raven.init(InfoChess);
+
+  ic.configure({
+    send_index: function(request, response) {
+      response.sendfile('/index.html', { root: __dirname });
+    },
+    send_asset: function(request, response, path) {
+      response.sendfile(path, { root: __dirname });
+    }
+  });
+
+  ic.run();
+
+});

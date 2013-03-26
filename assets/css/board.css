@@ -140,33 +140,109 @@ ul#pieces_list > li {
   background-size: 25px 25px;
 }
 
+.close_button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border-width: 2px 3px;
+  /* border: solid #d3d3d3; */
+  border: solid #EEE;
+  border-radius: 4px;
+  width: 20px;
+  height: 19px;
+  background: #EEE top left no-repeat url('../images/close.svg');
+  background-size: 100%;
+}
+
+.hr {
+  border-bottom: 3px solid #FFF;
+  width: 100%;
+  margin: 3px 0px;
+}
+
 #settings {
   background: center center no-repeat url('../images/settings.gif');
   background-size: 25px 25px;
 }
 
-.settings_dialog {
+#settings_dialog {
+  position: absolute;
+  visibility: hidden;
   z-index: 20000 !important;
 }
-.settings_dialog:focus {
+#settings_dialog {
+  left: 292px; /* playing_area/2 - width/2 - padding-left/2 */
+  top: 56px; /* board height/2 - height/2 - padding-top/2*/
+  /*
+   * image: 573x476
+   * content area: 297x343
+   * area for side padding: 230px;
+   * area for top/bottom padding: 253;
+   */
+  padding-top: 78px !important;
+  padding-bottom: 73px !important;
+  padding-left: 115px !important;
+  padding-right: 145px !important;
+  width: 313;
+  min-width: 313;
+  height: 325;
+  box-shadow: 3px 3px 9px #000, -3px -3px 9px #000;
+}
+#dialog_content {
+  position: relative;
+  width: 100%;
+}
+#settings_content {
+  position: relative;
+}
+#forfeit_content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  visibility: hidden;
+  width: 100%;
+}
+#settings_dialog .title {
+  margin-left: 40px;
+  font-size: 34px;
+  font-family: Impact, Arial;
+  text-shadow: 3px 3px 8px #000, -3px -3px 8px #000;
+}
+.dialog {
+  background: top left no-repeat url('../images/settings_background.png') !important;
+  background-size: 100% !important;
+}
+.dialog:focus {
   outline: none;
 }
-.settings_dialog *:focus {
+.dialog *:focus {
   outline: none;
 }
 
-.settings_dialog ul {
+ul li.separator {
+  min-height:30px;
+  cursor: auto !important;
+}
+.dialog p {
+  margin-left: 10px;
+}
+.dialog ul {
   list-style-type: none;
 }
-.settings_dialog li {
+.dialog li,.close_button {
   cursor: hand;
   cursor: pointer;
 }
-.settings_dialog .disabled {
+.dialog li,a {
+  color: #FFF;
+  font-size: 22px;
+  text-shadow: 3px 3px 8px #000, -3px -3px 8px #000;
+}
+.dialog .disabled {
   cursor: auto !important;
   color: #777777;
 }
-.settings_dialog a {
+.dialog a {
   text-decoration: none;
 }
 

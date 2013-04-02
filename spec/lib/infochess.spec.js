@@ -26,17 +26,17 @@ describe("setArmy", function() {
     infochess.currentPhase = infochess.PHASES.DEFENSE;
 
     var do_it = function() {
-      infochess.setArmy(infochess.ROLES.WHITE, new BuildingBoard().serialize());
+      infochess.setArmy(WHITE, new BuildingBoard().serialize());
     };
 
     expect(do_it).toThrow();
   });
 
   it("should start the game once both armies are set", function() {
-    infochess.setArmy(infochess.ROLES.WHITE, makeBuildingBoard('white').serialize());
-    infochess.setArmy(infochess.ROLES.BLACK, makeBuildingBoard('black').serialize());
+    infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+    infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
     expect(infochess.currentPhase).toBe(infochess.PHASES.MOVE);
-    expect(infochess.currentRole).toBe(infochess.ROLES.WHITE);
+    expect(infochess.currentRole).toBe(WHITE);
   });
 });
 

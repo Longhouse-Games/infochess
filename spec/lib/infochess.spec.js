@@ -2,6 +2,13 @@ define(
     ['spec/spec_helper', 'lib/helper', 'lib/building_board', 'lib/playing_board', 'lib/infochess'],
     function(SpecHelper, HelperModule, BuildingBoardModule, PlayingBoardModule, InfoChess) {
 
+var context = describe;
+var WHITE = InfoChess.metadata.roles[0].slug;
+var BLACK = InfoChess.metadata.roles[1].slug;
+var ROLES = {
+  WHITE: WHITE,
+  BLACK: BLACK
+};
 var BuildingBoard = BuildingBoardModule.BuildingBoard;
 var PlayingBoard = PlayingBoardModule.PlayingBoard;
 var Position = HelperModule.Position;
@@ -54,6 +61,35 @@ describe("validateRole", function() {
     expect(do_it).not.toThrow();
   });
 
+});
+
+context("as a restricted instance that can't see all the pieces", function() {
+  describe("getWinner()", function() {
+    var infochess;
+    beforeEach(function() {
+      infochess = new InfoChess();
+    });
+
+    it("should return the winner if a king is captured", function() {
+      infochess.setArmy(WHITE, (new BuildingBoard()).addPiece(new Piece('king', WHITE), new Position(0,0)).serialize());
+      infochess.setArmy(BLACK, (new BuildingBoard()).addPiece(new Piece('king', BLACK), new Position(0,7)).serialize());
+      infochess.move(WHITE, new Position(0,0), new Position(0,1));
+      infochess.iw_attack(WHITE, {type: 'psyop', reinforced: true});
+      infochess.iw_defense(BLACK, {defend: false});
+
+      expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.GAMEOVER);
+      expect(infochess.getWinner()).toBe(WHITE);
+    });
+
+    it("should not report a winner just because it can't see the opponent's king", function() {
+      infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+      infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+      var client_infochess = new InfoChess();
+      client_infochess.fromDTO(infochess.asDTO(WHITE));
+      expect(client_infochess.getCurrentPhase()).toBe(infochess.PHASES.MOVE);
+      expect(client_infochess.getWinner()).toBe(null);
+    });
+  });
 });
 
 return {

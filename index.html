@@ -19,8 +19,8 @@
   <body>
     <input type="hidden" id="username" value="player" />
     <div id="settings_dialog" class="dialog" title="Settings">
-      <div id="dialog_content">
-        <div id="settings_content">
+      <div class="dialog_content_wrapper">
+        <div id="settings_content" class="dialog_content">
           <div class="close_button close"></div>
           <span class="title">Settings</span>
           <div class="hr"></div>
@@ -35,7 +35,7 @@
             <li class="close">Close</li>
           </ul>
         </div>
-        <div id="forfeit_content">
+        <div id="forfeit_content" class="dialog_content">
           <div class="close_button close"></div>
           <span class="title">Forfeit</span>
           <div class="hr"></div>
@@ -43,6 +43,26 @@
           <ul>
             <li id="confirm_forfeit">Forfeit Game</li>
             <li class="close">Cancel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="iw_defense_dialog" class="dialog">
+      <div class="dialog_content_wrapper">
+        <div id="iw_defense_content" class="dialog_content">
+          <span id="psyop_title" class="iw_text title">Psyop Attack!</span>
+          <span id="ew_title" class="iw_text title">Electronic Warfare Attack!</span>
+          <div class="hr"></div>
+          <p id="psyop_text" class="iw_text">Your opponent has issued a psionic attack! If you
+          fail to defend against it, you will lose the pawn furthest from your
+          King. If you have no pawns, you will lose the piece furthest from
+          your King. If you have no other pieces, you will lose your King.</p>
+          <p id="ew_text" class="iw_text">Your opponent is using electronic warfare! If you
+          fail to defend against it, you will not be able to move a piece on
+          your next turn.</p>
+          <ul>
+            <li id="defend">Defend: Costs <span id="cost">{{cost}}</span> points</li>
+            <li id="ignore">Ignore</li>
           </ul>
         </div>
       </div>

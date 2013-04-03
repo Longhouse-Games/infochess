@@ -246,7 +246,7 @@ var Player = function(_socket, server, user, role) {
 
   function endOfTurn() {
     //Things that should happen when changing to another player's turn
-    this.server.egs_notifier.move(this.server.getGame().getCurrentRole());
+    me.server.egs_notifier.move(me.server.getGame().getCurrentRole());
   }
 
   var handleMessage = function(message, func, recipients) {

@@ -5,7 +5,7 @@
   "description": "InfoChess, a game by John Arquilla",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node runner.js",
     "start": "node app.js"
   },
   "repository": {
@@ -17,13 +17,13 @@
     "node": "~0.10"
   },
   "dependencies": {
-    "raven": "git://github.com/Longhouse-Games/raven.git#master",
+    "raven": "git://localhost/Users/rgould/ctfpecco/raven/.git#master",
     "coffee-script" : "1.6",
     "requirejs": "2.1",
     "underscore": "1.4",
     "winston": "0.6"
   },
   "devDependencies": {
-    "jasmine-node" : ">=1.0.26"
+    "jasmine-node" : ""
   }
 }

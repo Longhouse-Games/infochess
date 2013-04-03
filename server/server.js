@@ -14,6 +14,7 @@ define([
 var metadata = Game.metadata;
 
 var Position = HelperModule.Position;
+var InvalidMessageError = HelperModule.InvalidMessageError;
 var WHITE_ROLE = 'white';
 var BLACK_ROLE = 'black';
 
@@ -256,7 +257,7 @@ var Player = function(_socket, server, user, role) {
         console.log(data);
         me.server.refreshBoard(func(data), recipients);
       } catch (error) {
-        if (error.name === "InvalidMessageError") {
+        if (error instanceof InvalidMessageError) {
           logger.error("Client error", { error: error });
           me.socket.emit('error', error.message);
           return;

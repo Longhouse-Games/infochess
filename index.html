@@ -69,66 +69,117 @@
     </div>
     <audio src="sounds/your_turn.wav" preload="auto" id="your_turn">
     </audio>
-    <div id="checkers" class="board">
-      <div id="pieces"></div>
-      <div id="moves"></div>
-      <div id="white_moves"></div>
-      <div id="black_moves"></div>
-      <div id="bottom_overlay">
-        <div id="turn_overlay" class="overlay">LOADING...</div>
-        <input id="message" class="overlay" />
+    <div id="table_area">
+      <div id="board" class="board">
+        <div id="pieces" class="board_overlay"></div>
+        <div id="pawn_capture">
+          <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+          Pawn Capture
+        </div>
+      </div>
+      <div id="side_area">
+        <div id="settings_overlay">
+          <div id="settings" class="setting_button"></div>
+          <div id="volume_control" class="toggle_sound setting_button volume_control_on"></div>
+        </div>
+        <div id="army_selector" class="side_selector">
+          <div id="points_indicator" class="nukeme">
+          </div>
+          <div id="piece_selectors">
+          </div>
+          <div id="reset" class="button">
+            <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            Reset
+          </div>
+          <div id="commit" class="button">
+            <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            Commit
+          </div>
+        </div>
+        <div id="action_selector" class="side_selector">
+          <div id="points_indicator" class="nukeme">
+            POINTS:
+            <div class="point_block full"></div>
+            <div class="point_block full"></div>
+            <div class="point_block full"></div>
+            <div class="point_block empty"></div>
+            <div class="point_block empty"></div>
+            <span id="total">3</span>
+          </div>
+          <div id="ew_actions" class="actions_container">
+            <div id="ew_main" class="iw_main"></div>
+            <div id="ew_normal" class="strength first">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+            <div id="ew_reinforced" class="strength second">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+            <div id="ew_feint" class="strength third disabled">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+          </div>
+          <div id="psyop_actions" class="actions_container">
+            <div id="psyop_main" class="iw_main"></div>
+            <div id="psyop_normal" class="strength first">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+            <div id="psyop_reinforced" class="strength second">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+            <div id="psyop_feint" class="strength third disabled">
+              <span id="value"></span>
+              <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+            </div>
+          </div>
+          <div id="end_turn">
+          </div>
+        </div>
+        <div id="chat">
+          <div id="chat_messages">
+          </div>
+          <input type="text" id="chat_input"/>
+        </div>
+      </div>
+      <div id="dashboard" class="overlay_flash">
+        <div class="dashboard_section">
+          <img src="../images/transparent_pixel.gif" class="vertical-aligner">
+          <span id="status">Connecting to server...</span>
+        </div>
       </div>
     </div>
-    <div id="waiting">Waiting For Opponent</div>
-    <div id="users"></div>
-    <div id="status_area">
-      <div id="settings_overlay">
-        <div id="settings" class="setting_button"></div>
-        <div id="volume_control" class="toggle_sound setting_button volume_control_on"></div>
+    <div id="killme" style="display: none;">
+      <div id="status_area">
+        <div>
+          You have <span id="iw_points">0</span> IW points remaining.
+        </div>
+        <div>
+          Current IW Attack costs: PsyOp - <span id="psyop_attack_cost">0</span> IW;  EW - <span id="ew_attack_cost">0</span> IW; Reinforced: +1 IW
+        </div>
+        <div>
+          Current IW Defend costs: PsyOp - <span id="psyop_defend_cost">0</span> IW;  EW - <span id="ew_defend_cost">0</span> IW
+        </div>
       </div>
       <div>
-        You have <span id="iw_points">0</span> IW points remaining.
+        <div>
+          <p id="points_remaining">Points Remaining: <span id='points'>10</span></p>
+          <p id="opponent_status">Waiting for opponent</p>
+        </div>
+        <div id="pawn_upgrade_dialog">
+          Your pawn can be upgraded. Choose its new type:
+          <ul id="upgrade_list">
+          </ul>
+        </div>
       </div>
-      <div>
-        Current IW Attack costs: PsyOp - <span id="psyop_attack_cost">0</span> IW;  EW - <span id="ew_attack_cost">0</span> IW; Reinforced: +1 IW
+      <div id="actions">
+        <div>
+          <span id="feint">Feint</span> (Costs 1 IW, only available when IW cost is 2)
+        </div>
       </div>
-      <div>
-        Current IW Defend costs: PsyOp - <span id="psyop_defend_cost">0</span> IW;  EW - <span id="ew_defend_cost">0</span> IW
-      </div>
-    </div>
-    <div id="side_area">
-      <div id="army_selector">
-        <p id="points_remaining">Points Remaining: <span id='points'>10</span></p>
-        <p>Your army:</p>
-        <ul id="pieces_list">
-        </ul>
-        <p id="finish_army">Ready!</p>
-        <p id="opponent_status">Waiting for opponent</p>
-      </div>
-      <div id="pawn_upgrade_dialog">
-        Your pawn can be upgraded. Choose its new type:
-        <ul id="upgrade_list">
-        </ul>
-      </div>
-      <div id="chatlog" class="chat" ></div>
-    </div>
-    <div id="actions">
-      <div>
-        PsyOp attack: <span id="psyop_normal">Normal</span> / <span id="psyop_reinforced">Reinforced</span>
-      </div>
-      <div>
-        Electronic Warfare attack: <span id="ew_normal">Normal</span> / <span id="ew_reinforced">Reinforced</span>
-      </div>
-      <div>
-        <span id="feint">Feint</span> (Costs 1 IW, only available when IW cost is 2)
-      </div>
-      <div>
-        <span id="end_turn">End Turn</span> (no IW attack)
-      </div>
-      <div id="pawn_capture">
-        <span>Pawn Capture</span>
-      </div>
-      <span id="toggle_sound">Disable Sound</span>
     </div>
   </body>
 </html>

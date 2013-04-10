@@ -1,3 +1,7 @@
+.nukeme {
+  background: rgb(32, 51, 40);
+}
+
 * {
   font-family: Arial;
 }
@@ -27,38 +31,237 @@ body {
   color: #EEE;
 }
 
+#table_area {
+  position: relative;
+  min-width: 1280px;
+  width: 1280px;
+  min-height: 800px;
+  height: 800px;
+}
+.building_area {
+  background: top left no-repeat url("../images/background_building.jpg");
+  background-size: 100%;
+}
+.playing_area {
+  background: top left no-repeat url("../images/background_playing.jpg");
+  background-size: 100%;
+}
+
+#dashboard {
+  position: absolute;
+  z-index: 10002px;
+  left: 210px;
+  top: 736px;
+  width: 316px;
+  height: 44px;
+  border-radius: 15px;
+}
+.dashboard_section {
+  width: 315px;
+  height: 44px;
+  color: rgb(26, 47, 36);
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+img.vertical-aligner {
+  vertical-align: middle;
+  height: 100%;
+  width: 1px;
+}
+
 #side_area {
-  height: 580px;
-  background: #EEE;
-  padding: 5px;
-  margin-bottom: 10px;
-  overflow-y: scroll;
-  overflow-x: none;
+  position: relative;
+  left: 695px;
+  top: 0px;
+  height: 800px;
+  width: 585px;
 }
 
-#actions {
-  float: right
-}
-
-.chat {
-  color: black;
-}
-#chatlog {
-  height: 580px;
-  background: #EEE;
-  padding: 5px;
-  margin-bottom: 10px;
-  overflow-y: scroll;
-  overflow-x: none;
+.side_selector {
+  display: none;
+  position: relative;
+  height: 545px;
+  top: 40px;
 }
 
 #army_selector {
-  display: none;
-  background: #555;
-  border-style: groove;
+  left: 110px;
+  width: 430px;
+}
+
+#army_selector #points_indicator {
   position: absolute;
-  height: 580px;
-  padding: 5px;
+  top: 10px;
+  left: 20px;
+  width: 400px;
+  height: 40px;
+}
+
+#piece_selectors {
+  position: absolute;
+  top: 64px;
+  left: 99px;
+  width: 296px;
+  height: 437px;
+}
+.piece_selector {
+  float: left;
+  width: 125px;
+  height: 139px;
+  margin-bottom: 11px;
+  margin-right: 23px;
+}
+.cost_indicator {
+  height: 26px;
+}
+.piece_selector img.piece {
+  height: 100px;
+  width: 100px;
+  padding: 1px 13px 13px 13px;
+}
+#army_selector #commit {
+  left: 265px;
+}
+#army_selector #reset {
+  left: 120px;
+}
+#army_selector .button {
+  position: absolute;
+  top: 511px;
+  width: 80px;
+  height: 25px;
+  border: 2px solid rgb(177, 243, 202);
+  border-radius: 15px;
+  text-align: center;
+}
+
+#action_selector {
+  left: 93px;
+  width: 446px;
+}
+
+#action_selector #points_indicator {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  width: 400px;
+  height: 40px;
+}
+#points_indicator * {
+  position: relative;
+  top: 7px;
+  float: left;
+  color: rgb(154, 255, 206);
+}
+#points_indicator span {
+  text-align: center;
+}
+#points_indicator span.title {
+  width: 118px;
+}
+.point_block {
+  border: 1px solid rgb(208, 255, 176);
+  height: 17px;
+  width: 10px;
+  position: relative;
+  margin-right: 10px;
+}
+.point_block.full {
+  background: rgb(208, 255, 176);
+}
+.point_block.empty {
+}
+
+#ew_actions {
+  top: 54px;
+}
+#psyop_actions {
+  top: 216px;
+}
+.actions_container {
+  position: absolute;
+  width: 367px;
+  height: 160px;
+  left: 38px;
+}
+
+#ew_main {
+}
+#psyop_main {
+}
+.iw_main {
+  position: absolute;
+  top: 29px;
+  left: 14px;
+  width: 109px;
+  height: 125px;
+}
+
+.strength {
+  position: absolute;
+  text-align: right;
+  height: 21px;
+  left: 122px;
+  color: rgb(154, 255, 206);
+}
+.strength.disabled {
+  background: #000;
+  opacity: 0.5;
+}
+.strength.first {
+  width: 195px;
+  top: 47px;
+}
+.strength.second {
+  width: 207px;
+  top: 76px;
+}
+.strength.third {
+  width: 221px;
+  top: 106px;
+}
+
+#end_turn {
+  position: absolute;
+  border-radius: 30px;
+  width: 236px;
+  height: 72px;
+  top: 410px;
+  left: 106px;
+}
+#end_turn.disabled {
+  background: #000;
+  opacity: 0.5;
+}
+
+#chat {
+  position: absolute;
+  top: 589px;
+  left: 69px;
+  width: 495px;
+  height: 167px;
+}
+#chat_messages {
+  height: 137px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 3px 2px;
+  border-bottom: 1px solid white;
+  font-size: 14px;
+  font-weight: initial;
+  color: white;
+}
+#chat_input {
+  color: white;
+  background: rgba(0, 0, 0, 0);
+  height: 25px;
+  width: 238px;
+  border-style: none;
+  outline: none;
+  text-align: left;
+  font-size: 16px;
+  font-weight: initial;
 }
 
 #pawn_upgrade_dialog {
@@ -246,39 +449,6 @@ ul li.separator {
   display: none;
 }
 
-.overlay {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 800;
-  padding: 4px 0px;
-  z-index: 10000;
-
-  -webkit-box-shadow: 2px 2px 2px #222;
-     -mox-box-shadow: 2px 2px 2px #222;
-          box-shadow: 2px 2px 2px #222;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-
-  color: #DDD;
-  background-color: rgb(51, 51, 51);
-  background-color: rgba(51, 51, 51, 0.9);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#DD333333, endColorstr=#DD333333)";
-}
-
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-  #turn_overlay { top: 2px !important; }
-  #bottom_overlay { top: 588px !important; }
-}
-
-#turn_overlay {
-  width: 220px;
-  left: 52px;
-}
-
 #message {
   width: 200px;
   left: 290px;
@@ -288,27 +458,46 @@ ul li.separator {
   font-weight: initial;
 }
 
-#bottom_overlay {
-  position: absolute;
-  top: 590px;
-  left: 0px;
-}
-
 .flickering_board {
   background: top left no-repeat url('../images/board_base.png');
+  background-size: 100% 100%;
 }
 
 .board {
-  width: 560px;
-  height: 560px;
-  padding: 40px;
   position: relative;
-  margin-right: 10px;
-  background-size: 640px 640px;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
+  top: 64px;
+  left: 54px;
   float: left;
+
+  width: 588px;
+  height: 588px;
+  padding: 18px;
   z-index: 100;
+}
+.board_overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+}
+#pawn_capture {
+  border-radius: 15px;
+  border: 2px solid rgb(159, 255, 201);
+  color: rgb(159, 255, 201);
+
+  position: absolute;
+  top: 636px;
+  left: 230px;
+
+  width: 168px;
+  height: 25px;
+  text-align: center;
+  text-transform: uppercase;
+}
+#pawn_capture.disabled {
+  border: 2px solid rgb(159, 159, 159);
+  color: rgb(159, 159, 159);
 }
 
 .soldier {
@@ -341,28 +530,14 @@ ul li.separator {
   50%      { transform: scale3d(1.2, 1.2, 1); zoom: 1; }
 }
 
-#soldier_moves div, #guerrilla_moves div {
-  z-index: 300;
-}
-
-#moves, #white_moves div, #black_moves div {
-  z-index: 300;
-}
-
-#moves, #pieces {
-  width: 100%;
-  height: 100%;
-}
-
-#moves, #soldier_moves, #guerrilla_moves, #white_moves, #black_moves {
+.shadow_piece {
   opacity: 0.4;
 }
-
 .shadow_piece, .soldier_piece, .temp_piece, .normal_piece {
   position: absolute;
   width: 68px;
   height: 68px;
-  margin: 2px;
+  margin: 3px;
 }
 
 .castling_shadow_piece {

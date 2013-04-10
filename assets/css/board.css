@@ -199,6 +199,8 @@ img.vertical-aligner {
 }
 
 .strength {
+  cursor: hand;
+  cursor: pointer;
   position: absolute;
   text-align: right;
   height: 21px;
@@ -206,6 +208,7 @@ img.vertical-aligner {
   color: rgb(154, 255, 206);
 }
 .strength.disabled {
+  cursor: auto !important;
   background: #000;
   opacity: 0.5;
 }
@@ -223,6 +226,8 @@ img.vertical-aligner {
 }
 
 #end_turn {
+  cursor: hand;
+  cursor: pointer;
   position: absolute;
   border-radius: 30px;
   width: 236px;
@@ -231,6 +236,7 @@ img.vertical-aligner {
   left: 106px;
 }
 #end_turn.disabled {
+  cursor: auto !important;
   background: #000;
   opacity: 0.5;
 }
@@ -482,6 +488,8 @@ ul li.separator {
   width: 100%;
 }
 #pawn_capture {
+  cursor: hand;
+  cursor: pointer;
   border-radius: 15px;
   border: 2px solid rgb(159, 255, 201);
   color: rgb(159, 255, 201);
@@ -496,6 +504,7 @@ ul li.separator {
   text-transform: uppercase;
 }
 #pawn_capture.disabled {
+  cursor: auto !important;
   border: 2px solid rgb(159, 159, 159);
   color: rgb(159, 159, 159);
 }

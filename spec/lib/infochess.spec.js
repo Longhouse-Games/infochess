@@ -63,6 +63,23 @@ describe("validateRole", function() {
 
 });
 
+describe("getPawnCaptures()", function() {
+  var infochess;
+  beforeEach(function() {
+    infochess = new InfoChess();
+    infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+    infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+  });
+
+  context("when no targets can be captured", function() {
+    it("should not set the phase to be pawn_capture", function() {
+      var captures = infochess.getPawnCaptures();
+      expect(captures.length).toBe(0);
+      expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.MOVE);
+    });
+  });
+});
+
 context("as a restricted instance that can't see all the pieces", function() {
   describe("getWinner()", function() {
     var infochess;

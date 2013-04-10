@@ -527,7 +527,7 @@ ul li.separator {
 .shadow_piece {
   opacity: 0.4;
 }
-.shadow_piece, .soldier_piece, .temp_piece, .normal_piece, .invisible_piece {
+.shadow_piece, .soldier_piece, .temp_piece, .normal_piece, .invisible_piece, .psyop_capture {
   position: absolute;
   width: 68px;
   height: 68px;
@@ -536,6 +536,11 @@ ul li.separator {
 
 .invisible_piece {
   background: top left no-repeat url('../images/invisible_piece.gif');
+  background-size: 100%;
+}
+
+.psyop_capture {
+  background: top left no-repeat url('../images/psyop_capture.gif');
   background-size: 100%;
 }
 

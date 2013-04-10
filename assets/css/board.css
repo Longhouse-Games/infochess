@@ -1,7 +1,3 @@
-.nukeme {
-  background: rgb(32, 51, 40);
-}
-
 * {
   font-family: Arial;
 }
@@ -100,37 +96,37 @@ img.vertical-aligner {
 
 #piece_selectors {
   position: absolute;
-  top: 64px;
+  top: 84px;
   left: 99px;
-  width: 296px;
-  height: 437px;
+  width: 256px;
+  height: 377px;
 }
 .piece_selector {
   float: left;
-  width: 125px;
-  height: 139px;
-  margin-bottom: 11px;
-  margin-right: 23px;
+  width: 108px;
+  height: 119px;
+  margin-bottom: 10px;
+  margin-right: 20px;
 }
 .cost_indicator {
-  height: 26px;
+  height: 18px;
 }
 .piece_selector img.piece {
-  height: 100px;
-  width: 100px;
-  padding: 1px 13px 13px 13px;
+  height: 90px;
+  width: 90px;
+  padding: 2px 9px 9px 9px;
 }
 #army_selector #commit {
-  left: 265px;
+  left: 233px;
 }
 #army_selector #reset {
-  left: 120px;
+  left: 90px;
 }
 #army_selector .button {
   position: absolute;
-  top: 511px;
-  width: 80px;
-  height: 25px;
+  top: 477px;
+  width: 108px;
+  height: 19px;
   border: 2px solid rgb(177, 243, 202);
   border-radius: 15px;
   text-align: center;

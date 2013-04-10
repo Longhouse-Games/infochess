@@ -578,14 +578,20 @@ ul li.separator {
 }
 
 .removal_marker {
-  width: 10px;
-  height: 10px;
-  margin-top: 3px;
-  margin-left: 56px;
+  background: top left no-repeat url('../images/removal_marker.svg');
+  background-size: 100%;
+  background-color: white;
+  opacity: 0.6;
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+  margin-left: 48px;
   overflow: visible;
   position: relative;
   float: left;
-  background: white;
+}
+.removal_marker:hover {
+  opacity: 1.0 !important;
 }
 
 .king_white {

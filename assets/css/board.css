@@ -527,11 +527,16 @@ ul li.separator {
 .shadow_piece {
   opacity: 0.4;
 }
-.shadow_piece, .soldier_piece, .temp_piece, .normal_piece {
+.shadow_piece, .soldier_piece, .temp_piece, .normal_piece, .invisible_piece {
   position: absolute;
   width: 68px;
   height: 68px;
   margin: 3px;
+}
+
+.invisible_piece {
+  background: top left no-repeat url('../images/invisible_piece.gif');
+  background-size: 100%;
 }
 
 .castling_shadow_piece {

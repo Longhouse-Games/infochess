@@ -547,7 +547,9 @@ ul li.separator {
 }
 
 .psyop_capture {
-  background: top left no-repeat url('../images/psyop_capture.gif');
+  /* done in JS so that we can reanimate the gif without reloading it
+    background: top left no-repeat url('../images/psyop_capture.gif');
+  */
   background-size: 100%;
 }
 

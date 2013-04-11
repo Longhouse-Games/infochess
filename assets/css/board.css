@@ -183,15 +183,27 @@ img.vertical-aligner {
 }
 
 #ew_main {
+  background: top left no-repeat url("../images/ew_actions_enabled.png");
+  background-size: 100%;
+}
+#ew_main.disabled {
+  background: top left no-repeat url("../images/ew_actions_disabled.png");
+  background-size: 100%;
 }
 #psyop_main {
+  background: top left no-repeat url("../images/psyop_actions_enabled.png");
+  background-size: 100%;
+}
+#psyop_main.disabled {
+  background: top left no-repeat url("../images/psyop_actions_disabled.png");
+  background-size: 100%;
 }
 .iw_main {
   position: absolute;
-  top: 29px;
-  left: 14px;
-  width: 109px;
-  height: 125px;
+  top: 7px;
+  left: 12px;
+  width: 113px;
+  height: 146px;
 }
 
 .strength {
@@ -205,20 +217,39 @@ img.vertical-aligner {
 }
 .strength.disabled {
   cursor: auto !important;
-  background: #000;
-  opacity: 0.5;
+}
+.strength.disabled span {
+  color: rgb(89, 118, 99);
 }
 .strength.first {
   width: 195px;
   top: 47px;
+  background: top left no-repeat url('../images/iw_normal_enabled.png');
+  background-size: 100%;
+}
+.strength.first.disabled {
+  background: top left no-repeat url('../images/iw_normal_disabled.png');
+  background-size: 100%;
 }
 .strength.second {
   width: 207px;
   top: 76px;
+  background: top left no-repeat url('../images/iw_reinforced_enabled.png');
+  background-size: 100%;
+}
+.strength.second.disabled {
+  background: top left no-repeat url('../images/iw_reinforced_disabled.png');
+  background-size: 100%;
 }
 .strength.third {
   width: 221px;
   top: 106px;
+  background: top left no-repeat url('../images/iw_feint_enabled.png');
+  background-size: 100%;
+}
+.strength.third.disabled {
+  background: top left no-repeat url('../images/iw_feint_disabled.png');
+  background-size: 100%;
 }
 
 #end_turn {
@@ -230,11 +261,13 @@ img.vertical-aligner {
   height: 72px;
   top: 410px;
   left: 106px;
+  background: top left no-repeat url('../images/end_turn_enabled.png');
+  background-size: 100%;
 }
 #end_turn.disabled {
   cursor: auto !important;
-  background: #000;
-  opacity: 0.5;
+  background: top left no-repeat url('../images/end_turn_disabled.png');
+  background-size: 100%;
 }
 
 #chat {

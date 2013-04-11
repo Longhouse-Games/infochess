@@ -540,7 +540,9 @@ ul li.separator {
 }
 
 .invisible_piece {
-  background: top left no-repeat url('../images/invisible_piece.gif');
+  /* done in JS so that we can reanimate the gif without reloading it
+    background: top left no-repeat url('../images/invisible_piece.gif'); 
+  */
   background-size: 100%;
 }
 

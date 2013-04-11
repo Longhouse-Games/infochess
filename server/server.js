@@ -295,10 +295,10 @@ var Player = function(_socket, server, user, role) {
 
   handleMessage('psyop', function(data) {
     console.log(me.server.getGame());
-    if (typeof data.reinforced === 'undefined') {
-      throw new InvalidMessageError("Protocol error: 'reinforced' must be specified for IW attacks");
+    if (typeof data.strength === 'undefined') {
+      throw new InvalidMessageError("Protocol error: 'strength' must be specified for IW attacks");
     }
-    var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', reinforced: data.reinforced});
+    var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', strength: data.strength});
     endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)
@@ -310,11 +310,11 @@ var Player = function(_socket, server, user, role) {
 
   handleMessage('ew', function(data) {
     console.log("EW attack from " + me.role);
-    if (typeof data.reinforced === 'undefined') {
-      throw new InvalidMessageError("Protocol error: 'reinforced' must be specified for IW attacks");
+    if (typeof data.strength === 'undefined') {
+      throw new InvalidMessageError("Protocol error: 'strength' must be specified for IW attacks");
     }
 
-    var result = me.server.getGame().iw_attack(me.role, {type: 'ew', reinforced: data.reinforced});
+    var result = me.server.getGame().iw_attack(me.role, {type: 'ew', strength: data.strength});
     endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
       // Notify other player (TODO spectators will get this too, but they shouldn't)

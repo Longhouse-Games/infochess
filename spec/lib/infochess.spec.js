@@ -91,7 +91,7 @@ context("as a restricted instance that can't see all the pieces", function() {
       infochess.setArmy(WHITE, (new BuildingBoard()).addPiece(new Piece('king', WHITE), new Position(0,0)).serialize());
       infochess.setArmy(BLACK, (new BuildingBoard()).addPiece(new Piece('king', BLACK), new Position(0,7)).serialize());
       infochess.move(WHITE, new Position(0,0), new Position(0,1));
-      infochess.iw_attack(WHITE, {type: 'psyop', reinforced: true});
+      infochess.iw_attack(WHITE, {type: 'psyop', strength: 'reinforced'});
       infochess.iw_defense(BLACK, {defend: false});
 
       expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.GAMEOVER);

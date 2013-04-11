@@ -137,7 +137,7 @@ describe("iw attack", function() {
     var attack = {
       attacker: 'black',
       type: 'psyop',
-      reinforced: false
+      strength: 'normal'
     };
     var result = board.psyop_attack(attack);
     expect(result).not.toBeUndefined();
@@ -159,7 +159,7 @@ describe("iw attack", function() {
     var attack = {
       attacker: 'black',
       type: 'psyop',
-      reinforced: false
+      strength: 'normal'
     };
     var result = board.psyop_attack(attack);
     expect(result).not.toBeUndefined();
@@ -177,7 +177,7 @@ describe("iw attack", function() {
     var attack = {
       attacker: 'black',
       type: 'psyop',
-      reinforced: false
+      strength: 'normal'
     };
     var result = board.psyop_attack(attack);
     expect(result).not.toBeUndefined();

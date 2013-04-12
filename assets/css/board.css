@@ -299,15 +299,6 @@ img.vertical-aligner {
   font-weight: initial;
 }
 
-#pawn_upgrade_dialog {
-  visibility: hidden;
-  background: #555;
-  border-style: groove;
-  position: absolute;
-  height: 580px;
-  padding: 5px;
-}
-
 img.piece {
   height: 50px;
   width: 50px;
@@ -426,7 +417,7 @@ ul#pieces_list > li {
 .dialog {
   position: absolute;
   visibility: hidden;
-  z-index: 20000 !important;
+  z-index: 20000;
   left: 292px; /* playing_area/2 - width/2 - padding-left/2 */
   top: 56px; /* board height/2 - height/2 - padding-top/2*/
   /*
@@ -435,22 +426,53 @@ ul#pieces_list > li {
    * area for side padding: 230px;
    * area for top/bottom padding: 253;
    */
-  padding-top: 78px !important;
-  padding-bottom: 73px !important;
-  padding-left: 115px !important;
-  padding-right: 145px !important;
+  padding-top: 78px;
+  padding-bottom: 73px;
+  padding-left: 115px;
+  padding-right: 145px;
   width: 313;
   min-width: 313;
   height: 325;
   box-shadow: 3px 3px 9px #000, -3px -3px 9px #000;
-  background: top left no-repeat url('../images/settings_background.png') !important;
-  background-size: 100% !important;
+  background: top left no-repeat url('../images/settings_background.png');
+  background-size: 100%;
 }
 .dialog:focus {
   outline: none;
 }
 .dialog *:focus {
   outline: none;
+}
+
+#pawn_upgrade_dialog {
+  position: absolute;
+  visibility: hidden;
+  left: 762px !important;
+  top: 128px !important;
+  padding-top: 64px !important;
+  padding-bottom: 73px !important;
+  padding-right: 115px !important;
+  padding-left: 103px !important;
+  width: 245px !important;
+  min-width: 245px !important;
+  height: 248px !important;
+  z-index: 10000 !important;
+  background: top left no-repeat url('../images/settings_background.png');
+  background-size: 100%;
+}
+#upgrade_list {
+  width: 150px;
+}
+#upgrade_list li {
+  float: left;
+  width: 55px;
+  height: 75px;
+  margin-right: 20px;
+  margin-bottom: 5px;
+}
+#upgrade_list span {
+  font-size: 14px !important;
+  text-transform: uppercase;
 }
 
 ul li.separator {

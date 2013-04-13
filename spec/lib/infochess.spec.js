@@ -128,6 +128,25 @@ describe("IW attacks", function() {
   });
 });
 
+describe("IW defense", function() {
+  var infochess;
+  describe("when the defender has run out of IW points", function() {
+    beforeEach(function() {
+      infochess = new InfoChess();
+    });
+    it("should reject the message", function() {
+      infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+      infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+      infochess.board.remainingIW = { white: 10, black: 0 };
+      infochess.move(WHITE, new Position(0,1), new Position(0,2));
+      infochess.iw_attack('white', { type: 'psyop', strength: 'reinforced' });
+      expect(function() {
+        infochess.iw_defense('black', { defend: true });
+      }).toThrow();
+    });
+  });
+});
+
 return {
   name: "infochess_spec"
 };

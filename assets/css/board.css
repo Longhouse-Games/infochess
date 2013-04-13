@@ -539,6 +539,7 @@ ul li.separator {
   width: 100%;
 }
 #pawn_capture {
+  display: none;
   cursor: hand;
   cursor: pointer;
   border-radius: 15px;

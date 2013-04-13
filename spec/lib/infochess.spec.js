@@ -109,6 +109,25 @@ context("as a restricted instance that can't see all the pieces", function() {
   });
 });
 
+describe("IW attacks", function() {
+  var infochess;
+  describe("when a player has run out of IW points", function() {
+    beforeEach(function() {
+      infochess = new InfoChess();
+    });
+    it("should reject the message", function() {
+      infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+      infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+      infochess.board.remainingIW = { white: 0, black: 0 };
+      infochess.move(WHITE, new Position(0,1), new Position(0,2));
+      expect(function() {
+        infochess.iw_attack('white', { type: 'psyop', strength: 'reinforced' });
+      }).toThrow();
+      expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.IW);
+    });
+  });
+});
+
 return {
   name: "infochess_spec"
 };

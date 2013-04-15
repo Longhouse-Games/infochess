@@ -110,6 +110,9 @@ img.vertical-aligner {
 }
 .cost_indicator {
   height: 18px;
+  width: 28px;
+  text-align: center;
+  color: rgb(26, 47, 36);
 }
 .piece_selector img.piece {
   height: 90px;
@@ -130,6 +133,10 @@ img.vertical-aligner {
   border: 2px solid rgb(177, 243, 202);
   border-radius: 15px;
   text-align: center;
+  color: rgb(26, 47, 36);
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 #action_selector {

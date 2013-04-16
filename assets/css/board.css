@@ -1,3 +1,22 @@
+.selectable {
+  cursor: hand;
+  cursor: pointer;
+  -webkit-animation: selectable 1700ms ease-in-out infinite;
+}
+.selectable:hover {
+  outline: 1px solid white;
+  box-shadow: none;
+}
+@-webkit-keyframes selectable {
+  0%, 100% {
+    box-shadow: 0px 0px 12px 4px rgb(0, 225, 225);
+  }
+
+  50% {
+    box-shadow: 0px 0px 1px 1px rgb(0, 100, 100);
+  }
+}
+
 * {
   font-family: Arial;
 }

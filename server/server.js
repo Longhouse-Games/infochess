@@ -301,8 +301,6 @@ var Player = function(_socket, server, user, role) {
     var result = me.server.getGame().iw_attack(me.role, {type: 'psyop', strength: data.strength});
     endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
-      // Notify other player (TODO spectators will get this too, but they shouldn't)
-      me.server.broadcast('defend', result, me);
       return true;
     }
     return result;
@@ -317,8 +315,6 @@ var Player = function(_socket, server, user, role) {
     var result = me.server.getGame().iw_attack(me.role, {type: 'ew', strength: data.strength});
     endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
-      // Notify other player (TODO spectators will get this too, but they shouldn't)
-      me.server.broadcast('defend', result, me);
       return true;
     }
     return result;
@@ -330,8 +326,6 @@ var Player = function(_socket, server, user, role) {
     var result = me.server.getGame().iw_attack(me.role, {type: 'feint'});
     endOfTurn();
     if (me.server.getGame().getCurrentPhase() === me.server.getGame().PHASES.DEFENSE) {
-      // Notify other player (TODO spectators will get this too, but they shouldn't)
-      me.server.broadcast('defend', result, me);
       return true;
     }
     return result;

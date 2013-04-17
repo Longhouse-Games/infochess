@@ -21,7 +21,8 @@
     "coffee-script" : "1.6",
     "requirejs": "2.1",
     "underscore": "1.4",
-    "winston": "0.6"
+    "winston": "0.6",
+    "allong.es": "0.10.2"
   },
   "devDependencies": {
     "jasmine-node" : ""

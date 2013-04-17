@@ -126,6 +126,37 @@ describe("IW attacks", function() {
       expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.IW);
     });
   });
+
+  context("when iw attack cost is 1", function() {
+    beforeEach(function() {
+      infochess = new InfoChess();
+      infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+      infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+      infochess.move(WHITE, new Position(0,1), new Position(0,2));
+    });
+
+    describe("psyop attack", function() {
+      it("should reject feints with an error", function() {
+        var attack = function() {
+          infochess.iw_attack('white', { type: 'psyop', strength: 'feint' });
+        };
+        expect(attack).toThrow();
+      });
+    });
+    describe("ew attack", function() {
+      beforeEach(function() {
+        infochess.endTurn(WHITE);
+        infochess.move(BLACK, new Position(0,6), new Position(0,5));
+      });
+      it("should reject feints with an error", function() {
+        expect(infochess.board.getCurrentEWAttackCost()).toBe(2);
+        var attack = function() {
+          infochess.iw_attack(BLACK, { type: 'psyop', strength: 'feint' });
+        };
+        expect(attack).toThrow();
+      });
+    });
+  });
 });
 
 describe("IW defense", function() {

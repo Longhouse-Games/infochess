@@ -748,3 +748,58 @@ ul li.separator {
   border: 1px solid #0FF;
 }
 
+.flash, .attacker, .defender {
+}
+
+.flash {
+  display: none;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  text-shadow: 1px 1px 2px #922, 0 0 2em white, 0 0 0.4em white;
+  text-transform: uppercase;
+  z-index: 50000;
+  text-align: center;
+  color: #E44;
+  opacity: 0.0;
+}
+.flash-animation {
+  -webkit-animation: flash-left 2s 1;
+}
+.flash .main {
+  font-weight: bold;
+  font-size: 60px;
+}
+.flash .message {
+  font-weight: bold;
+  font-size: 45px;
+}
+@-webkit-keyframes flash-left {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0,0) rotate(5deg) translate(0);
+    -webkit-transform-origin: center center;
+  }
+
+  100% {
+    opacity: 0.7;
+    -webkit-transform: scale(1,1) rotate(-15deg) translate(-40%, -25%);
+    -webkit-transform-origin: center center;
+  }
+}
+@-webkit-keyframes flash-right {
+  0% {
+    opacity: 0;
+    font-size: 0;
+    -webkit-transform: scale(0,0) rotate(-5deg) translate(0);
+    -webkit-transform-origin: center center;
+  }
+
+  100% {
+    opacity: 0.7;
+    font-size: 300%;
+    -webkit-transform: scale(1,1) rotate(15deg) translate(40%, 25%);
+    -webkit-transform-origin: center center;
+  }
+}

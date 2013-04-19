@@ -19,6 +19,87 @@
   </head>
   <body>
     <input type="hidden" id="username" value="player" />
+    <div id="flashes">
+      <div id="psyop" class="flash">
+        <div class="main">Psionic attack</div>
+        <div class="success">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message"></div>
+        </div>
+        <div class="defended">
+          <div class="attacker message">
+            DEFENDED!
+          </div>
+          <div class="defender message"></div>
+        </div>
+        <div class="reinforced">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message">
+            REINFORCED
+          </div>
+        </div>
+        <div class="successful_feint">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message">
+            Feint! No effect!
+          </div>
+        </div>
+        <div class="ineffective_feint">
+          <div class="attacker message">
+            No effect!
+          </div>
+          <div class="defender message"></div>
+        </div>
+      </div>
+      <div id="ew" class="flash">
+        <div class="main">Electronic Warfare</div>
+        <div class="success">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message">
+            Communications jammed
+          </div>
+        </div>
+        <div class="defended">
+          <div class="attacker message">
+            DEFENDED!
+          </div>
+          <div class="defender message">
+            No effect!
+          </div>
+        </div>
+        <div class="reinforced">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message">
+            REINFORCED!<br>
+            Communications jammed!
+          </div>
+        </div>
+        <div class="successful_feint">
+          <div class="attacker message">
+            Success!
+          </div>
+          <div class="defender message">
+            Feint! No effect!
+          </div>
+        </div>
+        <div class="ineffective_feint">
+          <div class="attacker message">
+            No effect!
+          </div>
+          <div class="defender message"></div>
+        </div>
+      </div>
+    </div>
     <div id="settings_dialog" class="dialog" title="Settings">
       <div class="dialog_content_wrapper">
         <div id="settings_content" class="dialog_content">

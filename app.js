@@ -7,11 +7,6 @@ requirejs.config({
     lib: "./lib",
     server: "./server",
     underscore: "./vendor/underscore"
-  },
-  shim: {
-    underscore: {
-      exports: '_'
-    }
   }
 });
 

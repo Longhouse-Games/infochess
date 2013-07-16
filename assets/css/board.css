@@ -554,33 +554,43 @@ ul#pieces_list > li {
   visibility: hidden;
   left: 762px !important;
   top: 128px !important;
-  padding-top: 64px !important;
-  padding-bottom: 73px !important;
-  padding-right: 115px !important;
-  padding-left: 103px !important;
-  width: 245px !important;
-  min-width: 245px !important;
-  height: 248px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  width: 463px !important;
+  min-width: 463px !important;
+  height: 394px !important;
+  min-height: 394px !important;
   z-index: 10000 !important;
-  background: top left no-repeat url('../images/settings_background.png');
-  -webkit-background-size:100%;
-     -moz-background-size:100%;
-       -o-background-size:100%;
-          background-size:100%;
+  background: top left no-repeat url('../images/pawn_upgrade_background.png');
+  -webkit-background-size:463px;
+     -moz-background-size:463px;
+       -o-background-size:463px;
+          background-size:463px;
 }
 #upgrade_list {
-  width: 150px;
+  position: absolute;
+  top: 111px;
+  left: 131px;
+  width: 256px;
+  height: 214px;
 }
-#upgrade_list li {
+#upgrade_list div.piece_wrapper {
   float: left;
-  width: 55px;
-  height: 75px;
-  margin-right: 20px;
-  margin-bottom: 5px;
+  width: 85px;
+  height: 85px;
+  margin-right: 42px;
+  margin-bottom: 44px;
 }
-#upgrade_list span {
+#upgrade_list img.piece {
+  width: 85px !important;
+  height: 85px !important;
+}
+#upgrade_list div.piece_name {
   font-size: 14px !important;
   text-transform: uppercase;
+  text-align: center;
 }
 
 ul li.separator {

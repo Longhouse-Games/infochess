@@ -12,9 +12,9 @@ requirejs.config({
 
 Raven = require('raven');
 
-requirejs(['./server/server'], function(InfoChess) {
+requirejs(['lib/raven/bridge'], function(Ravenbridge) {
 
-  ic = Raven.init(InfoChess);
+  ic = Raven.init(Ravenbridge);
 
   ic.configure({
     send_index: function(request, response) {

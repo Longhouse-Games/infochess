@@ -1,6 +1,11 @@
 Authors
 =======
 
+Game Design
+-----------
+* John Arquilla
+* inspired by the original InfoChess game created by ManTech International Corporation
+
 Programming
 -----------
 * Kyle Chiu
@@ -10,10 +15,6 @@ Programming
 Art
 ---
 * Scott Keating
-
-Game Design
------------
-* John Arquilla
 
 Thanks
 ======

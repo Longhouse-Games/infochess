@@ -9,49 +9,127 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Guerrilla Checkers</h1>
-    <p>By Brian Train</p>
+    <h1>InfoChess</h1>
+    <p>By John Arquilla</p>
     <p>
       <h2>Table of Contents:</h2>
       <ol>
-        <li><a href="#roles">Roles</a></li>
-        <li><a href="#winning">Winning</a></li>
-        <li><a href="#state_movement">State movement</a></li>
-        <li><a href="#guerrilla_movement">Guerrilla movement</a></li>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#iw_moves">IW Moves</a></li>
+        <li><a href="#visibility">Visibility</a></li>
+        <li><a href="#game_play">Game Play</a></li>
       </ol>
     </p>
     <p>
-      <h2><a id="roles">Roles:</a></h2>
-      <ul>
-        <li>
-          Guerrillas: They receive 66 pieces and place two pieces each turn.
-        </li>
-        <li>
-          The State: They have six pieces, all of which are on the board at the start.
-        </li>
-      </ul>
-      <img src="images/rules/pieces_guerrilla.png">
-      <img src="images/rules/pieces_soldier.png">
-    </p>
-    <p>
-      <h2><a id="winning">Victory</a></h2>
-      The player who clears the board of all enemy pieces at the end of his turn wins. The Guerrilla player loses if he runs out of stones.
-    </p>
-    <p>
-      <h2><a id="state_movement">State Movement:</a></h2>
-      The State player moves one checker per turn, one square diagonally as a King in regular checkers, or makes captures by jumping over the point between two squares. He is not forced to capture if he does not want to, but if he does he must take all possible captures. Captured stones are removed from the board.
+      InfoChess is a game played on a standard chessboard with standard chess pieces, but with the addition of information warfare (IW) moves. The game is designed to stimulate a deeper appreciation of the interaction between the informational domain and more traditional military affairs.
+
+      <h2><a id="setup">Setup:</a></h2>
       <p>
-        <img src="images/rules/state_moves.jpeg">
+        Each player simultaneously determines the pieces it will use in the game. Each player is given 10 points.  Kings are free and each player gets one. Queens cost 3 points; Knights and Rooks cost 2 points; Bishops and Pawns cost 1 point. Players can buy up to one Queen; up to 2 each of Knights, Rooks, and Bishops; and up to 8 Pawns.
       </p>
-    </p>
-    <p>
-      <h2><a id="guerrilla_movement">Guerrilla Movement:</a></h2>
-      The Guerrilla player does not move his pieces. Instead, he places two and only two stones per turn on the board, on the points (intersections) of the squares. The first stone must be orthogonally adjacent to any stone on the board; the second stone must be orthogonally adjacent to the first stone placed. He may not place stones on the board edge points. He captures an enemy checker by surrounding it (i.e. having a stone, or a board edge point, on each of the four points of the square the checker occupies – note this makes the edge of the board very dangerous for the State player). The checker is removed from the board.
+
       <p>
-        <img src="images/rules/guerrilla_moves.jpeg">
+        Pawns can be placed anywhere on the second row. All other pieces can be placed anywhere on the back row.  If two bishops are purchased, they must be placed on different colors.
+      </p>
+
+      <p>
+        Kings, Pawns, and Knights start off as invisible to the opponent.  Queens, Rooks, and Bishops are visible.
+      </p>
+
+      <h2><a id="iw_moves">IW MOVES:</a></h2>
+      <p>
+        Each player receives 10 IW points that it can use during the course of the game. Players must decide before the game starts how they will allocate their points between two types of IW moves: Psyops and Electronic Warfare.
+      </p>
+
+      <p>
+        Psyops essentially force an opponent’s piece to surrender. Psyops capture the pawn furthest from the King. (This is measured by the number of moves it would take the King to get to that piece).  If the opponent does not have any pawns, the furthest remaining piece is removed. Kings can be captured using Psyops if they are the last piece.
       </p>
       <p>
-        <img src="images/rules/edge_captures.jpeg">
+        Electronic Warfare essentially disrupts the opponent’s ability to communicate to its units.  Electronic Warfare prevents the opponent from making its next physical move.
+      </p>
+      <p>
+        Costs: The first time a Psyop attack takes place it costs 1 IW point. The defender has an option to defend against the attack, with a cost of 2 IW points. The next Psyop attack by either side costs 2 IW points, and the defense costs 1 IW point. This then oscillates back and forth according to the total number of uses, regardless of which side initiates the IW attack. Odd-numbered Psyop uses cost 1:2 to attack:defend and even numbered Psyop uses cost 2:1 to attack:defend. Electronic Warfare works the same way, except the odd-numbered moves cost 2:1 to attack:defend and even-numbered moves cost 1:2 to attack:defend.
+      </p>
+
+      <p>
+        Reinforcing IW: If a player chooses to defend against an IW attack, the defense is always successful, unless the attack has been reinforced. Reinforcing an IW attack costs 1 extra IW point and always succeeds, even if the opponent defends against it. The defending player does not know whether the attack was reinforced or not. Only if the defending players chooses to defend against the attack, will it be able to deduce whether it was reinforced.
+      </p>
+
+      <p>
+        Feints: When IW attacks cost 2 points, players can choose to feint an attack for the cost of 1 IW. The defender is notified of the nature of the attack, but not whether it was a feint, standard attack, or reinforced attack. If the defender chooses to defend the attack, the defense will be successful and the defender will not know whether it was a feint or standard attack. If the defender does not defend, it will be notified that the attack was a feint and no physical effect takes place.
+      </p>
+
+      <h2><a name="visibility">VISIBILITY</a></h2>
+      <p>
+        Kings, Pawns, and Knights start off as invisible to the opponent.
+      </p>
+
+      <p>
+        Capturing a piece reveals both the piece being captured and the piece doing the capturing.
+      </p>
+
+      <p>
+        If a pawn attempts to move and "bumps" into an invisible piece, the player moving is notified that an opponent’s piece is in the space, but is not told what type of piece. The other player is not notified that one of its pieces has been bumped into or that the opponent has learned the location of one of its pieces.
+      </p>
+
+      <p>
+        Psyop reveals the piece that is captured as well as the location of that piece.
+      </p>
+
+      <p>
+        All pieces that move into the last 3 defensive rows become visible.
+      </p>
+
+      <p>
+        Once a piece is revealed, it is visible for the remainder of the game.
+      </p>
+
+      <h2><a name="game_play">GAME PLAY</a></h2>
+
+      <p>
+        All pieces move according to standard chess rules, unless otherwise noted.
+      </p>
+
+      <p>
+        The game ends when the King is captured.
+      </p>
+
+      <p>
+        White moves first. Sides are determined randomly.
+      </p>
+
+      <p>
+        Each turn will consist of 6 parts for each player:<br/>
+        1. Notification, if applicable, of whether the player’s previous IW move was defended or not.<br/>
+        2. Notification, if applicable, of opponent’s IW move (but not whether it was reinforced or a feint).<br/>
+        3. Option to defend against opponent’s IW move and notification of success or not.<br/>
+        4. Option to ask about “pawn-capture” (see below)<br/>
+        5. Required physical move<br/>
+        6. Option to make one offensive IW move, either Pysop or EW but not both<br/>
+      </p>
+
+      <p>
+        Pawn Capture: Before making a physical move, a player has the option of asking if any of its pawns can capture a piece (the type of piece is not revealed). If the answer is yes, the player must execute that capture.  If more than one capture is possible, the player is told the locations of the possible captures and can choose among them. If the answer is no, the player can make any move. If the capturing pawn is invisible, the player losing the piece to the pawn is not informed of the square from which the paw n came.
+      </p>
+
+      <p>
+        Moving Pawns: If the forward path of a pawn move is blocked, the player is notified and can make any other move by any other piece. The opponent is not notified of this attempted move. En passant captures are allowed. Pawns can move forward two spaces their first move, as in regular chess.
+      </p>
+
+      <p>
+        Pawn Promotion: Pawns that reach the farthest row can be promoted to any piece other than the King at no cost.
+      </p>
+
+      <p>
+        Blocked Moves: If a player attempts to move along a path blocked by an invisible piece, the moving piece stops and captures the invisible piece. Pawns are the exception to this rule (see above).
+      </p>
+
+      <p>
+        Castling: castling is permitted, but only if the King is in its traditional starting location and the Rook to be castled is in its starting corner location.
+      </p>
+
+      <p>
+        Check: Check rules do not apply.
       </p>
     </p>
   </body>

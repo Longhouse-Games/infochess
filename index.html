@@ -229,10 +229,18 @@
           <div id="end_turn">
           </div>
         </div>
-        <div id="chat">
-          <div id="chat_messages">
+        <div id="text_panels">
+          <div id="chat_message_indicator">!</div>
+          <div id="chat_selector"></div>
+          <div id="notes_selector">NOTES</div>
+          <div id="chat">
+            <div id="chat_messages">
+            </div>
+            <input type="text" id="chat_input"/>
           </div>
-          <input type="text" id="chat_input"/>
+          <div id="notes">
+            <textarea id="notes_content" placeholder="Enter some notes here. They will be saved." rows="9" cols="67"></textarea>
+          </div>
         </div>
       </div>
       <div id="dashboard" class="overlay_flash">

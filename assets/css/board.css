@@ -383,10 +383,63 @@ img.vertical-aligner {
           background-size:100%;
 }
 
+#text_panels {
+  position: absolute;
+  top: 562px;
+  left: 69px;
+  width: 495px;
+  height: 167px;
+}
+
+#chat_selector {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 113px;
+  height: 28px;
+}
+
+#chat_message_indicator {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  font-size: 22px;
+  display: none;
+  color: red;
+}
+
+#notes_selector {
+  position: absolute;
+  top: 0px;
+  left: 113px;
+  width: 113px;
+  height: 28px;
+}
+
+#notes {
+  position: absolute;
+  top: 27px;
+  left: 0px;
+  width: 495px;
+  height: 167px;
+  display: none;
+}
+
+#notes textarea {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: rgba(0,0,0,0);
+  font-size: 15px;
+  color: white;
+}
+
 #chat {
   position: absolute;
-  top: 589px;
-  left: 69px;
+  top: 27px;
+  left: 0px;
   width: 495px;
   height: 167px;
 }

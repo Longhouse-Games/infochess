@@ -173,7 +173,12 @@
           <div id="volume_control" class="toggle_sound setting_button volume_control_on"></div>
         </div>
         <div id="army_selector" class="side_selector">
-          <div id="points_indicator">
+          <div id="points_indicator" class="points_indicator">
+          </div>
+          <div id="iw_selector">
+            <div id="psyop">Psyop: <span id="count">5</span></div>
+            <input type="range" id="ew_points"/ min="0" max="10" step="1" value="5">
+            <div id="ew">EW: <span id="count">5</span></div>
           </div>
           <div id="piece_selectors">
           </div>
@@ -187,7 +192,9 @@
           </div>
         </div>
         <div id="action_selector" class="side_selector">
-          <div id="points_indicator">
+          <div id="psyop_points_indicator" class="points_indicator">
+          </div>
+          <div id="ew_points_indicator" class="points_indicator">
           </div>
           <div id="ew_actions" class="actions_container" title="Causes your opponent to skip their physical move. They may still make an IW attack.">
             <div id="ew_main" class="iw_main"></div>

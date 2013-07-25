@@ -124,7 +124,33 @@ img.vertical-aligner {
   top: 10px;
   left: 20px;
   width: 400px;
-  height: 40px;
+  height: 35px;
+}
+
+#army_selector #iw_selector {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  width: 400px;
+  height: 35px;
+}
+#iw_selector #psyop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 72px;
+}
+#iw_selector #ew_points {
+  position: absolute;
+  top: 0px;
+  left: 72px;
+  width: 244px;
+}
+#iw_selector #ew {
+  position: absolute;
+  top: 0px;
+  left: 330px;
+  width: 55px;
 }
 
 #piece_selectors {
@@ -179,23 +205,30 @@ img.vertical-aligner {
   width: 446px;
 }
 
-#action_selector #points_indicator {
+#action_selector #ew_points_indicator {
   position: absolute;
-  top: 10px;
+  top: 0px;
   left: 20px;
   width: 400px;
   height: 40px;
 }
-#points_indicator * {
+#action_selector #psyop_points_indicator {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  width: 400px;
+  height: 40px;
+}
+.points_indicator * {
   position: relative;
   top: 7px;
   float: left;
   color: rgb(154, 255, 206);
 }
-#points_indicator span {
+.points_indicator span {
   text-align: center;
 }
-#points_indicator span.title {
+.points_indicator span.title {
   width: 118px;
 }
 .point_block {

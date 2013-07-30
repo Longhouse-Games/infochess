@@ -74,6 +74,20 @@ body {
           background-size:100%;
 }
 
+#notification {
+  position: absolute;
+  top: 42px;
+  left: 26px;
+  width: 681px;
+  font-size: 28px;
+  text-align: center;
+  color: #00FF00;
+  opacity: 0.8;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px black, 0 0 2em gray, 0 0 0.4em gray;
+  z-index: 500;
+}
+
 #dashboard {
   position: absolute;
   z-index: 10002px;
@@ -841,7 +855,7 @@ ul li.separator {
   height: 63px;
 }
 
-.pawn_capture_target {
+.pawn_capture_target, .psyop_target {
   border: 5px solid green;
   z-index: 350;
   position: absolute;

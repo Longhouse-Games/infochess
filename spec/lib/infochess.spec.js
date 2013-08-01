@@ -136,7 +136,7 @@ describe("IW attacks", function() {
     it("should reject the message", function() {
       infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
       infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
-      infochess.board.remainingIW = { white: 0, black: 0 };
+      infochess.board.remainingIW = { white: {'psyop':0, 'ew':0}, black: {'psyop':0, 'ew':0} };
       infochess.move(WHITE, new Position(0,1), new Position(0,2));
       expect(function() {
         infochess.iw_attack('white', { type: 'psyop', strength: 'reinforced' });
@@ -186,7 +186,7 @@ describe("IW defense", function() {
     it("should reject the message", function() {
       infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
       infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
-      infochess.board.remainingIW = { white: 10, black: 0 };
+      infochess.board.remainingIW = { white: {'psyop':5, 'ew':5}, black: {'psyop':0, 'ew':0} };
       infochess.move(WHITE, new Position(0,1), new Position(0,2));
       infochess.iw_attack('white', { type: 'psyop', strength: 'reinforced' });
       expect(function() {

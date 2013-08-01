@@ -269,7 +269,7 @@ describe("deserialisation", function() {
   });
 
   it("should ignore unknown attributes", function() {
-    json = '{ "pieces": [], "foo": "bar" }';
+    json = '{ "pieces": { "0,0": { "type": "king", "cost": 0, "limit": 1, "colour": "white", "starting_row": 0 }}, "foo": "bar" }';
     board = new BuildingBoard(json);
     expect(board.foo).toBeUndefined();
   });

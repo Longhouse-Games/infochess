@@ -16,6 +16,11 @@
 
     <script src="socket.io/socket.io.js"></script>
     <script data-main="lib/client/main" src="js/require.js"></script>
+    <script id="history_entry" type="text/html">
+      <div class="history_entry">
+        <span class="text {{type}}">{{text}}</span>
+      </div>
+    </script>
   </head>
   <body>
     <input type="hidden" id="username" value="player" />
@@ -231,8 +236,9 @@
         </div>
         <div id="text_panels">
           <div id="chat_message_indicator">!</div>
-          <div id="chat_selector"></div>
-          <div id="notes_selector">NOTES</div>
+          <div id="chat_selector" class="selector selected"></div>
+          <div id="notes_selector" class="selector deselected">NOTES</div>
+          <div id="log_selector" class="selector deselected">LOG</div>
           <div id="chat">
             <div id="chat_messages">
             </div>
@@ -240,6 +246,9 @@
           </div>
           <div id="notes">
             <textarea id="notes_content" placeholder="Enter some notes here. They will be saved." rows="9" cols="67"></textarea>
+          </div>
+          <div id="log">
+            <div id="log_messages"></div>
           </div>
         </div>
       </div>

@@ -405,6 +405,16 @@ img.vertical-aligner {
   height: 167px;
 }
 
+#text_panels .selected {
+  color: cyan;
+  cursor: auto !important;
+}
+
+#text_panels .deselected {
+  cursor: hand;
+  cursor: pointer;
+}
+
 #chat_selector {
   position: absolute;
   top: 0px;
@@ -428,7 +438,15 @@ img.vertical-aligner {
   position: absolute;
   top: 0px;
   left: 113px;
-  width: 113px;
+  width: 64px;
+  height: 28px;
+}
+
+#log_selector {
+  position: absolute;
+  top: 0px;
+  left: 184px;
+  width: 64px;
   height: 28px;
 }
 
@@ -448,6 +466,25 @@ img.vertical-aligner {
   background: rgba(0,0,0,0);
   font-size: 15px;
   color: white;
+}
+
+#log {
+  position: absolute;
+  top: 27px;
+  left: 0px;
+  width: 495px;
+  height: 167px;
+  display: none;
+}
+#log_messages {
+  position: absolute;
+  font-size: 15px;
+  color: white;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 3px 2px;
+  height: 161px;
+  width: 100%;
 }
 
 #chat {
@@ -784,7 +821,7 @@ ul li.separator {
   color: rgb(159, 159, 159);
 }
 
-.selected {
+#board .selected {
   -webkit-animation: myanim 1s ease-in-out infinite; /* Saf5, Chrome */
      -moz-animation: myanim 1s ease-in-out infinite; /* FF5+ */
       -ms-animation: myanim 1s ease-in-out infinite;

@@ -225,11 +225,9 @@ describe("castling", function() {
     expect(moves.kingside).toBeFalsy();
     expect(moves.queenside).toBeFalsy();
 
-    var do_it = function() {
+    expect(function() {
       board.move('white', new Position(3,0), new Position(0,0));
-    };
-    var result = board.move('white', new Position(3,0), new Position(0,0));
-    expect(do_it).toThrow();
+    }).toThrow();
   });
 
   it("should not report a move another piece are between king and rook", function() {

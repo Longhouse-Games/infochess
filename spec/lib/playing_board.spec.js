@@ -87,6 +87,23 @@ describe("move", function() {
       expect(board.pieces["0,2"].type).toBe('rook');
       expect(board.pieces["0,2"].colour).toBe('black');
     });
+
+    it("should still move forward when bumping during initial move", function() {
+      board = new PlayingBoard({
+        "0,1": new Piece('pawn', 'white'),
+        "0,3": new Piece('pawn', 'black')
+      });
+
+      var result = board.move('white', new Position(0,1), new Position(0,3));
+
+      expect(board.pieces["0,1"]).toBeUndefined();
+      expect(board.pieces["0,2"]).toBeDefined();
+      expect(board.pieces["0,2"].type).toBe('pawn');
+      expect(board.pieces["0,2"].colour).toBe('white');
+      expect(board.pieces["0,3"]).toBeDefined();
+      expect(board.pieces["0,3"].type).toBe('pawn');
+      expect(board.pieces["0,3"].colour).toBe('black');
+    });
   });
 });
 

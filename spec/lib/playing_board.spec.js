@@ -69,6 +69,25 @@ describe("move", function() {
     expect(board.pieces["2,0"]).toBeUndefined();
   });
 
+  describe("moving a pawn", function() {
+    it("should not be possible to capture an opposing piece during initial forward movement", function() {
+      board = new PlayingBoard({
+        "0,1": new Piece('pawn', 'white'),
+        "0,2": new Piece('rook', 'black')
+      });
+
+      expect(function() {
+        board.move('white', new Position(0,1), new Position(0,3));
+      }).toThrow();
+
+      expect(board.pieces["0,1"]).toBeDefined();
+      expect(board.pieces["0,1"].type).toBe('pawn');
+      expect(board.pieces["0,1"].colour).toBe('white');
+      expect(board.pieces["0,2"]).toBeDefined();
+      expect(board.pieces["0,2"].type).toBe('rook');
+      expect(board.pieces["0,2"].colour).toBe('black');
+    });
+  });
 });
 
 describe("pawn capture", function() {

@@ -63,6 +63,31 @@ describe("validateRole", function() {
 
 });
 
+describe("move", function() {
+  beforeEach(function() {
+    infochess = new InfoChess();
+    infochess.setArmy(WHITE, makeBuildingBoard('white').serialize());
+    infochess.setArmy(BLACK, makeBuildingBoard('black').serialize());
+  });
+
+  it("should normally change the phase to IW", function() {
+    infochess.move(WHITE, new Position(0,1), new Position(0,2));
+    expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.IW);
+  });
+
+  describe("with a move that causes the chosen piece to not move", function() {
+    //Such as a non-moving 'pawnbump'
+    it("should keep the phase at MOVE", function() {
+      infochess.move(WHITE, new Position(0,1), new Position(0,3));
+      infochess.endTurn(WHITE);
+      infochess.move(BLACK, new Position(0,6), new Position(0,4));
+      infochess.endTurn(BLACK);
+      infochess.move(WHITE, new Position(0,3), new Position(0,4));
+      expect(infochess.getCurrentPhase()).toBe(infochess.PHASES.MOVE);
+    });
+  });
+});
+
 describe("getPawnCaptures()", function() {
   var infochess;
   beforeEach(function() {

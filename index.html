@@ -21,6 +21,17 @@
         <span class="text {{type}}">{{text}}</span>
       </div>
     </script>
+    <script id="iw_defense_dialog" type="text/html">
+      <div id="iw_defense_dialog_{{type}}" class="iw_defense_dialog">
+        <div id="defend" class="button">
+          <div id="cost_wrapper">
+            Cost: <span id="cost">{{cost}}</span>
+          </div>
+        </div>
+        <div id="ignore" class="button"></div>
+        <div id="remaining_points" class="points_indicator"></div>
+      </div>
+    </script>
   </head>
   <body>
     <input type="hidden" id="username" value="player" />

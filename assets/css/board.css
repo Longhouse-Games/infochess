@@ -399,10 +399,11 @@ img.vertical-aligner {
 
 #text_panels {
   position: absolute;
-  top: 562px;
-  left: 69px;
-  width: 495px;
-  height: 167px;
+  top: 556px;
+  left: 62px;
+  width: 508px;
+  height: 208px;
+  background: top left no-repeat url('../images/tab_chat.png');
 }
 
 #text_panels .selected {
@@ -415,12 +416,20 @@ img.vertical-aligner {
   cursor: pointer;
 }
 
+#text_panels > .content {
+  position: absolute;
+  top: 33px;
+  left: 8px;
+  width: 495px;
+  height: 167px;
+}
+
 #chat_selector {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 113px;
-  height: 28px;
+  top: 3px;
+  left: 4px;
+  width: 108px;
+  height: 30px;
 }
 
 #chat_message_indicator {
@@ -436,26 +445,21 @@ img.vertical-aligner {
 
 #notes_selector {
   position: absolute;
-  top: 0px;
-  left: 113px;
-  width: 64px;
-  height: 28px;
+  top: 3px;
+  left: 111px;
+  width: 106px;
+  height: 30px;
 }
 
 #log_selector {
   position: absolute;
-  top: 0px;
-  left: 184px;
-  width: 64px;
-  height: 28px;
+  top: 3px;
+  left: 217px;
+  width: 105px;
+  height: 30px;
 }
 
 #notes {
-  position: absolute;
-  top: 27px;
-  left: 0px;
-  width: 495px;
-  height: 167px;
   display: none;
 }
 
@@ -469,11 +473,6 @@ img.vertical-aligner {
 }
 
 #log {
-  position: absolute;
-  top: 27px;
-  left: 0px;
-  width: 495px;
-  height: 167px;
   display: none;
 }
 #log_messages {
@@ -488,11 +487,6 @@ img.vertical-aligner {
 }
 
 #chat {
-  position: absolute;
-  top: 27px;
-  left: 0px;
-  width: 495px;
-  height: 167px;
 }
 #chat_messages {
   height: 137px;

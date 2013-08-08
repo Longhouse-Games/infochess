@@ -178,6 +178,7 @@
     <div id="table_area">
       <div id="board" class="board">
         <div id="pieces" class="board_overlay"></div>
+        <div id="opponent_status"></div>
         <div id="pawn_capture" title="See if any pawns can capture an invisible piece. If they can, that move must be taken.">
           <img src="images/transparent_pixel.gif" class="vertical-aligner">
           Pawn Capture
@@ -202,9 +203,10 @@
             <img src="images/transparent_pixel.gif" class="vertical-aligner">
             Reset
           </div>
-          <div id="commit" class="button" title="Finalises your army">
+          <div id="ready" class="button unready" title="Finalises your army">
+            <div id="indicator"></div>
             <img src="images/transparent_pixel.gif" class="vertical-aligner">
-            Commit
+            Ready
           </div>
         </div>
         <div id="action_selector" class="side_selector">

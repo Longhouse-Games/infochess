@@ -16,6 +16,12 @@
 
     <script src="socket.io/socket.io.js"></script>
     <script data-main="lib/client/main" src="js/require.js"></script>
+    <script id="chat_message" type="text/html">
+      <div class="chat_message {{role}}">
+        <span class="name">{{user}}</span>
+        {{message}}
+      </div>
+    </script>
     <script id="history_entry" type="text/html">
       <div class="history_entry">
         <span class="text {{type}}">{{text}}</span>

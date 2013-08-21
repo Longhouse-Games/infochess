@@ -537,6 +537,16 @@ img.vertical-aligner {
   font-size: 16px;
   font-weight: initial;
 }
+.chat_message span {
+  padding-right: 15px;
+  color: red;
+}
+.chat_message.white span {
+  color: white;
+}
+.chat_message.black span {
+  color: grey;
+}
 
 img.piece {
   height: 50px;

@@ -530,7 +530,7 @@ img.vertical-aligner {
   color: white;
   background: rgba(0, 0, 0, 0);
   height: 25px;
-  width: 238px;
+  width: 100%;
   border-style: none;
   outline: none;
   text-align: left;

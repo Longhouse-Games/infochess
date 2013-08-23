@@ -408,7 +408,7 @@ img.vertical-aligner {
           border-radius:30px;
   width: 236px;
   height: 72px;
-  top: 410px;
+  top: 377px;
   left: 106px;
   background: top left no-repeat url('../images/end_turn_enabled.png');
   -webkit-background-size:100%;
@@ -423,6 +423,16 @@ img.vertical-aligner {
      -moz-background-size:100%;
        -o-background-size:100%;
           background-size:100%;
+}
+
+#last_turn_report {
+  position: absolute;
+  top: 454px;
+  left: 7px;
+  width: 428px;
+  height: 53px;
+  border: 3px solid rgb(178, 244, 203);
+  padding: 2px;
 }
 
 #text_panels {

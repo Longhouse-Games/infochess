@@ -189,11 +189,11 @@ img.vertical-aligner {
   left: 0px;
   width: 72px;
 }
-#iw_selector #ew_points {
+#iw_selector #ew_points_slider {
   position: absolute;
   top: 0px;
-  left: 72px;
-  width: 244px;
+  left: 86px;
+  width: 225px;
 }
 #iw_selector #ew {
   position: absolute;

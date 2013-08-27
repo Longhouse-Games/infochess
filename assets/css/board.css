@@ -1035,6 +1035,9 @@ body.black .board {
 .king_white {
   background: top left no-repeat url('../images/king_white.68x68.png');
 }
+.temp_piece.king_white, .invisible.king_white {
+  background: top left no-repeat url('../images/king_white-invisible.68x68.png');
+}
 .queen_white {
   background: top left no-repeat url('../images/queen_white.68x68.png');
 }
@@ -1044,14 +1047,23 @@ body.black .board {
 .knight_white {
   background: top left no-repeat url('../images/knight_white.68x68.png');
 }
+.temp_piece.knight_white, .invisible.knight_white {
+  background: top left no-repeat url('../images/knight_white-invisible.68x68.png');
+}
 .bishop_white {
   background: top left no-repeat url('../images/bishop_white.68x68.png');
 }
 .pawn_white {
   background: top left no-repeat url('../images/pawn_white.68x68.png');
 }
+.temp_piece.pawn_white, .invisible.pawn_white {
+  background: top left no-repeat url('../images/pawn_white-invisible.68x68.png');
+}
 .king_black {
   background: top left no-repeat url('../images/king_black.68x68.png');
+}
+.temp_piece.king_black, .invisible.king_black{
+  background: top left no-repeat url('../images/king_black-invisible.68x68.png');
 }
 .queen_black {
   background: top left no-repeat url('../images/queen_black.68x68.png');
@@ -1062,11 +1074,17 @@ body.black .board {
 .knight_black {
   background: top left no-repeat url('../images/knight_black.68x68.png');
 }
+.temp_piece.knight_black, .invisible.knight_black {
+  background: top left no-repeat url('../images/knight_black-invisible.68x68.png');
+}
 .bishop_black {
   background: top left no-repeat url('../images/bishop_black.68x68.png');
 }
 .pawn_black {
   background: top left no-repeat url('../images/pawn_black.68x68.png');
+}
+.temp_piece.pawn_black, .invisible.pawn_black {
+  background: top left no-repeat url('../images/pawn_black-invisible.68x68.png');
 }
 
 .intersection {

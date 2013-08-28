@@ -810,6 +810,8 @@ ul#pieces_list > li {
 #upgrade_list img.piece {
   width: 85px !important;
   height: 85px !important;
+  cursor: hand;
+  cursor: pointer;
 }
 #upgrade_list div.piece_name {
   font-size: 14px !important;

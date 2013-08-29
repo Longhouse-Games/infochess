@@ -754,9 +754,9 @@ ul#pieces_list > li {
   padding-bottom: 73px;
   padding-left: 115px;
   padding-right: 145px;
-  width: 313;
-  min-width: 313;
-  height: 325;
+  width: 313px;
+  min-width: 313px;
+  height: 325px;
   -webkit-box-shadow:3px 3px 9px #000, -3px -3px 9px #000;
      -moz-box-shadow:3px 3px 9px #000, -3px -3px 9px #000;
           box-shadow:3px 3px 9px #000, -3px -3px 9px #000;

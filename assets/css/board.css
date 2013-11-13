@@ -470,6 +470,15 @@ img.vertical-aligner {
   padding: 2px;
 }
 
+#turn_count_container {
+  position: absolute;
+  top: 523px;
+  left: 351px;
+  width: 90px;
+  height: 20px;
+  text-align: right;
+}
+
 #text_panels {
   position: absolute;
   top: 556px;

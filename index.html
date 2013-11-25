@@ -139,6 +139,7 @@
             <li><a href="credits" target="_new" onClick="window.open(this.href, 'credits', 'width=660,height=800,resizable,scrollbars=yes').focus();return(false);">Credits</a></li>
             <li class="separator"></li>
             <li id="show_confirm_forfeit">Forfeit Game</li>
+            <li id="show_offer_draw">Offer a Draw</li>
             <li class="separator"></li>
             <li class="close">Close</li>
           </ul>
@@ -151,6 +152,26 @@
           <ul>
             <li id="confirm_forfeit">Forfeit Game</li>
             <li class="close">Cancel</li>
+          </ul>
+        </div>
+        <div id="offer_draw_content" class="dialog_content">
+          <div class="close_button close"></div>
+          <span class="title">Offer a Draw</span>
+          <div class="hr"></div>
+          <p>Are you sure you want to offer your opponent a draw?</p>
+          <ul>
+            <li id="confirm_offer_draw">Offer a Draw</li>
+            <li class="close">Cancel</li>
+          </ul>
+        </div>
+        <div id="accept_draw_content" class="dialog_content">
+          <div class="close_button close"></div>
+          <span class="title">Draw Offered</span>
+          <div class="hr"></div>
+          <p>Your opponent has offered a draw. Accept?</p>
+          <ul>
+            <li id="accept_draw">Accept. Nobody wins.</li>
+            <li class="close">Reject. Keep playing.</li>
           </ul>
         </div>
       </div>

@@ -741,6 +741,20 @@ ul#pieces_list > li {
   visibility: hidden;
   width: 100%;
 }
+#offer_draw_content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  visibility: hidden;
+  width: 100%;
+}
+#accept_draw_content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  visibility: hidden;
+  width: 100%;
+}
 .dialog .title {
   margin-left: 40px;
   font-size: 34px;

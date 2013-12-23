@@ -1,0 +1,22 @@
+#settings_overlay {
+  background: transparent;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F979797,endColorstr=#7F979797)"; /* IE8 */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7F979797,endColorstr=#7F979797);   /* IE6 & 7 */
+        zoom: 1;
+}
+#settings {
+  background: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='images/settings_ie.gif', sizingMethod='scale');
+}
+.volume_control_on {
+  background: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='images/sound_on_ie.gif', sizingMethod='scale');
+}
+.volume_control_off {
+  background: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='images/sound_off_ie.gif', sizingMethod='scale');
+}
+.close_button {
+  background: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='images/close_ie.gif', sizingMethod='scale');
+}

@@ -22,7 +22,7 @@ PREFIX="/infochess"
 PORT=3000
 ```
 1. `foreman run`
-1. `open http://localhost:3000/infochess/new?guerrillas=foo&coin=bar&fmt=html&dbg=1`
+1. `open http://localhost:3000/infochess/new?white=foo&black=bar&fmt=html&dbg=1`
 
 Liferay Stub
 ------------

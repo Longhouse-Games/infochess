@@ -27,3 +27,6 @@ body.white .board {
 body.black .board {
   background: top left no-repeat url('../images/board_base-black_ie.jpg');
 }
+#notes textarea {
+  background: rgb(34, 63, 47);
+}

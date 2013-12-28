@@ -20,3 +20,10 @@
   background: none;
   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='images/close_ie.gif', sizingMethod='scale');
 }
+
+body.white .board {
+  background: top left no-repeat url('../images/board_base-white_ie.jpg');
+}
+body.black .board {
+  background: top left no-repeat url('../images/board_base-black_ie.jpg');
+}
